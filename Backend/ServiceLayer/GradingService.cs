@@ -142,7 +142,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             throw new NotImplementedException();
         }
 
-
+        
         /// <summary>
         /// This method updates the due date of a task
         /// </summary>
@@ -157,7 +157,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             throw new NotImplementedException();
         }
 
-
+        
         /// <summary>
         /// This method updates task title.
         /// </summary>
@@ -172,7 +172,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             throw new NotImplementedException();
         }
 
-
+        
         /// <summary>
         /// This method updates the description of a task.
         /// </summary>
@@ -187,7 +187,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             throw new NotImplementedException();
         }
 
-
+        
         /// <summary>
         /// This method advances a task to the next column
         /// </summary>
