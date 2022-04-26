@@ -7,7 +7,7 @@ public interface boardService
     /// </summary>
     /// <param name="boardName">The name of the new board</param>
     /// <returns>The string "{}", unless an error occurs</returns>
-    public json add(string boardName);
+    public jason add(string boardName);
 
     /// <summary>
     /// This method removes an existing board. 
