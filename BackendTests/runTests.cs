@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.ServiceLayer;
+using System.Text.Json;
+
 
 namespace BackendTests
 {
@@ -11,10 +13,14 @@ namespace BackendTests
     {
         static void Main(string[] args)
         {
-            GradingService gs = new GradingService();
-            new userTest(gs).runTests();
-            new taskTest(gs).runTests();
-            new boardTest(gs).runTests();
+            BoardService bs = new BoardService();
+            TaskService ts = new TaskService();
+            UserService us = new UserService();
+            new BoardTest(bs).runTests();
+            new TaskTest(ts).runTests();
+            new UserTest(us).runTests();
+          
+
         }
     }
 }
