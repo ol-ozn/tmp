@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.ServiceLayer;
+using System.Text.Json;
 
 namespace BackendTests
 {
-    public class boardTest
+    public class BoardTest
     {
-        private readonly boardService bs;
-        public boardTest(boardService bs)
+        private readonly BoardService bs;
+        public BoardTest(BoardService bs)
         {
             this.bs = bs;
         }
@@ -18,68 +19,76 @@ namespace BackendTests
         public void runTests()
         {
    
-            String res1 = bs.add("amit@gmail.com") ;
-            if (res1.Equals("good"))
+           
+            String res1 = bs.createBoard("yonatan") ;
+            Response res1j = JsonSerializer.Deserialize<Response>(res1);
+            if (res1j.ErrorMessage.Equals("ok"))
             {
-                Console.WriteLine("the task has been added successfully");
+                Console.WriteLine("the board has been added successfully");
             }
             else
             {
-                Console.WriteLine(res1);
+                Console.WriteLine(res1j.ErrorMessage);
             }
-            String res2 = bs.add("yonatan");
-            if (res2.Equals("good"))
+            String res2 = bs.createBoard("yonatan");
+            Response res2j = JsonSerializer.Deserialize<Response>(res2);
+            if (res2j.ErrorMessage.Equals("ok"))
             {
-                Console.WriteLine("the task has been added successfully");
+                Console.WriteLine("the board has been added successfully");
             }
             else
             {
-                Console.WriteLine(res2);
+                Console.WriteLine(res2j.ErrorMessage);
             }
-            String res3 = bs.remove("amit@gmail.com");
-            if (res3.Equals("good"))
+            String res3 = bs.remove(1);
+            Response res3j = JsonSerializer.Deserialize<Response>(res3);
+            if (res3j.ErrorMessage.Equals("ok"))
             {
                 Console.WriteLine("the board has been removed successfully");
             }
             else
             {
-                Console.WriteLine(res3);
+                Console.WriteLine(res3j.ErrorMessage);
             }
-            String res4 = bs.remove("yone");
-            if (res4.Equals("good"))
+            String res4 = bs.remove(-2);
+            Response res4j = JsonSerializer.Deserialize<Response>(res4);
+            if (res4j.ErrorMessage.Equals("ok"))
             {
                 Console.WriteLine("the board has been removed successfully");
             }
             else
             {
-                Console.WriteLine(res4);
+                Console.WriteLine(res4j.ErrorMessage);
             }
-            String res5 = bs.changeState("amit@gmail.com", "Milestone_1");
-            if (res5.Equals("good"))
+            String res5 = bs.changeState(0, "Milestone_1");
+            Response res5j = JsonSerializer.Deserialize<Response>(res5);
+            if (res5j.ErrorMessage.Equals("ok"))
             {
-                Console.WriteLine("the board has been removed successfully");
-            }
-            else
-            {
-                Console.WriteLine(res5);
-            }
-            String res6 = bs.changeState("yone", "Milestone_1");
-            if (res6.Equals("good"))
-            {
-                Console.WriteLine("the board has been removed successfully");
+                Console.WriteLine("the task has been advenced successfully");
             }
             else
             {
-                Console.WriteLine(res6);
+                Console.WriteLine(res5j.ErrorMessage);
             }
-            String res7 = bs.changeState("yone", "none such a board");
-            if (res7.Equals("good"))
+            String res6 = bs.changeState(1, "Milestone_1");
+            Response res6j = JsonSerializer.Deserialize<Response>(res6);
+            if (res6j.ErrorMessage.Equals("ok"))
             {
-                Console.WriteLine("the board has been removed successfully");
+                Console.WriteLine("the board has been advenced successfully");
             }
             else
             {
-                Console.WriteLine(res7);
+                Console.WriteLine(res6j.ErrorMessage);
+            }
+            String res7 = bs.changeState(2, "none such a board");
+            Response res7j = JsonSerializer.Deserialize<Response>(res7);
+            if (res7j.ErrorMessage.Equals("ok"))
+            {
+                Console.WriteLine("the board has been advenced successfully");
+            }
+            else
+            {
+                Console.WriteLine(res7j.ErrorMessage);
             }
             
         }
