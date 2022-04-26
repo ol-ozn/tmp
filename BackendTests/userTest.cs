@@ -23,7 +23,7 @@ public class userTest
         
         String res2 = us.createUser("olga@gmail.com", "1234");
         Response res2j = JsonSerializer.Deserialize<Response>(res2);
-        if (res2j.ErrorMessage.Equals("good"))
+        if (res2j.ErrorMessage.Equals("ok"))
         {
             Console.WriteLine("register completed successfully");
         }
@@ -35,7 +35,7 @@ public class userTest
         //testing login of an account
         String res3 = us.login("yonatan@gmail.com", "2345");
         Response res3j = JsonSerializer.Deserialize<Response>(res3);
-        if (res3j.ErrorMessage.Equals("good"))
+        if (res3j.ErrorMessage.Equals("ok"))
         {
             Console.WriteLine("login completed successfully");
         }
@@ -45,7 +45,7 @@ public class userTest
         }
         String res4 = us.login("olga@gmail.com", "2345");
         Response res4j = JsonSerializer.Deserialize<Response>(res4);
-        if (res4j.ErrorMessage.Equals("good"))
+        if (res4j.ErrorMessage.Equals("ok"))
         {
             Console.WriteLine("login completed successfully");
         }
@@ -55,7 +55,7 @@ public class userTest
         }
         String res5 = us.login("olga@gmail.com", "1234");
         Response res5j = JsonSerializer.Deserialize<Response>(res5);
-        if (res5j.ErrorMessage.Equals("good"))
+        if (res5j.ErrorMessage.Equals("ok"))
         {
             Console.WriteLine("login completed successfully");
         }
@@ -67,7 +67,7 @@ public class userTest
         //testing logging out of an account
         String res6 = us.logout();
         Response res6j = JsonSerializer.Deserialize<Response>(res6);
-        if (res6j.ErrorMessage.Equals("good"))
+        if (res6j.ErrorMessage.Equals("ok"))
         {
             Console.WriteLine("logout completed successfully");
         }
@@ -79,7 +79,7 @@ public class userTest
         //testing deletion of an account
         String res7 = us.deleteAccount();
         Response res7j = JsonSerializer.Deserialize<Response>(res7);
-        if (res7j.ErrorMessage.Equals("good"))
+        if (res7j.ErrorMessage.Equals("ok"))
         {
             Console.WriteLine("Account deleted successfully");
         }
