@@ -20,7 +20,7 @@ public class userTest
         } else
         {
             Console.WriteLine(res1j.ErrorMessage);
-        }
+        
         String res2 = us.createUser("olga@gmail.com", "1234");
         Response res2j = JsonSerializer.Deserialize<Response>(res2);
         if (res2j.ErrorMessage.Equals("good"))
