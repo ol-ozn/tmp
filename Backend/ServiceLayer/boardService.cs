@@ -7,11 +7,10 @@ public interface boardService
     /// </summary>
     /// <param name="boardName">The name of the new board</param>
     /// <returns>The string "{}", unless an error occurs</returns>
-<<<<<<< HEAD
-    public jason add(string boardName);
-=======
+
+   
     public String add(string boardName);
->>>>>>> 751b8d657ba501c0407d193b32d69c9704d0c930
+
 
     /// <summary>
     /// This method removes an existing board. 
@@ -27,14 +26,5 @@ public interface boardService
     /// <param name="taskTitle">The title of the task of which to change state</param>
     /// <returns>The string "{}", unless an error occurs</returns>
     public String changeState(string boardName, string taskTitle);
-
-    /// <summary>
-    /// This method changes the attributes of a task. 
-    /// </summary>
-    /// <param name="boardName">The name of the board in which the task is in</param>
-    /// <param name="taskTitle">The title of the task to be changed</param>
-    /// <param name="text">The new text to be inserted</param>
-    /// <returns>The string "{}", unless an error occurs</returns>
-    public String editTask(string boardName, string taskTitle, string text);
 
 }
