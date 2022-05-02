@@ -4,153 +4,93 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.ServiceLayer;
+using System.Text.Json;
 
 namespace BackendTests
 {
-    public class boardTest
+    public class BoardTest
     {
-        private readonly GradingService gs;
-        public boardTest(GradingService gs)
+        private readonly BoardService bs;
+        public BoardTest(BoardService bs)
         {
-            this.gs = gs;
+            this.bs = bs;
         }
 
         public void runTests()
         {
-            String res1 = gs.LimitColumn("amit@gmail.com", "milstone1", 0, 5);
-            if (res1.Equals("good"))
-            {
-                Console.WriteLine("limited the task amount in the column successfully");
-
-            } else
-            {
-                Console.WriteLine(res1);
-            }
-            String res2 = gs.LimitColumn("amit@gmail.com", "milstone1", -2, 3);
-            if (res2.Equals("good"))
-            {
-                Console.WriteLine("limited the task amount in the column successfully");
-            }
-            else
-            {
-                Console.WriteLine(res2);
-            }
-
-            String res3 = gs.GetColumnLimit("amit@gmail.com", "milstone1", 1);
-            if (res3.Equals("good"))
-            {
-                Console.WriteLine("action completed successfully");
-            }
-            else
-            {
-                Console.WriteLine(res3);
-            }
-
-            String res4 = gs.GetColumnName("amit@gmail.com", "milstone1", 1);
-            if (res4.Equals("good"))
-            {
-                Console.WriteLine("action completed successfully");
-            }
-            else
-            {
-                Console.WriteLine(res4);
-            }
-
-            String res5 = gs.AddTask("amit@gmail.com", "milstone1", "do uml", "create uml in drawio", new DateTime(2022,04,27)) ;
-            if (res5.Equals("good"))
-            {
-                Console.WriteLine("the task has been added successfully");
-            }
-            else
-            {
-                Console.WriteLine(res5);
-            }
-            String res6 = gs.AddTask("amit@gmail.com", "milstone1", "do uml", "create uml in drawio", new DateTime(2022, 04, 27)); //should return the task exists already
-            if (res6.Equals("good"))
-            {
-                Console.WriteLine("the task has been added successfully");
-            }
-            else
-            {
-                Console.WriteLine(res6);
-            }
-
-            String res7 = gs.AdvanceTask("amit@gmail.com", "milstone1", 1, 5);
-            if (res7.Equals("good"))
-            {
-                Console.WriteLine("the task has been advanced successfully");
-            }
-            else
-            {
-                Console.WriteLine(res7);
-            }
-            String res8 = gs.AdvanceTask("amit@gmail.com", "milstone1", 2, 5);
-            if (res8.Equals("good"))
-            {
-                Console.WriteLine("the task has been advanced successfully");
-            }
-            else
-            {
-                Console.WriteLine(res8);
-            }
-
-            String res9 = gs.GetColumn("amit@gmail.com", "milstone1", 1);
-            if (res9.Equals("good"))
-            {
-                Console.WriteLine("the column has been returned successfully");
-            }
-            else
-            {
-                Console.WriteLine(res9);
-            }
-
-            String res10 = gs.AddBoard("amit@gmail.com", "ms1");
-            if (res10.Equals("good"))
+   
+           
+            String res1 = bs.createBoard("yonatan") ;
+            Response res1j = JsonSerializer.Deserialize<Response>(res1);
+            if (res1j.ErrorMessage.Equals("ok"))
             {
                 Console.WriteLine("the board has been added successfully");
             }
             else
             {
-                Console.WriteLine(res10);
+                Console.WriteLine(res1j.ErrorMessage);
             }
-            String res11 = gs.AddBoard("amit@gmail.com", "ms1"); //should return the board name is taken already
-            if (res11.Equals("good"))
+            String res2 = bs.createBoard("yonatan");
+            Response res2j = JsonSerializer.Deserialize<Response>(res2);
+            if (res2j.ErrorMessage.Equals("ok"))
             {
                 Console.WriteLine("the board has been added successfully");
             }
             else
             {
-                Console.WriteLine(res11);
+                Console.WriteLine(res2j.ErrorMessage);
             }
-
-            String res12 = gs.RemoveBoard("amit@gmail.com", "ms1");
-            if (res12.Equals("good"))
+            String res3 = bs.remove(1);
+            Response res3j = JsonSerializer.Deserialize<Response>(res3);
+            if (res3j.ErrorMessage.Equals("ok"))
             {
                 Console.WriteLine("the board has been removed successfully");
             }
             else
             {
-                Console.WriteLine(res12);
+                Console.WriteLine(res3j.ErrorMessage);
             }
-            String res13 = gs.RemoveBoard("amit@gmail.com", "ms1"); //should return that there's no such board
-            if (res13.Equals("good"))
+            String res4 = bs.remove(-2);
+            Response res4j = JsonSerializer.Deserialize<Response>(res4);
+            if (res4j.ErrorMessage.Equals("ok"))
             {
                 Console.WriteLine("the board has been removed successfully");
             }
             else
             {
-                Console.WriteLine(res13);
+                Console.WriteLine(res4j.ErrorMessage);
+            }
+            String res5 = bs.changeState(0, "Milestone_1");
+            Response res5j = JsonSerializer.Deserialize<Response>(res5);
+            if (res5j.ErrorMessage.Equals("ok"))
+            {
+                Console.WriteLine("the task has been advenced successfully");
+            }
+            else
+            {
+                Console.WriteLine(res5j.ErrorMessage);
+            }
+            String res6 = bs.changeState(1, "Milestone_1");
+            Response res6j = JsonSerializer.Deserialize<Response>(res6);
+            if (res6j.ErrorMessage.Equals("ok"))
+            {
+                Console.WriteLine("the board has been advenced successfully");
+            }
+            else
+            {
+                Console.WriteLine(res6j.ErrorMessage);
+            }
+            String res7 = bs.changeState(2, "none such a board");
+            Response res7j = JsonSerializer.Deserialize<Response>(res7);
+            if (res7j.ErrorMessage.Equals("ok"))
+            {
+                Console.WriteLine("the board has been advenced successfully");
+            }
+            else
+            {
+                Console.WriteLine(res7j.ErrorMessage);
             }
             
-            String res14 = gs.InProgressTasks("amit@gmail.com");
-            if (res14.Equals("good"))
-            {
-                Console.WriteLine("the tasks have been returned successfully");
-            }
-            else
-            {
-                Console.WriteLine(res14);
-            }
         }
     }
 }

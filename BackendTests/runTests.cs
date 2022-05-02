@@ -13,15 +13,13 @@ namespace BackendTests
     {
         static void Main(string[] args)
         {
-            //GradingService gs = new GradingService();
-            //new userTest(new userService()).runTests();
-            // new taskTest(gs).runTests();
-            //new boardTest(gs).runTests();
-            String jstr = "{\"ErrorMessage\":\"olga\",\"ReturnValue\":\"hello amit and yonatan!\"}";
-            Console.WriteLine(jstr);
-            Response jr = JsonSerializer.Deserialize<Response>(jstr);
-            Console.WriteLine(jr.ErrorMessage);
-            Console.WriteLine(jr.ReturnValue);
+            BoardService bs = new BoardService();
+            TaskService ts = new TaskService();
+            UserService us = new UserService();
+            new BoardTest(bs).runTests();
+            new TaskTest(ts).runTests();
+            new UserTest(us).runTests();
+          
 
         }
     }

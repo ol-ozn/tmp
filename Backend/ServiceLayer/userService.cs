@@ -1,7 +1,11 @@
 ﻿using System;
 
-public interface userService
+public class UserService
 {
+    public UserService()
+    {
+
+    }
 
     /// <summary>
     ///  This method logs in an existing user.
@@ -9,7 +13,10 @@ public interface userService
     /// <param name="email">The email address of the user to login</param>
     /// <param name="password">The password of the user to login</param>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public String login(String email, String password);
+    public String login(String email, String password)
+    {
+        throw new NotImplementedException();
+    }
 
     /// <summary>
     /// This method creates a new account. 
@@ -17,18 +24,27 @@ public interface userService
     /// <param name="email">The email of the new user</param>
     /// <param name="password">The password of the new user</param>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public String createUser(String email, String password);
+    public String createUser(String email, String password)
+    {
+        throw new NotImplementedException();
+    }
 
     /// <summary>
     /// This method logs out a logged in user. 
     /// </summary>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public String logout();
+    public String logout()
+    {
+        throw new NotImplementedException();
+    }
 
     /// <summary>
     /// This method deletes the current account. 
     /// </summary>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public String deleteAccount();
+    public String deleteAccount()
+    {
+        throw new NotImplementedException();
+    }
 
 }

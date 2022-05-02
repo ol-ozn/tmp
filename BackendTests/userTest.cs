@@ -2,10 +2,10 @@
 
 using IntroSE.Kanban.Backend.ServiceLayer;
 using System.Text.Json;
-public class userTest
+public class UserTest
 {
-    private readonly userService us;
-    public userTest(userService us)
+    private readonly UserService us;
+    public UserTest(UserService us)
     {
         this.us = us;
     }
