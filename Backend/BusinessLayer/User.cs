@@ -14,7 +14,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public string email;
         private string password;
         private bool isLoggedIn;
-        private List<Board> boardList;
+        private Dictionary<string,Board> boardList;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         //when we create user, we assume that all the fields are valid
@@ -24,7 +24,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.email = email;
             this.password = password;
             isLoggedIn = false;
-            boardList = new List<Board>();
+            boardList = new Dictionary<string, Board>();
         }
 
         public bool getIsLoggedIn()
@@ -60,24 +60,24 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public Task findTask(int taskId)
         {
-            foreach (Board board in boardList)
+            foreach(Board board in boardList.Values)
             {
                 //TODO: find better way to iterate over dict
-                List<Task> toDoList = (board.getBoard())["toDo"];
+                List<Task> toDoList = (board.getColumns())["toDo"];
                 foreach (Task task in toDoList)
                 {
                     if(taskId == task.getId())
                         return task;
                 }
 
-                List<Task> inProgressList = (board.getBoard())["inProgress"];
+                List<Task> inProgressList = (board.getCoulumns())["inProgress"];
                 foreach (Task task in inProgressList)
                 {
                     if (taskId == task.getId())
                         return task;
                 }
 
-                List<Task> doneList = (board.getBoard())["done"];
+                List<Task> doneList = (board.getColumns())["done"];
                 foreach (Task task in doneList)
                 {
                     if (taskId == task.getId())
@@ -91,9 +91,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public List<Task> listInProgress()
         {
             List<Task> list = new List<Task>();
-            foreach (Board board in boardList)
+            foreach (Board board in boardList.Values)
             {
-                List<Task> l = (board.getBoard())["inProgress"];
+                List<Task> l = (board.getColumns())["inProgress"];
                 foreach (Task task in l)
                 {
                     list.Add(task);                    
