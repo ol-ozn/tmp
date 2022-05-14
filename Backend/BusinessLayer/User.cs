@@ -70,7 +70,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                         return task;
                 }
 
-                List<Task> inProgressList = (board.getCoulumns())["inProgress"];
+                List<Task> inProgressList = (board.getColumns())["inProgress"];
                 foreach (Task task in inProgressList)
                 {
                     if (taskId == task.getId())
@@ -103,5 +103,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return list;
         }
 
+        public Dictionary<string, Board> getBoardList()
+        {
+            return boardList;
+        }
     }
 }

@@ -8,5 +8,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Task
     {
+        public int getId()
+        {
+            return 0;
+        }
+
+        public int getBoardID()
+        {
+            return 0;
+        }
+
+        public string getTitle()
+        {
+            return null;
+        }
     }
 }

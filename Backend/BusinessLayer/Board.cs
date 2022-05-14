@@ -8,17 +8,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Board
     {
-        //private String name { get; set; }
         private String name;
-        private List<List<Task>> board;
+        private Dictionary<string, List<Task>> columns;
         private readonly int id;
-        public Board(String boardName,int id)
+        public Board(String boardName, int id)
         {
             name = boardName;
-            board = new List<List<Task>>();
-            id = id;
+            columns = new Dictionary<string, List<Task>>();
+            this.id = id;
         }
 
         public String getName() { return name; }
+
+        public int getID() { return id; }
+
+        public Dictionary<string, List<Task>> getColumns() { return columns; }
+
+
     }
 }
