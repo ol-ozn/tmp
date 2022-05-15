@@ -14,17 +14,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public string email;
         private string password;
         private bool isLoggedIn;
-        private Dictionary<string,Board> boardList;
+        private Dictionary<string, Board> boardListByName;
+        private Dictionary<int, Board> boardListById;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         //when we create user, we assume that all the fields are valid
-        public User(string email, string password,int id) 
+        public User(string email, string password, int id)
         {
             this.id = id; //consider dropping id for user (ONLY)
             this.email = email;
             this.password = password;
             isLoggedIn = false;
-            boardList = new Dictionary<string, Board>();
+            boardListByName = new Dictionary<string, Board>();
+            boardListById = new Dictionary<int, Board>();
         }
 
         public bool getIsLoggedIn()
@@ -33,8 +35,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
         public void setIsLoggedIn(bool value)
-        {   
-            if(value)
+        {
+            if (value)
                 log.Debug(email + " logged in successfully");
             else
                 log.Debug(email + " logged out successfully");
@@ -49,7 +51,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public void login(string password)
         {
-            if(password.Equals(this.password))
+            if (password.Equals(this.password))
                 setIsLoggedIn(true);
             else
             {
@@ -60,13 +62,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public Task findTask(int taskId)
         {
-            foreach(Board board in boardList.Values)
+            foreach (Board board in boardListByName.Values)
             {
                 //TODO: find better way to iterate over dict
                 List<Task> toDoList = (board.getColumns())["toDo"];
                 foreach (Task task in toDoList)
                 {
-                    if(taskId == task.getId())
+                    if (taskId == task.getId())
                         return task;
                 }
 
@@ -91,21 +93,26 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public List<Task> listInProgress()
         {
             List<Task> list = new List<Task>();
-            foreach (Board board in boardList.Values)
+            foreach (Board board in boardListByName.Values)
             {
                 List<Task> l = (board.getColumns())["inProgress"];
                 foreach (Task task in l)
                 {
-                    list.Add(task);                    
+                    list.Add(task);
                 }
-                //list.Concat(l); TODO:check if it's ok
             }
+
             return list;
         }
 
-        public Dictionary<string, Board> getBoardList()
+        public Dictionary<string, Board> getBoardListByName()
         {
-            return boardList;
+            return boardListByName;
+        }
+
+        public Dictionary<int, Board> getBoardListById()
+        {
+            return boardListById;
         }
     }
 }

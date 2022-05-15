@@ -11,6 +11,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private String name;
         private Dictionary<string, List<Task>> columns;
         private readonly int id;
+
         public Board(String boardName, int id)
         {
             name = boardName;
@@ -18,12 +19,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.id = id;
         }
 
-        public String getName() { return name; }
+        public String getName()
+        {
+            return name;
+        }
 
-        public int getID() { return id; }
+        public int getID()
+        {
+            return id;
+        }
 
-        public Dictionary<string, List<Task>> getColumns() { return columns; }
-
-
+        public Dictionary<string, List<Task>> getColumns()
+        {
+            return columns;
+        }
     }
 }

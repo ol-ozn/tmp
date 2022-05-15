@@ -32,9 +32,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("User isn't logged in");
             }
 
-            Dictionary<string, Board> userBoards = user.getBoardList();
+            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
 
-            if (userBoards.ContainsKey(boardName)) // check if user has baord with given name
+            if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
             {
                 log.Debug("a board with this name: " + boardName + " for: " + user.email + " already exists");
                 throw new Exception("A board with this name already exist");
@@ -43,7 +44,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             int futureID = 0; //TODO: add counter for id 
             Board toAdd = new Board(boardName, futureID);
             boards.Add(futureID, toAdd); //add new board to gloabal board list
-            userBoards.Add(boardName, toAdd); // add nre board to user board list
+            userBoardsbyName.Add(boardName, toAdd); // add nre board to user board list
+            userBoardsbyId.Add(futureID, toAdd);
             log.Debug("a board with this name: " + boardName + " has been add to user: " + user.email);
             return toAdd;
         }
@@ -56,12 +58,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("User isn't logged in");
             }
 
-            Dictionary<string, Board> userBoards = user.getBoardList();
-            if (userBoards.ContainsKey(boardName))
+            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+            if (userBoardsbyName.ContainsKey(boardName))
             {
-                int boardId = userBoards[boardName].getID();
-                userBoards.Remove(boardName); //board has been remove from user board list
-                boards.Remove(boardId); //board has been remove from gloabal board list
+                int boardId = userBoardsbyName[boardName].getID();
+                userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
+                userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
+                boards.Remove(boardId); //board has been remove from global board list
                 log.Debug("a board with this name : " + boardName + " has been removed from user: " + user.email);
             }
             else
@@ -79,13 +83,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 log.Debug("Attempt to advance null task");
                 throw new Exception("null pointer exception");
             }
+
             if (!user.getIsLoggedIn())
             {
                 log.Debug("Attempt to remove a board when user isn't logged in");
                 throw new Exception("User isn't logged in");
             }
 
-            Dictionary<string, Board> userBoards = user.getBoardList();
+            Dictionary<string, Board> userBoards = user.getBoardListByName();
 
             Board board = boards[task.getBoardID()];
             if (!userBoards.ContainsKey(board.getName())) //check if user owns this tasks
@@ -116,9 +121,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
                         else
                         {
-                            log.Debug(user.email +" tried to advance task that is already done");
+                            log.Debug(user.email + " tried to advance task that is already done");
                             throw new Exception("Try do advance from done");
                         }
+
                         return; //Break all
                     }
                 }
