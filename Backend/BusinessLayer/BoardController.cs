@@ -12,10 +12,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     {
         private Dictionary<int, Board> boards;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private int boardIdCOunter;
+        
 
         public BoardController()
         {
             boards = new Dictionary<int, Board>();
+            this.boardIdCOunter = 0;
         }
 
         public Board addBoard(String boardName, User user)
@@ -41,12 +44,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("A board with this name already exist");
             }
 
-            int futureID = 0; //TODO: add counter for id 
+            int futureID = boardIdCOunter; //TODO: add counter for id 
             Board toAdd = new Board(boardName, futureID);
             boards.Add(futureID, toAdd); //add new board to gloabal board list
             userBoardsbyName.Add(boardName, toAdd); // add nre board to user board list
             userBoardsbyId.Add(futureID, toAdd);
             log.Debug("a board with this name: " + boardName + " has been add to user: " + user.email);
+            boardIdCOunter++;
             return toAdd;
         }
 
