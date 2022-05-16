@@ -19,6 +19,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             users = new Dictionary<string, User>();
         }
+
         public User createUser(string email, string password)
         {
             if (userExists(email))
@@ -44,7 +45,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             //if both ok- create new User obj
             User newUser = new User(email, password, 0); //TODO: when implemented id counter, change.
-            users.Add(email,newUser);
+            users.Add(email, newUser);
             log.Debug("User with email " + email + " was created successfully");
             newUser.setIsLoggedIn(true);
 
@@ -57,7 +58,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             bool lowerCap = false;
             bool num = false;
 
-            if(password == null || (password.Length < 6 | password.Length > 20))
+            if (password == null || (password.Length < 6 | password.Length > 20))
                 return false;
 
             foreach (char c in password)
@@ -66,10 +67,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     upperCap = true;
                 if (char.IsLower(c))
                     lowerCap = true;
-                if(char.IsNumber(c))
+                if (char.IsNumber(c))
                     num = true;
             }
-            
+
             return upperCap && lowerCap && num;
         }
 
@@ -98,12 +99,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private bool userExists(string email)
         {
-            if(users.ContainsKey(email))
+            if (users.ContainsKey(email))
                 return true;
 
-            log.Debug("Attempted log with "+ email + " which doesn't exist");
+            log.Debug("Attempted log with " + email + " which doesn't exist");
             throw new Exception("User with given email does not exist");
         }
+
 
         public void deleteUser(string email)
         {
@@ -116,7 +118,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public void logout(User u)
         {
-            if(u.getIsLoggedIn())
+            if (u.getIsLoggedIn())
                 u.setIsLoggedIn(false);
             else
             {
