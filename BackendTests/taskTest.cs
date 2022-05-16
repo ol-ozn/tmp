@@ -14,12 +14,9 @@ namespace BackendTests
     public class TaskTest
     {
         private readonly TaskService taskService;
-        private readonly UserService userService;
-        private readonly UserController userController;
         private readonly User currentUser;
 
-        public TaskTest(TaskService taskService, UserService userService, UserController userController,
-            string userEmail, string password)
+        public TaskTest(TaskService taskService, UserService userService, string userEmail, string password)
         {
             Response loginResponse = userService.login(userEmail, password);
             if (loginResponse.ErrorMessage.Equals(""))
@@ -29,11 +26,9 @@ namespace BackendTests
             else
             {
                 Console.WriteLine("user is not logged in");
-                return;
             }
 
             this.taskService = taskService;
-            this.userService = userService;
         }
 
 
