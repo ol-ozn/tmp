@@ -14,6 +14,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private int boardIdCOunter;
         
+        
 
         public BoardController()
         {

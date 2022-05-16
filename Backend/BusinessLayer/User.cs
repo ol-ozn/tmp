@@ -114,5 +114,29 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             return boardListById;
         }
+
+        public Board hasBoardByName(string boardName)
+        {
+            if (boardListByName.ContainsKey(boardName))
+            {
+                return boardListByName[boardName];
+            }
+            else
+            {
+                throw new Exception("The user doesn't own board with given name");
+            }
+        }
+
+        public Board hasBoardById(int boardId)
+        {
+            if (boardListById.ContainsKey(boardId))
+            {
+                return boardListById[boardId];
+            }
+            else
+            {
+                throw new Exception("The user doesn't own board with given id");
+            }
+        }
     }
 }

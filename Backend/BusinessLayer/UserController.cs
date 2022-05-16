@@ -123,5 +123,78 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("already logged out.");
             }
         }
+
+        public int getColumnLimit(string email, string boardName, int columnId)
+        {
+            if (!(users[email]).getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+            if (columnId < 0 || columnId > 2)
+            {
+                throw new Exception("invalid columnId");
+            }
+
+            User user = users[email];
+            Board bord = user.hasBoardByName(boardName);
+            return bord.getcolumLimit(columnId);
+            
+        }
+
+        public string getColumnName(string email, string boardName, int columnId)
+        {
+            if (!(users[email]).getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+            if (columnId < 0 || columnId > 2)
+            {
+                throw new Exception("invalid columnId");
+            }
+            User user = users[email];
+            Board bord = user.hasBoardByName(boardName);
+            return bord.getcolumname(columnId);
+
+        }
+
+        public void setColumnLinit(string email, string boardName, int columnId, int limit)
+        {
+            if (!(users[email]).getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+            if (columnId < 0 || columnId > 2)
+            {
+                throw new Exception("invalid columnId");
+            }
+
+            if (limit < -1)
+            {
+                throw new Exception("invalid column limit");
+            }
+
+            User user = users[email];
+            Board bord = user.hasBoardByName(boardName);
+            bord.setcolumLimit(columnId, limit);
+        }
+
+        public List<Task> getColumn(string email, string boardName, int columnId)
+        {
+            if (!(users[email]).getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+            if (columnId < 0 || columnId > 2)
+            {
+                throw new Exception("invalid columnId");
+            }
+            User user = users[email];
+            Board bord = user.hasBoardByName(boardName);
+            return bord.getColumn(columnId);
+        }
     }
 }
