@@ -23,11 +23,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <summary>
         /// This method creates and adds a new task. 
         /// </summary>
-        /// <param name="userName">The username that wants to add a new task</param>
-        /// <param name="title">The title the new task</param>
-        /// <param name="description">The description of the task</param>
-        /// <param name="dueDate">The dueDate of the task</param>
-        /// <returns>The string "{}", unless an error occurs</returns>
+        /// <param name="user">The username that wants to add a new task</param>
+        /// <param name="title">The title of the new task</param>
+        /// <param name="description">The description of the new task</param>
+        /// <param name="dueTime">The dueDate of the new task</param>
+        /// <param name="boardId">The boardId of the new task</param>
+        /// <returns>creates a new task and adds it to the users task list</returns>
         public Response add(User user, string title, string description, DateTime dueTime, int boardId)
         {
             try
@@ -44,11 +45,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
 
         /// <summary>
-        /// This method changes the attributes of a task. 
+        /// This method is called when the user tries to edit the task title. 
         /// </summary>
-        /// <param name="id">The id of the board in which the task is in</param>
-        /// <param name="taskTitle">The title of the task to be changed</param>
-        /// <param name="text">The new text to be inserted</param>
+        /// <param name="description">The description of the new task</param>
+        /// <param name="task">The task that it's title needs to be edited</param>
+        /// <param name="user">The username that wants to edit the task title</param>
         /// <returns>The string "{}", unless an error occurs</returns>
         public Response editTaskTitle(string description, Task task, User user)
         {
@@ -64,6 +65,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// This method is called when the user tries to edit the task description. 
+        /// </summary>
+        /// <param name="description">The task that it's description is edited</param>
+        /// <param name="task">The task that it's description needs to be edited</param>
+        /// <param name="user">The username that wants to edit the task description</param>
+        /// <returns>The string "{}", unless an error occurs</returns>
         public Response editTaskDescription(string description, Task task, User user)
         {
             try
@@ -78,6 +86,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// This method is called when the user tries to change the dueDate. 
+        /// </summary>
+        /// <param name="dateTime">the new due date that the user wants to change to</param>
+        /// <param name="task">The task that it's description needs to be edited</param>
+        /// <param name="user">The username that wants to edit the task description</param>
+        /// <returns>The string "{}", unless an error occurs</returns>
         public Response editTaskDueDate(DateTime dateTime, Task task, User user)
         {
             try
