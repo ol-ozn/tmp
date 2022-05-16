@@ -47,16 +47,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <summary>
         /// This method is called when the user tries to edit the task title. 
         /// </summary>
-        /// <param name="description">The description of the new task</param>
+        /// <param name="title">The title of the new task</param>
         /// <param name="task">The task that it's title needs to be edited</param>
         /// <param name="user">The username that wants to edit the task title</param>
         /// <returns>The string "{}", unless an error occurs</returns>
-        public Response editTaskTitle(string description, Task task, User user)
+        public Response editTaskTitle(string title, Task task, User user, int boardId)
         {
             try
             {
-                taskController.editDescription(description, task, user);
-                log.Debug("User: " + user.email + "edited thier task title");
+                taskController.editTitle(title, task, user,boardId);
+                log.Debug("User: " + user.email + "edited the task's title");
                 return new Response();
             }
             catch (Exception e)
