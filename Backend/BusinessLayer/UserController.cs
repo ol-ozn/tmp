@@ -161,7 +161,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         }
 
-        public void setColumnLinit(string email, string boardName, int columnId, int limit)
+        public void setColumnLimit(string email, string boardName, int columnId, int limit)
         {
             if (!(users[email]).getIsLoggedIn())
             {
