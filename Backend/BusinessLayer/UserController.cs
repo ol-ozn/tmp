@@ -161,7 +161,21 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         }
 
-        public void setColumnLimit(string email, string boardName, int columnId, int limit)
+        public void changePassword(User user, string oldPassword, string newPassword)
+        {
+            if (user.isPassword(oldPassword))
+            {
+                user.changePassword(newPassword);
+                log.Debug("Account with email: " + user.email + " has successfully changed the password");
+            }
+            else
+            {
+                log.Debug("Account with email: " + user.email + " attempted to change password with wrong old password");
+                throw new Exception("old password is incorrect!");
+            }
+
+        }
+            public void setColumnLimit(string email, string boardName, int columnId, int limit)
         {
             if (!(users[email]).getIsLoggedIn())
             {

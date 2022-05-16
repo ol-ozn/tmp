@@ -44,6 +44,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             isLoggedIn = value;
         }
 
+        public bool isPassword(string possiblePassword)
+        {
+            if(possiblePassword.Equals(password))
+                return true;
+            return false;
+        }
         public void changePassword(string password)
         {
             this.password = password;
