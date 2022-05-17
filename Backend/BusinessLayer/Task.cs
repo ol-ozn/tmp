@@ -58,7 +58,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             this.title = title;
         }
-        
+
         public void setDescription(string description)
         {
             this.description = description;

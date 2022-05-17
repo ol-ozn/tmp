@@ -14,11 +14,15 @@ namespace BackendTests
         static void Main(string[] args)
         {
             UserService userService = new UserService();
-            UserTest ut = new UserTest(userService);
-            ut.runUserTests();
             BoardService boardService = new BoardService(userService);
-            BoardTest bt = new BoardTest(boardService, userService);
-            // bt.runBoardTests();
+            TaskService taskService = new TaskService(userService);
+
+            UserTest ut = new UserTest(userService);
+            // ut.runUserTests();
+            BoardTest bt = new BoardTest(boardService, userService, taskService);
+            bt.runBoardTests();
+            TaskTest tt = new TaskTest(taskService, userService, boardService);
+            // tt.runTaskTests();
         }
     }
 }
