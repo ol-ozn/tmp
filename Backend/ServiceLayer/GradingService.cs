@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
+using IntroSE.Kanban.Backend.BusinessLayer;
 
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
@@ -48,11 +50,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     /// </summary>
     public class GradingService
     {
-
+        UserService userService;
+        BoardService boardService;
+        
         public GradingService()
         {
-            throw new NotImplementedException();
+            userService = new UserService();
+            boardService = new BoardService(userService);
         }
+
 
 
         /// <summary>
@@ -63,7 +69,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string Register(string email, string password)
         {
-            throw new NotImplementedException();
+            return (userService.createUser(email, password)).ErrorMessage;
         }
 
 
@@ -75,7 +81,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with user email, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string Login(string email, string password)
         {
-            throw new NotImplementedException();
+            return (userService.login(email, password)).ErrorMessage;
         }
 
 
@@ -86,7 +92,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string Logout(string email)
         {
-            throw new NotImplementedException();
+            return (userService.logout(email)).ErrorMessage;
         }
 
         /// <summary>
@@ -99,7 +105,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
         {
-            throw new NotImplementedException();
+            return (boardService.limitColumn(email, boardName, columnOrdinal, limit)).ErrorMessage;
         }
 
         /// <summary>
@@ -111,7 +117,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with column limit value, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumnLimit(string email, string boardName, int columnOrdinal)
         {
-            throw new NotImplementedException();
+            Response res = boardService.getColumnLimit(email, boardName, columnOrdinal);
+            if (res.ErrorMessage.Equals("{}"))
+                return ((int)res.ReturnValue).ToString();
+            return res.ErrorMessage;
         }
 
 
@@ -124,7 +133,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with column name value, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumnName(string email, string boardName, int columnOrdinal)
         {
-            throw new NotImplementedException();
+            Response res = boardService.getColumnName(email, boardName, columnOrdinal);
+            if (res.ErrorMessage.Equals("{}"))
+                return ((string)res.ReturnValue).ToString();
+            return res.ErrorMessage;
         }
 
 
@@ -211,7 +223,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with  a list of the column's tasks, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumn(string email, string boardName, int columnOrdinal)
         {
-            throw new NotImplementedException();
+            Response res = boardService.getColumnName(email, boardName, columnOrdinal);
+            if (res.ErrorMessage.Equals("{}"))
+                return ((List<Task>)res.ReturnValue).ToString();
+            return res.ErrorMessage;
         }
 
 
@@ -223,7 +238,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string AddBoard(string email, string name)
         {
-            throw new NotImplementedException();
+            return (boardService.createBoard(name, email)).ErrorMessage;
         }
 
 
@@ -235,7 +250,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string RemoveBoard(string email, string name)
         {
-            throw new NotImplementedException();
+            return (boardService.remove(name, email)).ErrorMessage;
         }
 
 

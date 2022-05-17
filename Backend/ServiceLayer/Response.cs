@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
@@ -15,6 +16,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             this.ErrorMessage = ErrorMessage;
             this.ReturnValue = ReturnValue;
+        }
+
+        public string toJson()
+        { 
+            return JsonSerializer.Serialize(this);
         }
     }
 }

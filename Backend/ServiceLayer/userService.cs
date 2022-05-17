@@ -24,7 +24,8 @@ public class UserService
         try
         {
             User user = userController.login(email, password);
-            return new Response("", user);
+            log.Info("user with email: " + email + " has logged in successfully");
+            return new Response("{}", user);
         }
         catch (Exception e)
         {
@@ -44,13 +45,13 @@ public class UserService
         try
         {
             User user = userController.createUser(email, password);
-            return new Response("", user);
+            log.Info("user with email " + email + " was created successfully");
+            return new Response("{}", user);
         }
         catch (Exception e)
         {
             log.Debug(e.Message);
             return new Response(e.Message, null);
-
         }
     }
 
@@ -63,7 +64,8 @@ public class UserService
         try
         {
             userController.logout(email);
-            return new Response("", null);
+            log.Info("user with email: " + email + "has logged out successfully");
+            return new Response("{}", null);
         }
         catch (Exception e)
         {
@@ -81,7 +83,8 @@ public class UserService
         try
         {
             userController.deleteUser(email);
-            return new Response("", null);
+            log.Info("user with email: " + email + " has been deleted successfully");
+            return new Response("{}", null);
         }
         catch (Exception e)
         {
