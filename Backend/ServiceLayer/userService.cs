@@ -6,11 +6,11 @@ using log4net;
 
 public class UserService
 {
-    private UserController uc;
+    public UserController userController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     public UserService()
     {
-        uc = new UserController();
+        userController = new UserController();
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ public class UserService
     {
         try
         {
-            User user = uc.login(email, password);
+            User user = userController.login(email, password);
             return new Response("", user);
         }
         catch (Exception e)
@@ -43,7 +43,7 @@ public class UserService
     {
         try
         {
-            User user = uc.createUser(email, password);
+            User user = userController.createUser(email, password);
             return new Response("", user);
         }
         catch (Exception e)
@@ -62,7 +62,7 @@ public class UserService
     {
         try
         {
-            uc.logout(email);
+            userController.logout(email);
             return new Response("", null);
         }
         catch (Exception e)
@@ -80,7 +80,7 @@ public class UserService
     {
         try
         {
-            uc.deleteUser(email);
+            userController.deleteUser(email);
             return new Response("", null);
         }
         catch (Exception e)

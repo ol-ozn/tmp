@@ -11,129 +11,118 @@ namespace BackendTests
 {
     public class BoardTest
     {
-        private readonly BoardService bs;
-        private readonly UserService us;
+        private readonly BoardService boardService;
+        private readonly UserService userService;
 
-        public BoardTest(BoardService bs, UserService us)
+        public BoardTest(BoardService boardService, UserService userService)
         {
-            this.bs = bs;
-            this.us = us;
+            this.boardService = boardService;
+            this.userService = userService;
         }
 
         public void runBoardTests()
         {
-            User user = (User)(us.createUser("yonatan@gamil.com", "Aa13456")).ReturnValue;
+            Response res = userService.createUser("yonatan@gamil.com", "Aa13456");
+            Console.WriteLine(res.ErrorMessage);
+            // User user = (User)(userService.createUser("yonatan@gamil.com", "Aa13456")).ReturnValue;
             addBoard1();
-            us.logout("yonatan@gamil.com");
             addBoard2();
-            us.login("yonatan@gamil.com", "Aa13456");
             addBoard3();
+            userService.logout("yonatan@gamil.com");
+            addBoard4();
+            userService.login("yonatan@gamil.com", "Aa13456");
+
+            removeBoard1();
+            removeBoard2();
+            removeBoard3();
+            userService.logout("yonatan@gamil.com");
+            removeBoard4();
+            userService.login("yonatan@gamil.com", "Aa13456");
         }
 
-        public void addBoard1()
+        public void addBoard1() //should create a board successfully
         {
-            Response res = bs.createBoard("boardName", "yonatan@gamil.com"); //should create a board
+            Response res = boardService.createBoard("board1", "yonatan@gamil.com");
             if (res.ErrorMessage.Equals(""))
-                Console.WriteLine("Account with email: olga1@gmail.com was created successfully");
+                Console.WriteLine("Account with email: yonatan@gamil.com has created a board with name \"board1\" successfully");
             else
                 Console.WriteLine(res.ErrorMessage);
-            us.logout("olga1@gmail.com"); //logging out in order to test later login
         }
 
-        public void addBoard2()
+        public void addBoard2() //should return that board with such name already exists
         {
-            bs.createBoard("oflineBoard", "yonatan@gamil.com"); //create board while offline
+            Response res = boardService.createBoard("board1", "yonatan@gamil.com"); //should create a board
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan@gamil.com has created a board with name \"board1\" successfully");
+            else
+                Console.WriteLine(res.ErrorMessage);
         }
 
-        public void addBoard3()
+        public void addBoard3() //should return illegal board name
         {
-            bs.createBoard("boardName", "yonatan@gamil.com"); //same board name 
-
+            Response res = boardService.createBoard("", "yonatan@gamil.com"); //should create a board
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan@gamil.com has created a board with name \"\" successfully");
+            else
+                Console.WriteLine(res.ErrorMessage);
         }
 
-        public void addBoard4()
+        public void addBoard4() //should return attempt to create board to a logged-out user
         {
-            bs.createBoard("", "yonatan@gamil.com"); //same board name 
+            //logout happens before calling this function
+            Response res = boardService.createBoard("board2", "yonatan@gamil.com");
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan@gamil.com has created a board with name \"board2\" successfully");
+            else
+                Console.WriteLine(res.ErrorMessage);
         }
 
-        public void runTests()
+        public void addBoard5() //should return attempt to create board to a non-existing user
         {
-            string res1 = bs.createBoard("yonatan");
-            Response res1j = JsonSerializer.Deserialize<Response>(res1);
-            if (res1j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the board has been added successfully");
-            }
+            //logout happens before calling this function
+            Response res = boardService.createBoard("board222", "yonatan222@gamil.com"); 
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan222@gamil.com has created a board with name \"board222\" successfully");
             else
-            {
-                Console.WriteLine(res1j.ErrorMessage);
-            }
-
-            String res2 = bs.createBoard("yonatan");
-            Response res2j = JsonSerializer.Deserialize<Response>(res2);
-            if (res2j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the board has been added successfully");
-            }
-            else
-            {
-                Console.WriteLine(res2j.ErrorMessage);
-            }
-
-            String res3 = bs.remove(1);
-            Response res3j = JsonSerializer.Deserialize<Response>(res3);
-            if (res3j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the board has been removed successfully");
-            }
-            else
-            {
-                Console.WriteLine(res3j.ErrorMessage);
-            }
-
-            String res4 = bs.remove(-2);
-            Response res4j = JsonSerializer.Deserialize<Response>(res4);
-            if (res4j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the board has been removed successfully");
-            }
-            else
-            {
-                Console.WriteLine(res4j.ErrorMessage);
-            }
-
-            String res5 = bs.changeState(0, "Milestone_1");
-            Response res5j = JsonSerializer.Deserialize<Response>(res5);
-            if (res5j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the task has been advenced successfully");
-            }
-            else
-            {
-                Console.WriteLine(res5j.ErrorMessage);
-            }
-
-            String res6 = bs.changeState(1, "Milestone_1");
-            Response res6j = JsonSerializer.Deserialize<Response>(res6);
-            if (res6j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the board has been advenced successfully");
-            }
-            else
-            {
-                Console.WriteLine(res6j.ErrorMessage);
-            }
-
-            String res7 = bs.changeState(2, "none such a board");
-            Response res7j = JsonSerializer.Deserialize<Response>(res7);
-            if (res7j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the board has been advenced successfully");
-            }
-            else
-            {
-                Console.WriteLine(res7j.ErrorMessage);
-            }
+                Console.WriteLine(res.ErrorMessage);
         }
+
+        public void removeBoard1() //should remove successfully
+        {
+            Response res = boardService.remove("board1", "yonatan@gamil.com");
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan@gamil.com has removed a board with name \"board1\" successfully");
+            else
+                Console.WriteLine(res.ErrorMessage);
+        }
+
+        public void removeBoard2() //should return attempt to remove board that didn't exist in the first place
+        {
+            Response res = boardService.remove("board2", "yonatan@gamil.com");
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan@gamil.com has removed a board with name \"board2\" successfully");
+            else
+                Console.WriteLine(res.ErrorMessage);
+        }
+        public void removeBoard3() //should return the account doesn't even exist
+        {
+            Response res = boardService.remove("board222", "yonatan222@gamil.com");
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan222@gamil.com has removed a board with name \"board222\" successfully");
+            else
+                Console.WriteLine(res.ErrorMessage);
+        }
+
+        public void removeBoard4() //should return the account isn't even logged in
+        {
+            //logout happens before calling this function
+            Response res = boardService.remove("board1", "yonatan@gamil.com");
+            if (res.ErrorMessage.Equals(""))
+                Console.WriteLine("Account with email: yonatan222@gamil.com has removed a board with name \"board1\" successfully");
+            else
+                Console.WriteLine(res.ErrorMessage);
+        }
+
+        //TODO: check change state tests
     }
 }

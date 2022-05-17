@@ -246,10 +246,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public User getUser(string email)
         {
-            if (!users.ContainsKey(email))
-            {
-                throw new Exception("User doesn't exist");
-            }
+            if (!userExists(email))
+                throw new Exception("Attempt to get user that doesn't exist");
 
             return users[email];
         }

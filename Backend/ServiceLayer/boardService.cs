@@ -6,22 +6,22 @@ using log4net;
 
 public class BoardService
 {
-    public UserController uc;
+    private UserController userController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-    public BoardService()
-    { uc = new UserController(); }
+    public BoardService(UserService userService)
+    { this.userController = userService.userController; }
 
 /// <summary>
     /// This method creates a new board. 
     /// </summary>
     /// <param name="boardName">The name of the new board</param>
     /// <returns>The string "{}", unless an error occurs</returns>
-    public Response createBoard(String boardName, string email)
+    public Response createBoard(string boardName, string email)
     {
         try
         {
-            Board board =  uc.addBoard(boardName, email);
+            Board board =  userController.addBoard(boardName, email);
             log.Debug("Board: " + boardName + "was add by " + email);
             return new Response("", board);
         }
@@ -41,7 +41,7 @@ public class BoardService
     {
         try
         {
-            uc.remove(boardName, email);
+            userController.remove(boardName, email);
             log.Debug("Board: " + boardName + "was removed by " + email);
             return new Response("", null);
         }
@@ -61,7 +61,7 @@ public class BoardService
     {
         try
         {
-            uc.changeState(email, boardName, columnOrdinal, taskId);
+            userController.changeState(email, boardName, columnOrdinal, taskId);
             log.Debug("taks: " + taskId + "was advanced by " + email);
             return new Response("", null);
 
