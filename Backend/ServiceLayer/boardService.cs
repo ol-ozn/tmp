@@ -6,23 +6,23 @@ using log4net;
 
 public class BoardService
 {
-    public BoardController bc;
+    public UserController uc;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     public BoardService()
-    { bc = new BoardController(); }
+    { uc = new UserController(); }
 
 /// <summary>
     /// This method creates a new board. 
     /// </summary>
     /// <param name="boardName">The name of the new board</param>
     /// <returns>The string "{}", unless an error occurs</returns>
-    public Response createBoard(String boardName, User user)
+    public Response createBoard(String boardName, string email)
     {
         try
         {
-            Board board =  bc.addBoard(boardName, user);
-            log.Debug("Board: " + boardName + "was add by " + user.email);
+            Board board =  uc.addBoard(boardName, email);
+            log.Debug("Board: " + boardName + "was add by " + email);
             return new Response("", board);
         }
         catch(Exception e)
@@ -37,12 +37,12 @@ public class BoardService
     /// </summary>
     /// <param name="id">The id of the board to remove</param>
     /// <returns>The string "{}", unless an error occurs</returns>
-    public Response remove(string boardName, User user)
+    public Response remove(string boardName, string email)
     {
         try
         {
-            bc.remove(boardName, user);
-            log.Debug("Board: " + boardName + "was removed by " + user.email);
+            uc.remove(boardName, email);
+            log.Debug("Board: " + boardName + "was removed by " + email);
             return new Response("", null);
         }
         catch (Exception e)
@@ -57,12 +57,12 @@ public class BoardService
     /// <param name="id">The id of the board in which the task is in</param>
     /// <param name="taskTitle">The title of the task of which to change state</param>
     /// <returns>The string "{}", unless an error occurs</returns>
-    public Response changeState(Task task, User user)
+    public Response changeState(string email, string boardName, int columnOrdinal, int taskId)
     {
         try
         {
-            bc.changeState(task,user);
-            log.Debug("taks: " + task.getTitle() + "was advanced by " + user.email);
+            uc.changeState(email, boardName, columnOrdinal, taskId);
+            log.Debug("taks: " + taskId + "was advanced by " + email);
             return new Response("", null);
 
         }
