@@ -23,11 +23,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             name = boardName;
             columns = new Dictionary<string, List<Task>>();
+            initColumns();
             this.id = id;
             columnsId = new Dictionary<int, string>();
             initialColumnsId(columnsId);
         }
 
+        public void initColumns()
+        {
+            columns.Add("backlog", new List<Task>());
+            columns.Add("inProgress", new List<Task>());
+            columns.Add("done", new List<Task>());
+        }
         public String getName()
         {
             return name;

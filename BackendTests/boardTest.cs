@@ -31,6 +31,7 @@ namespace BackendTests
             userService.logout("yonatan@gamil.com");
             addBoard4();
             userService.login("yonatan@gamil.com", "Aa13456");
+            addBoard5();
 
             removeBoard1();
             removeBoard2();

@@ -139,7 +139,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (!userExists(email))
                 throw new Exception("Attempt to delete an account with an email that doesn't exist.");
 
-            users.Remove(email); //TODO: check, should we delete all of the boards and tasks??
+            users.Remove(email);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!userExists(email))
                 throw new Exception("An account with that email doesn't even exist!");
-            if (isLoggedIn(email))
+            else if (isLoggedIn(email))
                 users[email].setIsLoggedIn(false);
             else
             {
@@ -171,46 +171,58 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+
+        /// <summary>
+        ///  This method returns the column limit of a given column in a given board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <returns>Limit of the given column</returns>
         public int getColumnLimit(string email, string boardName, int columnId)
         {
-            if (!(users[email]).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+            User user = getUser(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
                 throw new Exception("invalid columnId");
             }
 
-            User user = getUser(email);
-            Board bord = user.hasBoardByName(boardName);
-            return bord.getColumnLimit(columnId);
+            Board board = user.hasBoardByName(boardName);
+            return board.getColumnLimit(columnId);
         }
 
+        /// <summary>
+        ///  This method returns the column name of a given column in a given board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <returns>Name of the given column</returns>
         public string getColumnName(string email, string boardName, int columnId)
         {
-            if (!(users[email]).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+            User user = getUser(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
                 throw new Exception("invalid columnId");
             }
 
-            User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
             return bord.getColumnName(columnId);
         }
 
+        /// <summary>
+        ///  This method sets the column limit of a given column in a given board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <param name="limit">The wanted limit for the column</param>
+        /// <returns></returns>
         public void setColumnLimit(string email, string boardName, int columnId, int limit)
         {
-            if (!(users[email]).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+            User user = getUser(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
@@ -221,38 +233,52 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("invalid column limit");
             }
-
-            User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
             bord.setColumnLimit(columnId, limit);
         }
 
+        /// <summary>
+        ///  This method returns a column from a board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <returns>List of tasks representing the column</returns>
         public List<Task> getColumn(string email, string boardName, int columnId)
         {
-            if (!(users[email]).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+            User user = getUser(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
                 throw new Exception("invalid columnId");
             }
 
-            User user = getUser(email);
-            Board bord = user.hasBoardByName(boardName);
-            return bord.getColumn(columnId);
+            Board board = user.hasBoardByName(boardName);
+            return board.getColumn(columnId);
         }
 
+        /// <summary>
+        ///  This method returns a user.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>User</returns>
         public User getUser(string email)
         {
             if (!userExists(email))
-                throw new Exception("Attempt to get user that doesn't exist");
+                throw new Exception("User with email: " + email + " doesn't exist");
+            if(!isLoggedIn(email))
+                throw new Exception("User with email: " + email + " is logged out");
 
             return users[email];
         }
 
-        public Board addBoard(String boardName, string email)
+        /// <summary>
+        ///  This method adds a board to a user.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <returns>The created Board</returns>
+        public Board addBoard(string boardName, string email)
         {
             if (string.IsNullOrWhiteSpace(boardName))
             {
@@ -263,7 +289,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             if (!user.getIsLoggedIn())
             {
-                throw new Exception("User isn't logged in");
+                throw new Exception("User with email " + email + " isn't logged in");
             }
 
             Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
@@ -271,7 +297,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
             {
-                throw new Exception("A board with this name already exist");
+                throw new Exception("A board named " + boardName +" already exist");
             }
 
             int futureID = boardIdCOunter; //TODO: add counter for id 
@@ -282,6 +308,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return toAdd;
         }
 
+        /// <summary>
+        ///  This method sets the removes a board from users' boards.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <returns></returns>
         public void remove(string boardName, string email)
         {
             User user = getUser(email);
@@ -300,17 +332,25 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             else
             {
-                throw new Exception("Try to remove a non existing board");
+                throw new Exception("Try to remove a board with the name " + boardName + " which doesn't exist to the email: " + email);
             }
         }
 
+        /// <summary>
+        ///  This method changes the state of a task.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnOrdinal">The id of the column</param>
+        /// <param name="taskId">The id of the task to advance</param>
+        /// <returns></returns>
         public void changeState(string email, string boardName, int columnOrdinal, int taskId)
         {
             User user = getUser(email);
 
             if (!user.getIsLoggedIn())
             {
-                throw new Exception("User isn't logged in");
+                throw new Exception("User with email: " + email + " isn't logged in");
             }
 
             Board board = user.hasBoardByName(boardName);
