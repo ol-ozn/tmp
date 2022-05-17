@@ -12,7 +12,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private String name;
         private Dictionary<string, List<Task>> columns;
         private readonly int id;
-        private int limitToDo = -1; 
+        private int backlog = -1; 
         private int limitInProgress = -1;
         private int limitDone = -1;
         private Dictionary<int, string> columsId;
@@ -129,6 +129,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public List<Task> getTasksListById(int id)
         {
             return columns[columsId[id]];
+        }
+
+        public bool isColumnFull(int colID)
+        {
+            return getColumn(colID).Count == getcolumLimit(colID);
         }
 
     }

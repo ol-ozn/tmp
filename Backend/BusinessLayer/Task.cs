@@ -16,7 +16,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private DateTime dueTime;
         private string title;
         private string description;
-        private int boardId;
+        private string boardName;
         private int id;
 
 
@@ -29,12 +29,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="boardId">The id of the board that the task is in</param>
         /// <param name="id">The id of the task</param>
         /// <returns> creates a new task >
-        public Task(string title, string description, DateTime dueTime, int boardId,User user)
+        public Task(string title, string description, DateTime dueTime, string boardName, User user, int id)
         {
             this.title = title;
             this.description = description;
             this.dueTime = dueTime;
-            this.boardId = boardId;
+            this.boardName = boardName;
+            this.id = id;
         }
 
 
@@ -43,9 +44,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return id;
         }
 
-        public int getBoardID()
+        public string getBoardName()
         {
-            return boardId;
+            return boardName;
         }
 
         public string getTitle()

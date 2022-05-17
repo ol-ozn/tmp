@@ -324,6 +324,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 {
                     if (columnOrdinal < 2) //advance task to in progress
                     {
+                        if (board.isColumnFull(taskId)) //check column limit
+                        {
+                            throw new Exception("column overflow");
+                        }
                         board.getTasksListById(columnOrdinal).Remove(task); //remove task from given column ordinal
                         board.getTasksListById(columnOrdinal+1).Add(task); //advances task to the next column ordinal
                     }

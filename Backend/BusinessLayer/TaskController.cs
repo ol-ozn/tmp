@@ -12,15 +12,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class TaskController
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private UserController uc;
+        private int taskId;
 
-        public TaskController()
+        public TaskController(UserController uc)
         {
+            this.uc = uc;
+            this.taskId = 0;
         }
 
 
-        public Task addTask(string title, string description, DateTime dueTime, int boardId, User user)
+        public Task addTask(string title, string description, DateTime dueTime, string boardName, string email)
         {
-            if (checkTitleValidity(title, user, boardId))
+            if (checkTitleValidity(title, uc.getUser(email), boardName))
             {
                 throw new Exception("user tried to create a new task" +
                                     "with either an empty title or a title with more than" +
@@ -33,13 +37,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                                     "with a description that has more than 300 characters");
             }
 
-            Task newTask = new Task(title, description, dueTime, boardId, user);
+            if (uc.getUser(email).hasBoardByName(boardName).isColumnFull(0))
+            {
+                throw new Exception("Column overflow");
+            }
 
-            Dictionary<int, Board> userBoardById = user.getBoardListById();
-            Board boardbyID = userBoardById[boardId];
-            boardbyID.getColumns()["inProgress"].Add(newTask);
-
-
+            Task newTask = new Task(title, description, dueTime, boardName, uc.getUser(email), taskId);
+            taskId++;
+            Dictionary<string, Board> userBoardByName = uc.getUser(email).getBoardListByName();
+            Board boardbyName = userBoardByName[boardName];
+            boardbyName.getColumns()["backlog"].Add(newTask);
             return newTask;
         }
 
@@ -107,14 +114,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return ((description != null) || (description.Length > 300));
         }
 
-        private bool checkTitleValidity(string newTitle, User user, int boardId)
+        private bool checkTitleValidity(string newTitle, User user, string boardName)
         {
             if (!(newTitle == null || newTitle.Length > 50))
             {
                 return false;
             }
 
-            if (!taskNameAlreadyExists(user, newTitle, boardId))
+            if (!taskNameAlreadyExists(user, newTitle, boardName))
             {
                 throw new Exception("a task with this title already exists");
             }
@@ -122,10 +129,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return true;
         }
 
-        private bool taskNameAlreadyExists(User user, string title, int boardId)
+        private bool taskNameAlreadyExists(User user, string title, string boardName)
         {
-            Dictionary<int, Board> boardListById = user.getBoardListById();
-            Board board = boardListById[boardId];
+            Board board = user.hasBoardByName(boardName);
 
             foreach (List<Task> list in board.getColumns().Values)
             {
