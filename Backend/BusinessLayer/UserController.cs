@@ -12,11 +12,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     {
         private Dictionary<string, User> users;
         private int usersIdCount;
+        private int boardIdCOunter;
 
         public UserController()
         {
             users = new Dictionary<string, User>();
             usersIdCount = 0;
+            boardIdCOunter = 0;
         }
 
         /// <summary>
@@ -30,17 +32,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             //check if user with given email already exist
             if (userExists(email))
                 throw new Exception("User with email: " + email + " already exists.");
-            
+
 
             //check email validity
             if (!emailValidity(email))
                 throw new Exception("Invalid email: " + email);
-            
+
 
             //check password validity
             if (!passwordValidity(password))
-                throw new Exception("Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
-            
+                throw new Exception(
+                    "Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
+
 
             //if all the criteria above met- create new User object
             User newUser = new User(email, password, usersIdCount);
@@ -121,7 +124,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email to check existence of a user with</param>
         /// <returns>True if user exists, false otherwise</returns>
-        private bool userExists(string email) { return users.ContainsKey(email); }
+        private bool userExists(string email)
+        {
+            return users.ContainsKey(email);
+        }
 
         /// <summary>
         ///  This method deletes an existing user.
@@ -132,7 +138,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!userExists(email))
                 throw new Exception("Attempt to delete an account with an email that doesn't exist.");
-            
+
             users.Remove(email); //TODO: check, should we delete all of the boards and tasks??
         }
 
@@ -155,7 +161,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public void logout(string email)
         {
-            if(!userExists(email))
+            if (!userExists(email))
                 throw new Exception("An account with that email doesn't even exist!");
             if (isLoggedIn(email))
                 users[email].setIsLoggedIn(false);
@@ -177,10 +183,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("invalid columnId");
             }
 
-            User user = users[email];
+            User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
             return bord.getcolumLimit(columnId);
-            
         }
 
         public string getColumnName(string email, string boardName, int columnId)
@@ -194,11 +199,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("invalid columnId");
             }
-            User user = users[email];
+
+            User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
             return bord.getcolumname(columnId);
-
         }
+
         public void setColumnLimit(string email, string boardName, int columnId, int limit)
         {
             if (!(users[email]).getIsLoggedIn())
@@ -216,7 +222,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("invalid column limit");
             }
 
-            User user = users[email];
+            User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
             bord.setcolumLimit(columnId, limit);
         }
@@ -232,9 +238,102 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("invalid columnId");
             }
-            User user = users[email];
+
+            User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
             return bord.getColumn(columnId);
+        }
+
+        public User getUser(string email)
+        {
+            if (!users.ContainsKey(email))
+            {
+                throw new Exception("User doesn't exist");
+            }
+
+            return users[email];
+        }
+
+        public Board addBoard(String boardName, string email)
+        {
+            if (string.IsNullOrWhiteSpace(boardName))
+            {
+                throw new Exception("board name is not valid");
+            }
+
+            User user = getUser(email);
+
+            if (!user.getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+
+            if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
+            {
+                throw new Exception("A board with this name already exist");
+            }
+
+            int futureID = boardIdCOunter; //TODO: add counter for id 
+            Board toAdd = new Board(boardName, futureID);
+            userBoardsbyName.Add(boardName, toAdd); // add nre board to user board list
+            userBoardsbyId.Add(futureID, toAdd);
+            boardIdCOunter++;
+            return toAdd;
+        }
+
+        public void remove(string boardName, string email)
+        {
+            User user = getUser(email);
+            if (!user.getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+            if (userBoardsbyName.ContainsKey(boardName))
+            {
+                int boardId = userBoardsbyName[boardName].getID();
+                userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
+                userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
+            }
+            else
+            {
+                throw new Exception("Try to remove a non existing board");
+            }
+        }
+
+        public void changeState(string email, string boardName, int columnOrdinal, int taskId)
+        {
+            User user = getUser(email);
+
+            if (!user.getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+            Board board = user.hasBoardByName(boardName);
+            List<Task> tasksList = board.getColumn(columnOrdinal);
+            Dictionary<string, Board> userBoards = user.getBoardListByName();
+            foreach (Task task in tasksList)
+            {
+                if (task.getId() == taskId)
+                {
+                    if (columnOrdinal < 2) //advance task to in progress
+                    {
+                        board.getTasksListById(columnOrdinal).Remove(task); //remove task from given column ordinal
+                        board.getTasksListById(columnOrdinal+1).Add(task); //advances task to the next column ordinal
+                    }
+
+                    else
+                    {
+                        throw new Exception("Try do advance from done");
+                    }
+                }
+            }
         }
     }
 }
