@@ -33,7 +33,7 @@ public class UserTest
         delete2();
     }
 
-    private void createUser1() //should be correct
+    public void createUser1() //should be correct
     {
         Response res = us.createUser("olga1@gmail.com", "Abc12345");
         if (res.ErrorMessage.Equals(""))
@@ -43,7 +43,7 @@ public class UserTest
         us.logout("olga1@gmail.com"); //logging out in order to test later login
     }
 
-    private void createUser2() //account should already exist
+    public void createUser2() //account should already exist
     {
         Response res = us.createUser("olga1@gmail.com", "Abc12345");
         if (res.ErrorMessage.Equals(""))
@@ -52,7 +52,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void createUser3() //email should be invalid
+    public void createUser3() //email should be invalid
     {
         Response res = us.createUser("olga1gmail.com", "Abc12345");
         if (res.ErrorMessage.Equals(""))
@@ -61,7 +61,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void createUser4() //password should be invalid - no capital
+    public void createUser4() //password should be invalid - no capital
     {
         Response res = us.createUser("olga2@gmail.com", "abc12345");
         if (res.ErrorMessage.Equals(""))
@@ -70,7 +70,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void createUser5() //password should be invalid - too short
+    public void createUser5() //password should be invalid - too short
     {
         Response res = us.createUser("olga2@gmail.com", "abc45");
         if (res.ErrorMessage.Equals(""))
@@ -79,7 +79,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void createUser6() //password should be invalid - no number
+    public void createUser6() //password should be invalid - no number
     {
         Response res = us.createUser("olga2@gmail.com", "abcdefGH");
         if (res.ErrorMessage.Equals(""))
@@ -88,7 +88,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void createUser7() //password should be invalid - no lower case
+    public void createUser7() //password should be invalid - no lower case
     {
         Response res = us.createUser("olga2@gmail.com", "ABCDEF34");
         if (res.ErrorMessage.Equals(""))
@@ -97,7 +97,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void createUser8() //password should be invalid - too long
+    public void createUser8() //password should be invalid - too long
     {
         Response res = us.createUser("olga2@gmail.com", "THIS1iswayTOOlongofApasswordWHOWILLrememberit");
         if (res.ErrorMessage.Equals(""))
@@ -106,7 +106,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void login1() //should log in well
+    public void login1() //should log in well
     {
         Response res = us.login("olga1@gmail.com", "Abc12345");
         if (res.ErrorMessage.Equals(""))
@@ -115,7 +115,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void login2() //should return already logged in
+    public void login2() //should return already logged in
     {
         Response res = us.login("olga1@gmail.com", "Abc12345");
         if (res.ErrorMessage.Equals(""))
@@ -124,7 +124,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void login3() //should return the account doesn't exist
+    public void login3() //should return the account doesn't exist
     {
         Response res = us.login("olga3@gmail.com", "Abc12345");
         if (res.ErrorMessage.Equals(""))
@@ -133,7 +133,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void login4() //should return wrong password
+    public void login4() //should return wrong password
     {
         Response res = us.login("olga1@gmail.com", "WRongPa55word");
         if (res.ErrorMessage.Equals(""))
@@ -142,7 +142,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void logout1() //should work well 
+    public void logout1() //should work well 
     {
         Response res = us.logout("olga1@gmail.com");
         if (res.ErrorMessage.Equals(""))
@@ -151,7 +151,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void logout2() //should return already logged out
+    public void logout2() //should return already logged out
     {
         Response res = us.logout("olga1@gmail.com");
         if (res.ErrorMessage.Equals(""))
@@ -160,7 +160,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void logout3() //should return user with such email doesn't exist
+    public void logout3() //should return user with such email doesn't exist
     {
         Response res = us.logout("olga4@gmail.com");
         if (res.ErrorMessage.Equals(""))
@@ -169,7 +169,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void delete1() //should work well
+    public void delete1() //should work well
     {
         Response res = us.deleteAccount("olga1@gmail.com");
         if (res.ErrorMessage.Equals(""))
@@ -178,7 +178,7 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    private void delete2() //should return user doesn't exist
+    public void delete2() //should return user doesn't exist
     {
         Response res = us.deleteAccount("olga1@gmail.com");
         if (res.ErrorMessage.Equals(""))
