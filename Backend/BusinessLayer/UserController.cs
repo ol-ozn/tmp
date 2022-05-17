@@ -202,7 +202,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
-            return bord.getcolumname(columnId);
+            return bord.getColumName(columnId);
         }
 
         public void setColumnLimit(string email, string boardName, int columnId, int limit)

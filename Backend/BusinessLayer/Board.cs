@@ -74,12 +74,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private void initialColuumsId(Dictionary<int, string> collumsId)
         {
-            columsId.Add(0, "toDo");
+            columsId.Add(0, "backlog");
             columsId.Add(1, "inProgress");
             columsId.Add(2, "done");
         }
 
-        public string getcolumname(int id)
+        public string getColumName(int id)
         {
             return columsId[id];
         }
@@ -119,7 +119,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public List<Task> getColumn(int id)
         {
+            if (id >2 || id < 0)
+            {
+                throw new Exception("Id out of bounds");
+            }
             return columns[columsId[id]];
         }
+
+        public List<Task> getTasksListById(int id)
+        {
+            return columns[columsId[id]];
+        }
+
     }
 }
