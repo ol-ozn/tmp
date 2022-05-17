@@ -62,16 +62,23 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("User isn't logged in");
             }
+
             User currentUser = uc.getUser(email);
-            if (!checkTitleValidity(title, currentUser, boardName));
+            if (!checkTitleValidity(title, currentUser, boardName)) ;
             {
                 throw new Exception("user tried to either enter an empty title or a title with more than" +
                                     "50 characters");
             }
 
             Board boardByName = currentUser.hasBoardByName(boardName);
-            List<Task> = boardByName.getColumn(columnOrdinal);
-            task.setTitle(newTitle);
+            Task task = findTaskById(boardByName, taskId, columnOrdinal);
+            if (task == null)
+            {
+                throw new Exception("User:" + email + "tried to change task: " + taskId
+                                    + "from board " + boardName);
+            }
+
+            task.setTitle(title);
         }
 
 
@@ -147,7 +154,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     }
                 }
             }
+
             return false;
+        }
+
+        public Task findTaskById(Board board, int id, int columnOrdinal)
+        {
+            List<Task> currentTaskList = board.getColumn(columnOrdinal);
+            foreach (Task currentTask in currentTaskList)
+            {
+                if (currentTask.getId() == id)
+                {
+                    return currentTask;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -10,8 +10,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class Board
     {
         private String name;
+        private Dictionary<int, string> columnsId; // dictionary< columnsId, ColumnsTitle>
         private Dictionary<string, List<Task>> columns; // dictionary <board title, tasks list>
-        private Dictionary<int, string> columnsId; // dictionary< boardId, Title>
         private readonly int id;
         private int backlog = -1; 
         private int limitInProgress = -1;
@@ -126,17 +126,26 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return columns[columnsId[id]];
         }
-      
+        
 
-        public List<Task> getTasksListById(int id)
-        {
-            return columns[columnsId[id]];
-        }
 
         public bool isColumnFull(int colID)
         {
             return getColumn(colID).Count == getColumnLimit(colID);
         }
 
+        public Task findTaskById(int id, int columnOrdinal)
+        {
+            List<Task> currentTaskList = getColumn(columnOrdinal);
+            foreach (Task currentTask in currentTaskList)
+            {
+                if (currentTask.getId() == id)
+                {
+                    return currentTask;
+                }
+            }
+
+            throw new Exception("This Task Does not exist in this column");
+        }
     }
 }
