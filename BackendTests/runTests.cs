@@ -16,6 +16,9 @@ namespace BackendTests
             UserService userService = new UserService();
             UserTest ut = new UserTest(userService);
             ut.runUserTests();
+            BoardService boardService = new BoardService(userService);
+            BoardTest bt = new BoardTest(boardService, userService);
+            // bt.runBoardTests();
         }
     }
 }
