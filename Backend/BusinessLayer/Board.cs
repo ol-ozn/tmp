@@ -10,12 +10,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class Board
     {
         private String name;
-        private Dictionary<string, List<Task>> columns;
+        private Dictionary<string, List<Task>> columns; // dictionary <board title, tasks list>
+        private Dictionary<int, string> columnsId; // dictionary< boardId, Title>
         private readonly int id;
         private int backlog = -1; 
         private int limitInProgress = -1;
         private int limitDone = -1;
-        private Dictionary<int, string> columsId;
+        
 
 
         public Board(String boardName, int id)
@@ -23,8 +24,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             name = boardName;
             columns = new Dictionary<string, List<Task>>();
             this.id = id;
-            columsId = new Dictionary<int, string>();
-            initialColuumsId(columsId);
+            columnsId = new Dictionary<int, string>();
+            initialColumnsId(columnsId);
         }
 
         public String getName()
@@ -44,15 +45,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public int getLimitToDo()
         {
-            return limitToDo;
+            return limitDone;
         }
 
         public void setLimitToDo(int newLimit)
         {
-            this.limitToDo = newLimit;
+            this.limitDone = newLimit;
         }
 
-        public int getlimitInProgress()
+        public int getLimitInProgress()
         {
             return limitInProgress;
         }
@@ -72,19 +73,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.limitDone = newLimit;
         }
 
-        private void initialColuumsId(Dictionary<int, string> collumsId)
+        private void initialColumnsId(Dictionary<int, string> collumsId)
         {
-            columsId.Add(0, "backlog");
-            columsId.Add(1, "inProgress");
-            columsId.Add(2, "done");
+            columnsId.Add(0, "backlog");
+            columnsId.Add(1, "inProgress");
+            columnsId.Add(2, "done");
         }
 
-        public string getColumName(int id)
+        public string getColumnName(int id)
         {
-            return columsId[id];
+            return columnsId[id];
         }
 
-        public int getcolumLimit(int columnId)
+        public int getColumnLimit(int columnId)
         {
             if (columnId == 0)
             {
@@ -93,14 +94,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             else if (columnId == 1)
             {
-                return getlimitInProgress();
+                return getLimitInProgress();
             }
             else
             {
                 return getLimitDone();
             }
         }
-        public void setcolumLimit(int columnId, int newLimit)
+        public void setColumnLimit(int columnId, int newLimit)
         {
             if (columnId == 0)
             {
@@ -123,17 +124,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("Id out of bounds");
             }
-            return columns[columsId[id]];
+            return columns[columnsId[id]];
         }
+      
 
         public List<Task> getTasksListById(int id)
         {
-            return columns[columsId[id]];
+            return columns[columnsId[id]];
         }
 
         public bool isColumnFull(int colID)
         {
-            return getColumn(colID).Count == getcolumLimit(colID);
+            return getColumn(colID).Count == getColumnLimit(colID);
         }
 
     }

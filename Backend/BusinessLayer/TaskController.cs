@@ -56,19 +56,21 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// /// titles name length can't be longer than 50 chars.
         /// <param name="title">// sets the title of the task</param>
-        public void editTitle(string newTitle, Task task, User user, int boardId)
+        public void editTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
-            if (!user.getIsLoggedIn())
+            if (!uc.getUser(email).getIsLoggedIn())
             {
                 throw new Exception("User isn't logged in");
             }
-
-            if (!checkTitleValidity(newTitle, user, boardId)) ;
+            User currentUser = uc.getUser(email);
+            if (!checkTitleValidity(title, currentUser, boardName));
             {
                 throw new Exception("user tried to either enter an empty title or a title with more than" +
                                     "50 characters");
             }
 
+            Board boardByName = currentUser.hasBoardByName(boardName);
+            List<Task> = boardByName.getColumn(columnOrdinal);
             task.setTitle(newTitle);
         }
 
@@ -116,11 +118,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private bool checkTitleValidity(string newTitle, User user, string boardName)
         {
+            // checks whether the title is not empty or has more than 50 characters
             if (!(newTitle == null || newTitle.Length > 50))
             {
                 return false;
             }
 
+            // checks whether the user already has task with this name on the given board
             if (!taskNameAlreadyExists(user, newTitle, boardName))
             {
                 throw new Exception("a task with this title already exists");
@@ -143,7 +147,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     }
                 }
             }
-
             return false;
         }
     }

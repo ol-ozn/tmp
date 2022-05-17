@@ -14,8 +14,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public string email;
         private string password;
         private bool isLoggedIn;
-        private Dictionary<string, Board> boardListByName;
-        private Dictionary<int, Board> boardListById;
+        private Dictionary<string, Board> boardListByName; // Dict <boardName , Board Object>
+        private Dictionary<int, Board> boardListById;  // Dict < board Id , BoardObject>
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         //when we create user, we assume that all the fields are valid

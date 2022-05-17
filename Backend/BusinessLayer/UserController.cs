@@ -185,7 +185,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
-            return bord.getcolumLimit(columnId);
+            return bord.getColumnLimit(columnId);
         }
 
         public string getColumnName(string email, string boardName, int columnId)
@@ -202,7 +202,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
-            return bord.getColumName(columnId);
+            return bord.getColumnName(columnId);
         }
 
         public void setColumnLimit(string email, string boardName, int columnId, int limit)
@@ -224,7 +224,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             User user = getUser(email);
             Board bord = user.hasBoardByName(boardName);
-            bord.setcolumLimit(columnId, limit);
+            bord.setColumnLimit(columnId, limit);
         }
 
         public List<Task> getColumn(string email, string boardName, int columnId)
