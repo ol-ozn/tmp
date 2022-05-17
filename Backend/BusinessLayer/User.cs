@@ -29,71 +29,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardListById = new Dictionary<int, Board>();
         }
 
-        public bool getIsLoggedIn()
-        {
-            return isLoggedIn;
-        }
+        public bool getIsLoggedIn() { return isLoggedIn; }
 
-        public void setIsLoggedIn(bool value)
-        {
-            if (value)
-                log.Debug(email + " logged in successfully");
-            else
-                log.Debug(email + " logged out successfully");
-
-            isLoggedIn = value;
-        }
+        public void setIsLoggedIn(bool value) { isLoggedIn = value; }
 
         public bool isPassword(string possiblePassword)
         {
             if(possiblePassword.Equals(password))
                 return true;
             return false;
-        }
-        public void changePassword(string password)
-        {
-            this.password = password;
-        }
-
-        public void login(string password)
-        {
-            if (password.Equals(this.password))
-                setIsLoggedIn(true);
-            else
-            {
-                log.Debug("Attempt to log in to " + email + " with wrong password.");
-                throw new Exception("Wrong password");
-            }
-        }
-
-        public Task findTask(int taskId)
-        {
-            foreach (Board board in boardListByName.Values)
-            {
-                //TODO: find better way to iterate over dict
-                List<Task> toDoList = (board.getColumns())["toDo"];
-                foreach (Task task in toDoList)
-                {
-                    if (taskId == task.getId())
-                        return task;
-                }
-
-                List<Task> inProgressList = (board.getColumns())["inProgress"];
-                foreach (Task task in inProgressList)
-                {
-                    if (taskId == task.getId())
-                        return task;
-                }
-
-                List<Task> doneList = (board.getColumns())["done"];
-                foreach (Task task in doneList)
-                {
-                    if (taskId == task.getId())
-                        return task;
-                }
-            }
-
-            throw new Exception("Given task doesn't exist in any of this user's boards");
         }
 
         public List<Task> listInProgress()
@@ -111,15 +55,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return list;
         }
 
-        public Dictionary<string, Board> getBoardListByName()
-        {
-            return boardListByName;
-        }
+        public Dictionary<string, Board> getBoardListByName() { return boardListByName; }
 
-        public Dictionary<int, Board> getBoardListById()
-        {
-            return boardListById;
-        }
+        public Dictionary<int, Board> getBoardListById() { return boardListById; }
 
         public Board hasBoardByName(string boardName)
         {

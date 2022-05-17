@@ -5,53 +5,57 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using log4net;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class UserController
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private Dictionary<string, User> users;
+        private int usersIdCount;
 
         public UserController()
         {
             users = new Dictionary<string, User>();
+            usersIdCount = 0;
         }
 
+        /// <summary>
+        ///  This method creates a new user.
+        /// </summary>
+        /// <param name="email">The email address of the new user</param>
+        /// <param name="password">The password of the new user</param>
+        /// <returns>User object of the new user, unless an error occurs</returns>
         public User createUser(string email, string password)
         {
+            //check if user with given email already exist
             if (userExists(email))
-            {
-                log.Debug("Attempted to create a user that already exists.");
-                throw new Exception("User with this email already exists.");
-            }
+                throw new Exception("User with email: " + email + " already exists.");
+            
 
-            //check email
+            //check email validity
             if (!emailValidity(email))
-            {
-                log.Debug("Attempt to create a user is with invalid email");
-                throw new Exception("Invalid email.");
-            }
+                throw new Exception("Invalid email: " + email);
+            
 
-            //check password
+            //check password validity
             if (!passwordValidity(password))
-            {
-                log.Debug("Attempt to create a user is with invalid password");
-                throw new Exception(
-                    "Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
-            }
+                throw new Exception("Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
+            
 
-            //if both ok- create new User obj
-            User newUser = new User(email, password, 0); //TODO: when implemented id counter, change.
+            //if all the criteria above met- create new User object
+            User newUser = new User(email, password, usersIdCount);
+            usersIdCount++;
             users.Add(email, newUser);
-            log.Debug("User with email " + email + " was created successfully");
-            newUser.setIsLoggedIn(true);
+            newUser.setIsLoggedIn(true); //setting automatically the user is logged in
 
             return newUser;
         }
 
+        /// <summary>
+        ///  This method checks validity of a password.
+        /// </summary>
+        /// <param name="password">The password to check its' validity</param>
+        /// <returns>True if the password is valid, false otherwise</returns>
         private bool passwordValidity(string password)
         {
             bool upperCap = false;
@@ -74,6 +78,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return upperCap && lowerCap && num;
         }
 
+        /// <summary>
+        ///  This method checks validity of an email.
+        /// </summary>
+        /// <param name="email">The email to check its' validity</param>
+        /// <returns>True if the email is valid, false otherwise</returns>
         private bool emailValidity(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -85,41 +94,71 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return regexValid;
         }
 
+        /// <summary>
+        ///  This method logs in an existing user.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="password">The password of the user</param>
+        /// <returns>User object of logged in user, unless an error occurs</returns>
         public User login(string email, string password)
         {
-            User u = null;
-            //check email exist
-            if (userExists(email)) // if user doesn't exist- userExists() throws exception 
-                u = users[email];
-            //check correct password -> inside user (so no data leak) + flag logged in
-            u.login(password); //u is never null at this point
-            //log for login happens inside of u.login
-            return u;
+            if (!userExists(email))
+                throw new Exception("Attempt to log in to account with email: " + email + " that doesn't exist!");
+
+            if (!users[email].isPassword(password))
+                throw new Exception("Attempt to log in to " + email + " with wrong password!");
+
+            if (isLoggedIn(email))
+                throw new Exception("User already logged in"); //TODO: check with the guys about this one
+
+            users[email].setIsLoggedIn(true);
+
+            return users[email];
         }
 
-        private bool userExists(string email)
-        {
-            if (users.ContainsKey(email))
-                return true;
+        /// <summary>
+        ///  This method checks existence of a user.
+        /// </summary>
+        /// <param name="email">The email to check existence of a user with</param>
+        /// <returns>True if user exists, false otherwise</returns>
+        private bool userExists(string email) { return users.ContainsKey(email); }
 
-            log.Debug("Attempted log with " + email + " which doesn't exist");
-            throw new Exception("User with given email does not exist");
-        }
-
-
+        /// <summary>
+        ///  This method deletes an existing user.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>User object of logged in user, unless an error occurs</returns>
         public void deleteUser(string email)
         {
-            if (userExists(email))
-            {
-                users.Remove(email);
-                log.Debug("Account with email: " + email + " was deleted.");
-            }
+            if (!userExists(email))
+                throw new Exception("Attempt to delete an account with an email that doesn't exist.");
+            
+            users.Remove(email); //TODO: check, should we delete all of the boards and tasks??
         }
 
-        public void logout(User u)
+        /// <summary>
+        ///  This method checks if an account is logged in.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>True if the user is logged in, false otherwise</returns>
+        public bool isLoggedIn(string email) //function in order to have access from the outside
         {
-            if (u.getIsLoggedIn())
-                u.setIsLoggedIn(false);
+            if (!userExists(email))
+                throw new Exception("An account with that email doesn't even exist!");
+            return users[email].getIsLoggedIn();
+        }
+
+        /// <summary>
+        ///  This method logs out of a logged in user.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns></returns>
+        public void logout(string email)
+        {
+            if(!userExists(email))
+                throw new Exception("An account with that email doesn't even exist!");
+            if (isLoggedIn(email))
+                users[email].setIsLoggedIn(false);
             else
             {
                 throw new Exception("already logged out.");
@@ -160,22 +199,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return bord.getcolumname(columnId);
 
         }
-
-        public void changePassword(User user, string oldPassword, string newPassword)
-        {
-            if (user.isPassword(oldPassword))
-            {
-                user.changePassword(newPassword);
-                log.Debug("Account with email: " + user.email + " has successfully changed the password");
-            }
-            else
-            {
-                log.Debug("Account with email: " + user.email + " attempted to change password with wrong old password");
-                throw new Exception("old password is incorrect!");
-            }
-
-        }
-            public void setColumnLimit(string email, string boardName, int columnId, int limit)
+        public void setColumnLimit(string email, string boardName, int columnId, int limit)
         {
             if (!(users[email]).getIsLoggedIn())
             {

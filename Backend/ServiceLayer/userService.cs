@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Reflection;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
+using log4net;
 
 public class UserService
 {
-    private UserController uc; 
+    private UserController uc;
+    private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     public UserService()
     {
         uc = new UserController();
@@ -25,6 +28,7 @@ public class UserService
         }
         catch (Exception e)
         {
+            log.Debug(e.Message);
             return new Response(e.Message, null);
         }
     }
@@ -44,6 +48,7 @@ public class UserService
         }
         catch (Exception e)
         {
+            log.Debug(e.Message);
             return new Response(e.Message, null);
 
         }
@@ -53,15 +58,16 @@ public class UserService
     /// This method logs out a logged in user. 
     /// </summary>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public Response logout(User u)
+    public Response logout(string email)
     {
         try
         {
-            uc.logout(u);
+            uc.logout(email);
             return new Response("", null);
         }
         catch (Exception e)
         {
+            log.Debug(e.Message);
             return new Response(e.Message, null);
         }
     }
@@ -79,6 +85,7 @@ public class UserService
         }
         catch (Exception e)
         {
+            log.Debug(e.Message);
             return new Response(e.Message, null);
         }
     }

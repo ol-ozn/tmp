@@ -1,93 +1,189 @@
-﻿// using System;
-//
-// using IntroSE.Kanban.Backend.ServiceLayer;
-// using System.Text.Json;
-// public class UserTest
-// {
-//     private readonly UserService us;
-//     public UserTest(UserService us)
-//     {
-//         this.us = us;
-//     }
-//     public void runTests()
-//     {
-//         //testing creation of an account
-//         String res1 = us.createUser("olga@gmail.com", "1234");
-//         Response res1j = JsonSerializer.Deserialize<Response>(res1);
-//         if (res1j.ErrorMessage.Equals("ok"))
-//         {
-//             Console.WriteLine("register completed successfully");
-//         }
-//         else
-//         {
-//             Console.WriteLine(res1j.ErrorMessage);
-//
-//             String res2 = us.createUser("olga@gmail.com", "1234");
-//             Response res2j = JsonSerializer.Deserialize<Response>(res2);
-//             if (res2j.ErrorMessage.Equals("ok"))
-//             {
-//                 Console.WriteLine("register completed successfully");
-//             }
-//             else
-//             {
-//                 Console.WriteLine(res2j.ErrorMessage);
-//             }
-//
-//             //testing login of an account
-//             String res3 = us.login("yonatan@gmail.com", "2345");
-//             Response res3j = JsonSerializer.Deserialize<Response>(res3);
-//             if (res3j.ErrorMessage.Equals("ok"))
-//             {
-//                 Console.WriteLine("login completed successfully");
-//             }
-//             else
-//             {
-//                 Console.WriteLine(res3j.ErrorMessage);
-//             }
-//             String res4 = us.login("olga@gmail.com", "2345");
-//             Response res4j = JsonSerializer.Deserialize<Response>(res4);
-//             if (res4j.ErrorMessage.Equals("ok"))
-//             {
-//                 Console.WriteLine("login completed successfully");
-//             }
-//             else
-//             {
-//                 Console.WriteLine(res4j.ErrorMessage);
-//             }
-//             String res5 = us.login("olga@gmail.com", "1234");
-//             Response res5j = JsonSerializer.Deserialize<Response>(res5);
-//             if (res5j.ErrorMessage.Equals("ok"))
-//             {
-//                 Console.WriteLine("login completed successfully");
-//             }
-//             else
-//             {
-//                 Console.WriteLine(res5j.ErrorMessage);
-//             }
-//
-//             //testing logging out of an account
-//             String res6 = us.logout();
-//             Response res6j = JsonSerializer.Deserialize<Response>(res6);
-//             if (res6j.ErrorMessage.Equals("ok"))
-//             {
-//                 Console.WriteLine("logout completed successfully");
-//             }
-//             else
-//             {
-//                 Console.WriteLine(res6j.ErrorMessage);
-//             }
-//
-//             //testing deletion of an account
-//             String res7 = us.deleteAccount();
-//             Response res7j = JsonSerializer.Deserialize<Response>(res7);
-//             if (res7j.ErrorMessage.Equals("ok"))
-//             {
-//                 Console.WriteLine("Account deleted successfully");
-//             }
-//             else
-//             {
-//                 Console.WriteLine(res7j.ErrorMessage);
-//             }
-//         }
-//     }
-// }
+﻿using System;
+
+using IntroSE.Kanban.Backend.ServiceLayer;
+using System.Text.Json;
+
+public class UserTest
+{
+    private readonly UserService us;
+
+    public UserTest(UserService us)
+    {
+        this.us = us;
+    }
+
+    public void runUserTests()
+    {
+        createUser1();
+        createUser2();
+        createUser3();
+        createUser4();
+        createUser5();
+        createUser6();
+        createUser7();
+        createUser8();
+        login1();
+        login2();
+        login3();
+        login4();
+        logout1();
+        logout2();
+        logout3();
+        delete1();
+        delete2();
+    }
+
+    private void createUser1() //should be correct
+    {
+        Response res = us.createUser("olga1@gmail.com", "Abc12345");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+        us.logout("olga1@gmail.com"); //logging out in order to test later login
+    }
+
+    private void createUser2() //account should already exist
+    {
+        Response res = us.createUser("olga1@gmail.com", "Abc12345");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void createUser3() //email should be invalid
+    {
+        Response res = us.createUser("olga1gmail.com", "Abc12345");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void createUser4() //password should be invalid - no capital
+    {
+        Response res = us.createUser("olga2@gmail.com", "abc12345");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga2@gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void createUser5() //password should be invalid - too short
+    {
+        Response res = us.createUser("olga2@gmail.com", "abc45");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga2@gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void createUser6() //password should be invalid - no number
+    {
+        Response res = us.createUser("olga2@gmail.com", "abcdefGH");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga2@gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void createUser7() //password should be invalid - no lower case
+    {
+        Response res = us.createUser("olga2@gmail.com", "ABCDEF34");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga2@gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void createUser8() //password should be invalid - too long
+    {
+        Response res = us.createUser("olga2@gmail.com", "THIS1iswayTOOlongofApasswordWHOWILLrememberit");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga2@gmail.com was created successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void login1() //should log in well
+    {
+        Response res = us.login("olga1@gmail.com", "Abc12345");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was logged in successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void login2() //should return already logged in
+    {
+        Response res = us.login("olga1@gmail.com", "Abc12345");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was logged in successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void login3() //should return the account doesn't exist
+    {
+        Response res = us.login("olga3@gmail.com", "Abc12345");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga3@gmail.com was logged in successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void login4() //should return wrong password
+    {
+        Response res = us.login("olga1@gmail.com", "WRongPa55word");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was logged in successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void logout1() //should work well 
+    {
+        Response res = us.logout("olga1@gmail.com");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was logged out successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void logout2() //should return already logged out
+    {
+        Response res = us.logout("olga1@gmail.com");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was logged out successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void logout3() //should return user with such email doesn't exist
+    {
+        Response res = us.logout("olga4@gmail.com");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga4@gmail.com was logged out successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void delete1() //should work well
+    {
+        Response res = us.deleteAccount("olga1@gmail.com");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    private void delete2() //should return user doesn't exist
+    {
+        Response res = us.deleteAccount("olga1@gmail.com");
+        if (res.ErrorMessage.Equals(""))
+            Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+}
