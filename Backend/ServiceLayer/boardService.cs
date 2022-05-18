@@ -154,7 +154,7 @@ public class BoardService
         try
         {
             userController.changeState(email, boardName, columnOrdinal, taskId);
-            log.Info("taks: " + taskId + "was advanced by " + email);
+            log.Info("taks: " + taskId + " was advanced by " + email);
             return new Response("{}", null);
 
         }

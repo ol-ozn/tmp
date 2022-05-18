@@ -233,6 +233,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("invalid column limit");
             }
+
             Board bord = user.hasBoardByName(boardName);
             bord.setColumnLimit(columnId, limit);
         }
@@ -266,7 +267,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!userExists(email))
                 throw new Exception("User with email: " + email + " doesn't exist");
-            if(!isLoggedIn(email))
+            if (!isLoggedIn(email))
                 throw new Exception("User with email: " + email + " is logged out");
 
             return users[email];
@@ -297,7 +298,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
             {
-                throw new Exception("A board named " + boardName +" already exist");
+                throw new Exception("A board named " + boardName + " already exist");
             }
 
             int futureID = boardIdCOunter; //TODO: add counter for id 
@@ -332,7 +333,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             else
             {
-                throw new Exception("Try to remove a board with the name " + boardName + " which doesn't exist to the email: " + email);
+                throw new Exception("Try to remove a board with the name " + boardName +
+                                    " which doesn't exist to the email: " + email);
             }
         }
 
@@ -347,7 +349,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void changeState(string email, string boardName, int columnOrdinal, int taskId)
         {
             User user = getUser(email);
-
+            bool found = false;
             if (!user.getIsLoggedIn())
             {
                 throw new Exception("User with email: " + email + " isn't logged in");
@@ -356,6 +358,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board board = user.hasBoardByName(boardName);
             List<Task> tasksList = board.getColumn(columnOrdinal);
             Dictionary<string, Board> userBoards = user.getBoardListByName();
+            if (tasksList.Count == 0)
+            {
+                throw new Exception("Tried to find a task in an empty list");
+            }
+
             foreach (Task task in tasksList)
             {
                 if (task.getId() == taskId)
@@ -366,15 +373,23 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                         {
                             throw new Exception("column overflow");
                         }
+
                         board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
-                        board.getColumn(columnOrdinal+1).Add(task); //advances task to the next column ordinal
+                        board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
+                        found = true;
+                        break;
                     }
 
                     else
                     {
-                        throw new Exception("Try do advance from done");
+                        throw new Exception("Try do advance from done \n");
                     }
                 }
+            }
+
+            if (!found)
+            {
+                throw new Exception("task wasn't found in this column");
             }
         }
     }

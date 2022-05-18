@@ -25,21 +25,21 @@ namespace BackendTests
         public void runBoardTests()
         {
             Response res = userService.createUser("yonatan@gamil.com", "Aa13456");
-            // addBoard1();
-            // addBoard2();
-            // addBoard3();
-            // addBoard4();
-            // addBoard5();
-            //
-            // removeBoard1();
-            // removeBoard2();
-            // removeBoard3();
-            // removeBoard4();
-
+             // addBoard1();
+             // addBoard2();
+             // addBoard3();
+             // addBoard4();
+             // addBoard5();
+             //
+             // removeBoard1();
+             // removeBoard2();
+             // removeBoard3();
+             // removeBoard4();
+            
             changeState1();
-            // changeState2();
-            // changeState3();
-            // changeState4();
+             changeState2();
+             changeState3();
+             changeState4();
         }
 
         public void addBoard1() //should create a board successfully
@@ -125,7 +125,7 @@ namespace BackendTests
                 Console.WriteLine(res.ErrorMessage);
         }
 
-        //TODO: fix! doesn't work.
+
         public void changeState1() //should change state successfully
         {
             User user = (User)userService.login("yonatan@gamil.com", "Aa13456").ReturnValue;
@@ -145,8 +145,7 @@ namespace BackendTests
 
         public void changeState2() //should return we advanced from inprogress to done
         {
-            boardService.changeState("yonatan@gamil.com", "try", 1, 0);
-            Response res = boardService.changeState("yonatan@gamil.com", "try", 0, 0);
+            Response res = boardService.changeState("yonatan@gamil.com", "try", 1, 0);
             if (res.ErrorMessage.Equals("{}"))
             {
                 Console.WriteLine("changed the task with title hello successfully from inprogress to done");
@@ -162,15 +161,17 @@ namespace BackendTests
             Response res = boardService.changeState("yonatan@gamil.com", "try", 2, 0);
             if (res.ErrorMessage.Equals("{}"))
             {
-                Console.WriteLine("changed the task with title hello successfully from done to ???");
+                Console.WriteLine("changeState 3 failed");
             }
             else
             {
                 Console.Write(res.ErrorMessage);
             }
         }
-        public void changeState4() //should return we dont have a task like that
+        public void changeState4() // should return that the task with this id wasn't found in the column
         {
+            Response ignore = taskService.add("test4", "bla bla bla", new DateTime(2022, 5, 18), "try",
+                "yonatan@gamil.com");
             Response res = boardService.changeState("yonatan@gamil.com", "try", 0, 3984);
             if (res.ErrorMessage.Equals("{}"))
             {
@@ -181,5 +182,6 @@ namespace BackendTests
                 Console.Write(res.ErrorMessage);
             }
         }
+
     }
 }

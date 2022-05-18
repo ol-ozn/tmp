@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using log4net;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-
-
     public class Task
     {
-        private readonly string creationTime = DateTime.UtcNow.ToString("dd-mm-yyyy");
-        private DateTime dueTime;
-        private string title;
-        private string description;
-        private string boardName;
-        private int id;
+        public readonly string creationTime;
+        public DateTime dueTime;
+        public string title;
+        public string description;
+        public string boardName;
+        public int id;
 
 
         /// <summary>
@@ -31,6 +31,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns> creates a new task >
         public Task(string title, string description, DateTime dueTime, string boardName, User user, int id)
         {
+            creationTime = DateTime.UtcNow.ToString("dd-mm-yyyy");
             this.title = title;
             this.description = description;
             this.dueTime = dueTime;
@@ -68,5 +69,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             this.dueTime = dueTime;
         }
+
+        // public override string ToString()
+        // {
+        //     return $"{{ \"Id\": \"{id}\"," +
+        //            $" \"CreationTime\": \"{creationTime}\"}}, " +
+        //            $" \"Title\": \"{title}\"}}, " +
+        //            $" \"Description\": \"{description}\"}}, " +
+        //            $" \"DueDate\": \"{dueTime}\"}}";
+        // }
     }
 }

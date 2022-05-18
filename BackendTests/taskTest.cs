@@ -190,7 +190,7 @@ namespace BackendTests
             Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
                 currentUser);
             Response response = taskService.editTaskDescription(currentUser, "board1", 0, 0,
-                "this cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continue");
+                "this cannot continue this cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continue");
             if (response.ErrorMessage.Equals("{}"))
             {
                 Console.WriteLine("the task title was edited successfully");
@@ -200,5 +200,6 @@ namespace BackendTests
                 Console.WriteLine(response.ErrorMessage);
             }
         }
+
     }
 }
