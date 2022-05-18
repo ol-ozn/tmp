@@ -92,7 +92,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return false;
 
             //regex for valid email
-            bool regexValid = Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            bool regexValid = Regex.IsMatch(email, @"^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$");
 
             return regexValid;
         }
