@@ -36,7 +36,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.addTask(title, description, dueTime, boardName, email);
                 log.Debug("a task was added to user: " + email);
-                return new Response("{}", email);
+                return new Response(null, email);
             }
             catch (Exception e)
             {
@@ -100,8 +100,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 taskController.editDueDate(email, boardName, columnOrdinal, taskId, dueDate);
-                log.Debug("User: " + email + "edited thier task title");
-                return new Response("{}", null);
+                log.Debug("User: " + email + "edited the task title");
+                return new Response(null, "{}");
             }
             catch (Exception e)
             {
@@ -115,7 +115,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 List<Task> inProgress = taskController.listTaskInProgress(email);
                 log.Info("in progress tasks were listed successfully");
-                return new Response("{}", inProgress);
+                return new Response(null, inProgress);
             }
             catch (Exception e)
             {

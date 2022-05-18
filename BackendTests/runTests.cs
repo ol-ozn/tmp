@@ -30,7 +30,8 @@ namespace BackendTests
             GradingService gradingService = new GradingService();
             Console.WriteLine(gradingService.Register("amir@gmail.com","Test12345"));
             Console.WriteLine(gradingService.Logout("amir@gmail.com"));
-            Console.WriteLine(gradingService.Login("amir@gmail.com", "985415Amir"));
+            Console.WriteLine(gradingService.Login("amir@gmail.com", "Test12345"));
+            
             Console.WriteLine(gradingService.AddBoard("amir@gmail.com","board1"));
             Console.WriteLine(gradingService.AddTask("amir@gmail.com","board1","title2","bla bla 2",new DateTime(2026,5,5)));
             Console.WriteLine(gradingService.GetColumnLimit("amir@gmail.com", "board1", 1));
