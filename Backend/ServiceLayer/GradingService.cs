@@ -74,7 +74,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string s = (JsonController.toJson(res));
             if (res.ErrorMessage == null)
             {
-                return "{}";
+                return (String) res.ReturnValue;
             }
 
             return s;
