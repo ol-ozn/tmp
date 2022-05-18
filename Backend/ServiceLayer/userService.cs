@@ -46,7 +46,7 @@ public class UserService
         {
             User user = userController.createUser(email, password);
             log.Info("user with email " + email + " was created successfully");
-            return new Response("{}", "{}");
+            return new Response(null, "{}");
         }
         catch (Exception e)
         {

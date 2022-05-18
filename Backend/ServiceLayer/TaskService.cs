@@ -58,7 +58,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.editTitle(email, boardName, columnOrdinal, taskId, title);
                 log.Debug("User: " + email + "edited the task's title");
-                return new Response("{}", null);
+                return new Response(null, "{}");
             }
             catch (Exception e)
             {

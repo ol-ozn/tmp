@@ -28,7 +28,7 @@ namespace BackendTests
 
             // Console.WriteLine(JsonController.toJson(task));
             GradingService gradingService = new GradingService();
-            Console.WriteLine(gradingService.Register("amir@gmail.com","985415Amir"));
+            Console.WriteLine(gradingService.Register("amir@gmail.com","Test12345"));
             Console.WriteLine(gradingService.Logout("amir@gmail.com"));
             Console.WriteLine(gradingService.Login("amir@gmail.com", "985415Amir"));
             Console.WriteLine(gradingService.AddBoard("amir@gmail.com","board1"));
