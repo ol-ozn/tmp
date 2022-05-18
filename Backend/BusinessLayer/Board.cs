@@ -32,7 +32,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void initColumns()
         {
             columns.Add("backlog", new List<Task>());
-            columns.Add("inProgress", new List<Task>());
+            columns.Add("in progress", new List<Task>());
             columns.Add("done", new List<Task>());
         }
         public String getName()
@@ -83,7 +83,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private void initialColumnsId(Dictionary<int, string> collumsId)
         {
             columnsId.Add(0, "backlog");
-            columnsId.Add(1, "inProgress");
+            columnsId.Add(1, "in progress");
             columnsId.Add(2, "done");
         }
 

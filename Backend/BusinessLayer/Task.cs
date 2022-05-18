@@ -12,12 +12,44 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Task
     {
-        public readonly string creationTime;
-        public DateTime dueTime;
-        public string title;
-        public string description;
-        public string boardName;
-        public int id;
+        private int id;
+
+        public int Id
+        {
+            get { return id; }
+        }
+
+        private readonly DateTime creationTime;
+
+        public DateTime CreationTime
+        {
+            get { return creationTime; }
+        }
+
+        private string title;
+
+        public string Title
+        {
+            get { return title; }
+        }
+
+        private string description;
+
+        public string Description
+        {
+            get { return description; }
+        }
+
+
+        private DateTime dueTime;
+
+        public DateTime DueDate
+        {
+            get { return dueTime; }
+        }
+
+
+        private string boardName;
 
 
         /// <summary>
@@ -31,7 +63,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns> creates a new task >
         public Task(string title, string description, DateTime dueTime, string boardName, User user, int id)
         {
-            creationTime = DateTime.UtcNow.ToString("dd-mm-yyyy");
+            this.creationTime = DateTime.Now;
             this.title = title;
             this.description = description;
             this.dueTime = dueTime;
@@ -69,14 +101,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             this.dueTime = dueTime;
         }
-
-        // public override string ToString()
-        // {
-        //     return $"{{ \"Id\": \"{id}\"," +
-        //            $" \"CreationTime\": \"{creationTime}\"}}, " +
-        //            $" \"Title\": \"{title}\"}}, " +
-        //            $" \"Description\": \"{description}\"}}, " +
-        //            $" \"DueDate\": \"{dueTime}\"}}";
-        // }
     }
 }

@@ -24,6 +24,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public Task addTask(string title, string description, DateTime dueTime, string boardName, string email)
         {
+            if (!uc.getUser(email).getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
             if (!checkTitleValidity(title, uc.getUser(email), boardName))
             {
                 throw new Exception("user tried to create a new task" +
@@ -179,6 +184,38 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
 
             return null;
+        }
+
+        public List<Task> listTaskInProgress(string email)
+        {
+            User currentUser = uc.getUser(email);
+            Dictionary<string, Board> boardListByName = currentUser.getBoardListByName();
+            if (!boardListByName.Any())
+            {
+                throw new Exception("User has no Boards");
+            }
+
+            List<Task> list = new List<Task>();
+            foreach (Board board in boardListByName.Values)
+            {
+                List<Task> l = (board.getColumns())["in progress"];
+                if (!l.Any())
+                {
+                    continue;
+                }
+
+                foreach (Task task in l)
+                {
+                    list.Add(task);
+                }
+            }
+
+            if (!list.Any())
+            {
+                throw new Exception("no tasks in in progress");
+            }
+
+            return list;
         }
     }
 }

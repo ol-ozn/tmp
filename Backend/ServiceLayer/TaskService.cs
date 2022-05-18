@@ -108,5 +108,19 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return new Response(e.Message, null);
             }
         }
+
+        public Response listTasksInProgress(string email)
+        {
+            try
+            {
+                List<Task> inProgress = taskController.listTaskInProgress(email);
+                log.Info("in progress tasks were listed successfully");
+                return new Response("{}", inProgress);
+            }
+            catch (Exception e)
+            {
+                return new Response(e.Message, null);
+            }
+        }
     }
 }

@@ -11,16 +11,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     {
         public String ErrorMessage { get; set; }
         public Object ReturnValue { get; set; }
-        public Response() {}
+
+        public Response()
+        {
+        }
+
         public Response(String ErrorMessage, Object ReturnValue)
         {
             this.ErrorMessage = ErrorMessage;
             this.ReturnValue = ReturnValue;
-        }
-
-        public string toJson()
-        { 
-            return JsonSerializer.Serialize(this);
         }
     }
 }

@@ -11,9 +11,11 @@ public class BoardService
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     public BoardService(UserService userService)
-    { this.userController = userService.userController; }
+    {
+        this.userController = userService.userController;
+    }
 
-/// <summary>
+    /// <summary>
     /// This method creates a new board. 
     /// </summary>
     /// <param name="boardName">The name of the new board</param>
@@ -22,17 +24,17 @@ public class BoardService
     {
         try
         {
-            Board board =  userController.addBoard(boardName, email);
+            Board board = userController.addBoard(boardName, email);
             log.Info("Board: " + boardName + "was add by " + email);
             return new Response("{}", board);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             log.Debug(e.Message);
             return new Response(e.Message, null);
         }
     }
-    
+
 
     /// <summary>
     /// This method removes an existing board. 
@@ -66,8 +68,9 @@ public class BoardService
     {
         try
         {
-            userController.setColumnLimit(email, boardName, columnOrdinal,limit);
-            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) + " in board " + boardName + " was set to " + limit);
+            userController.setColumnLimit(email, boardName, columnOrdinal, limit);
+            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+                     " in board " + boardName + " was set to " + limit);
             return new Response("{}", null);
         }
         catch (Exception e)
@@ -89,7 +92,8 @@ public class BoardService
         try
         {
             int columnLimit = userController.getColumnLimit(email, boardName, columnOrdinal);
-            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) + " in board " + boardName + " has been accessed");
+            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+                     " in board " + boardName + " has been accessed");
             return new Response("{}", columnLimit);
         }
         catch (Exception e)
@@ -111,7 +115,8 @@ public class BoardService
         try
         {
             string columnName = userController.getColumnName(email, boardName, columnOrdinal);
-            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) + " in board " + boardName + " has been accessed");
+            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+                     " in board " + boardName + " has been accessed");
             return new Response("{}", columnName);
         }
         catch (Exception e)
@@ -133,7 +138,8 @@ public class BoardService
         try
         {
             List<Task> column = userController.getColumn(email, boardName, columnOrdinal);
-            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) + " in board " + boardName + " has been accessed");
+            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+                     " in board " + boardName + " has been accessed");
             return new Response("{}", column);
         }
         catch (Exception e)
@@ -156,7 +162,6 @@ public class BoardService
             userController.changeState(email, boardName, columnOrdinal, taskId);
             log.Info("taks: " + taskId + " was advanced by " + email);
             return new Response("{}", null);
-
         }
         catch (Exception e)
         {
@@ -164,5 +169,4 @@ public class BoardService
             return new Response(e.Message, null);
         }
     }
-
 }
