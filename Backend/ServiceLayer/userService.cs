@@ -25,7 +25,7 @@ public class UserService
         {
             User user = userController.login(email, password);
             log.Info("user with email: " + email + " has logged in successfully");
-            return new Response("{}", user);
+            return new Response("{}", email);
         }
         catch (Exception e)
         {
@@ -46,7 +46,7 @@ public class UserService
         {
             User user = userController.createUser(email, password);
             log.Info("user with email " + email + " was created successfully");
-            return new Response("{}", user);
+            return new Response("{}", "{}");
         }
         catch (Exception e)
         {
