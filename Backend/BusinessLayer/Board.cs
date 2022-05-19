@@ -80,11 +80,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.limitDone = newLimit;
         }
 
-        private void initialColumnsId(Dictionary<int, string> collumsId)
+        private void initialColumnsId(Dictionary<int, string> columnsId)
         {
-            columnsId.Add(0, "backlog");
-            columnsId.Add(1, "in progress");
-            columnsId.Add(2, "done");
+            this.columnsId.Add(0, "backlog");
+            this.columnsId.Add(1, "in progress");
+            this.columnsId.Add(2, "done");
         }
 
         public string getColumnName(int id)

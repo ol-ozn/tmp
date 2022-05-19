@@ -39,21 +39,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return true;
             return false;
         }
-        //
-        // public List<Task> listInProgress()
-        // {
-        //     List<Task> list = new List<Task>();
-        //     foreach (Board board in boardListByName.Values)
-        //     {
-        //         List<Task> l = (board.getColumns())["inProgress"];
-        //         foreach (Task task in l)
-        //         {
-        //             list.Add(task);
-        //         }
-        //     }
-        //
-        //     return list;
-        // }
 
         public Dictionary<string, Board> getBoardListByName() { return boardListByName; }
 
