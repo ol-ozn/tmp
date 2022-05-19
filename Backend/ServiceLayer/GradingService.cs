@@ -70,14 +70,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string Register(string email, string password)
         {
-            Response res = userService.createUser(email, password);
-            string s = (JsonController.toJson(res));
-            if (res.ErrorMessage == null)
-            {
-                return (String)res.ReturnValue;
-            }
+            return (JsonController.toJson(userService.createUser(email, password)));
 
-            return s;
+
+            // Response res = userService.createUser(email, password);
+            // string s = (JsonController.toJson(res));
+            // if (res.ErrorMessage == null)
+            // {
+            //     return (String)res.ReturnValue;
+            // }
+            //
+            // return s;
         }
 
 
