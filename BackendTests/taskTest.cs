@@ -45,7 +45,7 @@ namespace BackendTests
             DateTime dateTime = DateTime.UtcNow;
             Response response =
                 taskService.add("task1", "new task description", dateTime, "board1", currentUser);
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task has been added successfully");
             }
@@ -60,7 +60,7 @@ namespace BackendTests
         {
             DateTime dateTime = DateTime.UtcNow;
             Response response = taskService.add("", "new task description", dateTime, "board1", currentUser);
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task has been added successfully");
             }
@@ -78,7 +78,7 @@ namespace BackendTests
                 taskService.add(
                     "dnmfjdsnmjkfddnjkfdsnjkfndsjdnfjsfkfjsnfddsjdnfknfdfjsdjnsjnsnsdjkjnkfjdfdnfsjkdjfnsjndsfdsjknfsdffndsnjsdjks",
                     "new task description", dateTime, "board1", currentUser);
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task has been added successfully");
             }
@@ -95,7 +95,7 @@ namespace BackendTests
             taskService.add("task1", "first1", dateTime, "board1", currentUser);
             taskService.add("task1", "bla bla bla", dateTime, "board1", currentUser);
             Response response = taskService.add("task1", "new task description", dateTime, "board1", currentUser);
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task has been added successfully");
             }
@@ -112,7 +112,7 @@ namespace BackendTests
             Response response = taskService.add("title2",
                 "a new task description new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task description",
                 dateTime, "board1", currentUser);
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task has been added successfully");
             }
@@ -128,7 +128,7 @@ namespace BackendTests
             Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
                 currentUser);
             Response response = taskService.editTaskTitle(currentUser, "board1", 0, 0, "this is my new title");
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task title was edited successfully");
             }
@@ -144,7 +144,7 @@ namespace BackendTests
             Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
                 currentUser);
             Response response = taskService.editTaskTitle(currentUser, "board1", 0, 0, "");
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task title was edited successfully");
             }
@@ -160,7 +160,7 @@ namespace BackendTests
                 currentUser);
             Response response = taskService.editTaskTitle(currentUser, "board1", 0, 0,
                 "dnmfjdsnmjkfddnjkfdsnjkfndsjdnfjsfkfjsnfddsjdnfknfdfjsdjnsjnsnsdjkjnkfjdfdnfsjkdjfnsjndsfdsjknfsdffndsnjsdjks");
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task title was edited successfully");
             }
@@ -175,7 +175,7 @@ namespace BackendTests
             Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
                 currentUser);
             Response response = taskService.editTaskDescription(currentUser, "board1", 0, 0, "an edited description");
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task title was edited successfully");
             }
@@ -191,7 +191,7 @@ namespace BackendTests
                 currentUser);
             Response response = taskService.editTaskDescription(currentUser, "board1", 0, 0,
                 "this cannot continue this cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continue");
-            if (response.ErrorMessage.Equals("{}"))
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task title was edited successfully");
             }
