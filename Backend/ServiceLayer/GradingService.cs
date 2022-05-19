@@ -76,7 +76,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return (String)res.ReturnValue;
             }
-            
+
             return s;
         }
 
@@ -150,7 +150,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string s = JsonController.toJson(response);
             if (response.ErrorMessage == null)
             {
-                return (string)response.ReturnValue;
+                int limitValue = (int)response.ReturnValue;
+                return Convert.ToString(limitValue);
             }
 
             return s;
@@ -330,7 +331,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string RemoveBoard(string email, string name)
         {
-            Response response = boardService.remove(email, name);
+            Response response = boardService.remove(name, email);
             string s = JsonController.toJson(response);
             if (response.ErrorMessage == null)
             {

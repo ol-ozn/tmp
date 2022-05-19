@@ -38,6 +38,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             if (!checkDescriptionValidity(description))
             {
+
                 throw new Exception("user tried to create a new task" +
                                     " with a description that has more than 300 characters");
             }
@@ -79,8 +80,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Task task = findTaskById(boardByName, taskId, columnOrdinal);
             if (task == null)
             {
-                throw new Exception("User:" + email + "tried to change task: " + taskId
-                                    + "from board " + boardName);
+                throw new Exception("User: " + email + " tried to change a task that does not exist " +
+                                    "or not in this board");
             }
 
             task.setTitle(title);
@@ -100,6 +101,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             Board board = uc.getUser(email).hasBoardByName(boardName);
             Task task = findTaskById(board, taskId, columnOrdinal);
+            if (task == null)
+            {
+                throw new Exception("this task does not exist in this column");
+            }
             task.setDueTime(dueDate);
         }
 
@@ -123,6 +128,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             Board board = uc.getUser(email).hasBoardByName(boardName);
             Task task = findTaskById(board, taskId, columnOrdinal);
+            if (task == null)
+            {
+                throw new Exception("this task does not exist in this column");
+            }
             task.setDescription(description);
         }
 
@@ -175,6 +184,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Task findTaskById(Board board, int taskId, int columnOrdinal)
         {
             List<Task> currentTaskList = board.getColumn(columnOrdinal);
+            if (!currentTaskList.Any())
+            {
+                throw new Exception("There are no tasks in this column");
+            }
+
             foreach (Task currentTask in currentTaskList)
             {
                 if (currentTask.getId() == taskId)

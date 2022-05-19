@@ -369,7 +369,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 {
                     if (columnOrdinal < 2) //advance task to in progress
                     {
-                        if (board.isColumnFull(taskId)) //check column limit
+                        if (board.isColumnFull(columnOrdinal + 1)) //check column limit
                         {
                             throw new Exception("column overflow");
                         }
