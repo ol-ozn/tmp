@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
@@ -10,7 +11,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     {
         public String ErrorMessage { get; set; }
         public Object ReturnValue { get; set; }
-        public Response() {}
+
+        public Response()
+        {
+        }
+
         public Response(String ErrorMessage, Object ReturnValue)
         {
             this.ErrorMessage = ErrorMessage;

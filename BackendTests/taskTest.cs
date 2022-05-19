@@ -1,83 +1,205 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using System.Text.Json;
+using System.Transactions;
+using IntroSE.Kanban.Backend.BusinessLayer;
+using Task = IntroSE.Kanban.Backend.BusinessLayer.Task;
 
 namespace BackendTests
 {
     public class TaskTest
     {
-        private readonly TaskService ts;
-        public TaskTest(TaskService ts)
+        private readonly TaskService taskService;
+        private readonly string currentUser;
+
+        public TaskTest(TaskService taskService, UserService userService, BoardService boardService)
         {
-            this.ts = ts;
+            Response response = userService.createUser("amitabr@mail.com", "987654Kanban");
+            currentUser = "amitabr@mail.com";
+            boardService.createBoard("board1", currentUser);
+            this.taskService = taskService;
         }
-        public void runTests()
+
+
+        public void runTaskTests()
         {
-            String res1 = ts.addTask("milstone 1");
-            Response res1j = JsonSerializer.Deserialize<Response>(res1);
-            if (res1j.ErrorMessage.Equals("ok"))
+            addTaskValidEntry();
+            addTaskTitleIsNull();
+            addTaskTitleTooLong();
+            addTaskTitleAlreadyExists();
+            addTaskDescriptionTooLong();
+            editValidTitle();
+            editInValidTitleEmpty();
+            editInValidTitleTooLong();
+            editValidDescription();
+            editInValidDescriptionTooLong();
+        }
+
+
+        public void addTaskValidEntry()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            Response response =
+                taskService.add("task1", "new task description", dateTime, "board1", currentUser);
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task has been added successfully");
-            }
-            else
-            {
-                Console.WriteLine(res1j.ErrorMessage);
             }
 
-            String res2 = ts.editTask(1, "Task_1", "im changing the discription");
-            Response res2j = JsonSerializer.Deserialize<Response>(res2);
-            if (res2j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the taks has been edited successfully");
-            }
             else
             {
-                Console.WriteLine(res2j.ErrorMessage);
+                Console.WriteLine(response.ErrorMessage);
             }
-            String res3 = ts.editTask(-51, "Task_1", "im changing the discription");
-            Response res3j = JsonSerializer.Deserialize<Response>(res3);
-            if (res3j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the taks has been edited successfully");
-            }
-            else
-            {
-                Console.WriteLine(res3j.ErrorMessage);
-            }
-            String res4 = ts.editTask(0, "not exsit task", "im changing the discription");
-            Response res4j = JsonSerializer.Deserialize<Response>(res4);
-            if (res4j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the taks has been edited successfully");
-            }
-            else
-            {
-                Console.WriteLine(res4j.ErrorMessage);
-            }
-            String res5 = ts.editTask(0, "not exsit task", "");
-            Response res5j = JsonSerializer.Deserialize<Response>(res5);
-            if (res5j.ErrorMessage.Equals("ok"))
-            {
-                Console.WriteLine("the taks has been edited successfully");
-            }
-            else
-            {
-                Console.WriteLine(res5j.ErrorMessage);
-            }
-            String res6 = ts.addTask("");
-            Response res6j = JsonSerializer.Deserialize<Response>(res1);
-            if (res6j.ErrorMessage.Equals("ok"))
+        }
+
+        public void addTaskTitleIsNull()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            Response response = taskService.add("", "new task description", dateTime, "board1", currentUser);
+            if (response.ErrorMessage == null)
             {
                 Console.WriteLine("the task has been added successfully");
             }
+
             else
             {
-                Console.WriteLine(res6j.ErrorMessage);
+                Console.WriteLine(response.ErrorMessage);
             }
         }
+
+        public void addTaskTitleTooLong()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            Response response =
+                taskService.add(
+                    "dnmfjdsnmjkfddnjkfdsnjkfndsjdnfjsfkfjsnfddsjdnfknfdfjsdjnsjnsnsdjkjnkfjdfdnfsjkdjfnsjndsfdsjknfsdffndsnjsdjks",
+                    "new task description", dateTime, "board1", currentUser);
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task has been added successfully");
+            }
+
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
+        public void addTaskTitleAlreadyExists()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            taskService.add("task1", "first1", dateTime, "board1", currentUser);
+            taskService.add("task1", "bla bla bla", dateTime, "board1", currentUser);
+            Response response = taskService.add("task1", "new task description", dateTime, "board1", currentUser);
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task has been added successfully");
+            }
+
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
+        public void addTaskDescriptionTooLong()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            Response response = taskService.add("title2",
+                "a new task description new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task descriptiona new task description",
+                dateTime, "board1", currentUser);
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task has been added successfully");
+            }
+
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
+        public void editValidTitle()
+        {
+            Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
+                currentUser);
+            Response response = taskService.editTaskTitle(currentUser, "board1", 0, 0, "this is my new title");
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task title was edited successfully");
+            }
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
+
+        public void editInValidTitleEmpty()
+        {
+            Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
+                currentUser);
+            Response response = taskService.editTaskTitle(currentUser, "board1", 0, 0, "");
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task title was edited successfully");
+            }
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
+        public void editInValidTitleTooLong()
+        {
+            Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
+                currentUser);
+            Response response = taskService.editTaskTitle(currentUser, "board1", 0, 0,
+                "dnmfjdsnmjkfddnjkfdsnjkfndsjdnfjsfkfjsnfddsjdnfknfdfjsdjnsjnsnsdjkjnkfjdfdnfsjkdjfnsjndsfdsjknfsdffndsnjsdjks");
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task title was edited successfully");
+            }
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
+        public void editValidDescription()
+        {
+            Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
+                currentUser);
+            Response response = taskService.editTaskDescription(currentUser, "board1", 0, 0, "an edited description");
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task title was edited successfully");
+            }
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
+        public void editInValidDescriptionTooLong()
+        {
+            Response user = taskService.add("task1", "new task description", new DateTime(2022, 05, 16), "board1",
+                currentUser);
+            Response response = taskService.editTaskDescription(currentUser, "board1", 0, 0,
+                "this cannot continue this cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continuethis cannot continue");
+            if (response.ErrorMessage == null)
+            {
+                Console.WriteLine("the task title was edited successfully");
+            }
+            else
+            {
+                Console.WriteLine(response.ErrorMessage);
+            }
+        }
+
     }
 }
