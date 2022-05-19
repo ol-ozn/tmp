@@ -154,11 +154,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return false;
             }
 
-            // // checks whether the user already has task with this name on the given board
-            // if (taskNameAlreadyExists(user, newTitle, boardName))
-            // {
-            //     throw new Exception("a task with this title already exists");
-            // }
+            // checks whether the user already has task with this name on the given board
+            if (taskNameAlreadyExists(user, newTitle, boardName))
+            {
+                throw new Exception("a task with this title already exists");
+            }
 
             return true;
         }
