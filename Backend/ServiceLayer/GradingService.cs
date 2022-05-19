@@ -89,14 +89,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with user email, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string Login(string email, string password)
         {
-            Response response = userService.login(email, password);
-            string s = (JsonController.toJson(response));
-            if (response.ErrorMessage == null)
-            {
-                return (string)response.ReturnValue;
-            }
+            // Response response = userService.login(email, password);
+            // string s = (JsonController.toJson(response));
+            // if (response.ErrorMessage == null)
+            // {
+            //     return (string)response.ReturnValue;
+            // }
 
-            return s;
+            //return s
+            return (JsonController.toJson(userService.login(email, password)));
         }
 
 
@@ -146,15 +147,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with column limit value, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumnLimit(string email, string boardName, int columnOrdinal)
         {
-            Response response = boardService.getColumnLimit(email, boardName, columnOrdinal);
-            string s = JsonController.toJson(response);
-            if (response.ErrorMessage == null)
-            {
-                int limitValue = (int)response.ReturnValue;
-                return Convert.ToString(limitValue);
-            }
+            // Response response = boardService.getColumnLimit(email, boardName, columnOrdinal);
+            // string s = JsonController.toJson(response);
+            // if (response.ErrorMessage == null)
+            // {
+            //     int limitValue = (int)response.ReturnValue;
+            //     return Convert.ToString(limitValue);
+            // }
 
-            return s;
+            return JsonController.toJson(boardService.getColumnLimit(email, boardName, columnOrdinal));
         }
 
 
@@ -167,14 +168,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with column name value, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumnName(string email, string boardName, int columnOrdinal)
         {
-            Response response = boardService.getColumnName(email, boardName, columnOrdinal);
-            string s = JsonController.toJson(response);
-            if (response.ErrorMessage == null)
-            {
-                return (string)response.ReturnValue;
-            }
+            // Response response = boardService.getColumnName(email, boardName, columnOrdinal);
+            // string s = JsonController.toJson(response);
+            // if (response.ErrorMessage == null)
+            // {
+            //     return (string)response.ReturnValue;
+            // }
+            //
+            // return s;
 
-            return s;
+            return JsonController.toJson(boardService.getColumnName(email, boardName, columnOrdinal));
         }
 
 
@@ -189,14 +192,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with user-email, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-            Response response = taskService.add(title, description, dueDate, boardName, email);
-            string s = JsonController.toJson(response);
-            if (response.ErrorMessage == null)
-            {
-                return (string)response.ReturnValue;
-            }
+            // Response response = taskService.add(title, description, dueDate, boardName, email);
+            // string s = JsonController.toJson(response);
+            // if (response.ErrorMessage == null)
+            // {
+            //     return (string)response.ReturnValue;
+            // }
+            //
+            // return s;
 
-            return s;
+            return JsonController.toJson(taskService.add(title, description, dueDate, boardName, email));
         }
 
 
@@ -297,7 +302,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">Email of the user. Must be logged in</param>
         /// <param name="boardName">The name of the board</param>
         /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
-        /// <returns>Response with  a list of the column's tasks, unless an error occurs (see <see cref="GradingService"/>)</returns>
+        /// <returns>Response with a list of the column's tasks, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumn(string email, string boardName, int columnOrdinal)
         {
             return (JsonController.toJson(boardService.getColumn(email, boardName, columnOrdinal)));
