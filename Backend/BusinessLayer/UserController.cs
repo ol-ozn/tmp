@@ -49,7 +49,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             User newUser = new User(email, password, usersIdCount);
             usersIdCount++;
             users.Add(email, newUser);
-            // newUser.setIsLoggedIn(true); //setting automatically the user is logged in
+            newUser.setIsLoggedIn(true); //setting automatically the user is logged in
 
             return newUser;
         }
@@ -322,6 +322,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("User isn't logged in");
             }
+
 
             Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
             Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
