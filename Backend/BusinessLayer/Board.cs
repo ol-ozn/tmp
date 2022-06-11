@@ -13,10 +13,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private Dictionary<int, string> columnsId; // dictionary< columnsId, ColumnsTitle>
         private Dictionary<string, List<Task>> columns; // dictionary <board title, tasks list>
         private readonly int id;
-        private int backlog = -1; 
+        private int limitBacklog = -1;
         private int limitInProgress = -1;
         private int limitDone = -1;
-        
+        private int owner;
+        private HashSet<string> memeberList; // each board holds its members
+
+        public HashSet<string> MemeberList
+        {
+            get { return memeberList; }
+        }
 
 
         public Board(String boardName, int id)
@@ -27,14 +33,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.id = id;
             columnsId = new Dictionary<int, string>();
             initialColumnsId(columnsId);
+            owner = id;
+            memeberList = new HashSet<string>();
         }
 
         public void initColumns()
         {
-            columns.Add("backlog", new List<Task>());
+            columns.Add("limitBacklog", new List<Task>());
             columns.Add("in progress", new List<Task>());
             columns.Add("done", new List<Task>());
         }
+
         public String getName()
         {
             return name;
@@ -82,7 +91,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private void initialColumnsId(Dictionary<int, string> columnsId)
         {
-            this.columnsId.Add(0, "backlog");
+            this.columnsId.Add(0, "limitBacklog");
             this.columnsId.Add(1, "in progress");
             this.columnsId.Add(2, "done");
         }
@@ -108,6 +117,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return getLimitDone();
             }
         }
+
         public void setColumnLimit(int columnId, int newLimit)
         {
             if (columnId == 0)
@@ -127,13 +137,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public List<Task> getColumn(int id)
         {
-            if (id >2 || id < 0)
+            if (id > 2 || id < 0)
             {
                 throw new Exception("Id out of bounds");
             }
+
             return columns[columnsId[id]];
         }
-        
 
 
         public bool isColumnFull(int colID)

@@ -218,4 +218,19 @@ public class BoardService
             return new Response(e.Message, null);
         }
     }
+
+    public Response removeBoard(string email, string name)
+    {
+        try
+        {
+            boardController.removeBoard(email, name);
+            log.Info("user: " + email + " deleted board: " + name);
+            return new Response(null, "");
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
 }
