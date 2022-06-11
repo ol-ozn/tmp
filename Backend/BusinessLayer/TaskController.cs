@@ -218,8 +218,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     continue;
                 }
 
+                
                 foreach (Task task in l)
                 {
+                    //TODO: add a condition to check whether the user is assigned to this task
                     list.Add(task);
                 }
             }
