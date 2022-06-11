@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.ServiceLayer;
 using log4net;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
@@ -15,10 +16,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private UserController uc;
         private int taskId;
 
-        public TaskController(UserController uc)
+        public TaskController(ServiceFactory serviceFactory)
         {
-            this.uc = uc;
+            this.uc = serviceFactory.UserController;
             this.taskId = 0;
+            // this.uc = uc;
         }
 
 

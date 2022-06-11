@@ -1,85 +1,88 @@
-﻿// using System;
-// using System.Linq;
-// using System.Collections.Generic;
-// using System.Reflection.Metadata.Ecma335;
-// using IntroSE.Kanban.Backend.BusinessLayer;
-//
-//
-// namespace IntroSE.Kanban.Backend.ServiceLayer
-// {
-//     /// <summary>
-//     /// A class for grading your work <b>ONLY</b>. The methods are not using good SE practices and you should <b>NOT</b> infer any insight on how to write the service layer/business layer. 
-//     /// <para>
-//     /// Each of the class' methods should return a JSON string with the following structure (see <see cref="System.Text.Json"/>):
-//     /// <code>
-//     /// {
-//     ///     "ErrorMessage": &lt;string&gt;,
-//     ///     "ReturnValue": &lt;object&gt;
-//     /// }
-//     /// </code>
-//     /// Where:
-//     /// <list type="bullet">
-//     ///     <item>
-//     ///         <term>ReturnValue</term>
-//     ///         <description>
-//     ///             The return value of the function.
-//     ///             <para>
-//     ///                 The value may be either a <paramref name="primitive"/>, a <paramref name="Task"/>, or an array of of them. See below for the definition of <paramref name="Task"/>.
-//     ///             </para>
-//     ///             <para>If the function does not return a value or an exception has occorred, then the field is undefined.</para>
-//     ///         </description>
-//     ///     </item>
-//     ///     <item>
-//     ///         <term>ErrorMessage</term>
-//     ///         <description>If an exception has occorred, then this field will contain a string of the error message.</description>
-//     ///     </item>
-//     /// </list>
-//     /// </para>
-//     /// <para>
-//     /// The structure of the JSON of a Task, is:
-//     /// <code>
-//     /// {
-//     ///     "Id": &lt;int&gt;,
-//     ///     "CreationTime": &lt;DateTime&gt;,
-//     ///     "Title": &lt;string&gt;,
-//     ///     "Description": &lt;string&gt;,
-//     ///     "DueDate": &lt;DateTime&gt;
-//     /// }
-//     /// </code>
-//     /// </para>
-//     /// </summary>
-//     public class GradingService
-//     {
-//         UserService userService;
-//         BoardService boardService;
-//         TaskService taskService;
-//
-//         public GradingService()
-//         {
-//             userService = new UserService();
-//             boardService = new BoardService(userService);
-//             taskService = new TaskService(userService);
-//         }
-//
-//
-//         /// <summary>
-//         /// This method registers a new user to the system.
-//         /// </summary>
-//         /// <param name="email">The user email address, used as the username for logging the system.</param>
-//         /// <param name="password">The user password.</param>
-//         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
-//         public string Register(string email, string password)
-//         {
-//             Response res = userService.createUser(email, password);
-//             string s = (JsonController.toJson(res));
-//             if (res.ErrorMessage == null)
-//             {
-//                 return (String)res.ReturnValue;
-//             }
-//
-//             return s;
-//         }
-//
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
+using IntroSE.Kanban.Backend.BusinessLayer;
+
+
+namespace IntroSE.Kanban.Backend.ServiceLayer
+{
+    /// <summary>
+    /// A class for grading your work <b>ONLY</b>. The methods are not using good SE practices and you should <b>NOT</b> infer any insight on how to write the service layer/business layer. 
+    /// <para>
+    /// Each of the class' methods should return a JSON string with the following structure (see <see cref="System.Text.Json"/>):
+    /// <code>
+    /// {
+    ///     "ErrorMessage": &lt;string&gt;,
+    ///     "ReturnValue": &lt;object&gt;
+    /// }
+    /// </code>
+    /// Where:
+    /// <list type="bullet">
+    ///     <item>
+    ///         <term>ReturnValue</term>
+    ///         <description>
+    ///             The return value of the function.
+    ///             <para>
+    ///                 The value may be either a <paramref name="primitive"/>, a <paramref name="Task"/>, or an array of of them. See below for the definition of <paramref name="Task"/>.
+    ///             </para>
+    ///             <para>If the function does not return a value or an exception has occorred, then the field is undefined.</para>
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>ErrorMessage</term>
+    ///         <description>If an exception has occorred, then this field will contain a string of the error message.</description>
+    ///     </item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// The structure of the JSON of a Task, is:
+    /// <code>
+    /// {
+    ///     "Id": &lt;int&gt;,
+    ///     "CreationTime": &lt;DateTime&gt;,
+    ///     "Title": &lt;string&gt;,
+    ///     "Description": &lt;string&gt;,
+    ///     "DueDate": &lt;DateTime&gt;
+    /// }
+    /// </code>
+    /// </para>
+    /// </summary>
+    public class GradingService
+    {
+        // UserService userService;
+        // BoardService boardService;
+        // TaskService taskService;
+        private ServiceFactory serviceFactory;
+
+        public GradingService()
+        {
+            serviceFactory = new ServiceFactory();
+            // userService = new UserService();
+            // boardService = new BoardService(userService);
+            // taskService = new TaskService(userService);
+        }
+
+
+        /// <summary>
+        /// This method registers a new user to the system.
+        /// </summary>
+        /// <param name="email">The user email address, used as the username for logging the system.</param>
+        /// <param name="password">The user password.</param>
+        /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
+        public string Register(string email, string password)
+        {
+            Response res = serviceFactory.userService.createUser(email, password);
+            string s = (JsonController.toJson(res));
+            if (res.ErrorMessage == null)
+            {
+                return (String)res.ReturnValue;
+            }
+
+            return s;
+        }
+
+
 //
 //         /// <summary>
 //         ///  This method logs in an existing user.
@@ -322,5 +325,5 @@
 //         {
 //             return (JsonController.toJson(taskService.listTasksInProgress(email)));
 //         }
-//     }
-// }
+    }
+}

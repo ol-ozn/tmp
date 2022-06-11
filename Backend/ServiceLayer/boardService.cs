@@ -10,9 +10,10 @@ public class BoardService
     private UserController userController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-    public BoardService(UserService userService)
+    public BoardService(ServiceFactory serviceFactory)
     {
-        this.userController = userService.userController;
+        userController = serviceFactory.UserController;
+        // this.userController = userService.userController;
     }
 
     /// <summary>
