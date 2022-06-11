@@ -7,7 +7,7 @@ using IntroSE.Kanban.Backend.ServiceLayer;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-    internal class BoardController
+    public class BoardController
     {
         private Dictionary<int, Board> boards;
         private UserController userController;
@@ -21,8 +21,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public void joinBoard(string email, int id)
         {
-
+            return;
         }
 
+        public void transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
+        {
+            return;
+        }
+
+        public void leaveBoard(string email, int boardId)
+        {
+            return;
+        }
     }
 }

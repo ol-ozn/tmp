@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using log4net;
@@ -8,12 +9,13 @@ using log4net;
 public class BoardService
 {
     private UserController userController;
+    private BoardController boardController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     public BoardService(ServiceFactory serviceFactory)
     {
         userController = serviceFactory.UserController;
-        // this.userController = userService.userController;
+        boardController = serviceFactory.BoardController;
     }
 
     /// <summary>
@@ -164,6 +166,51 @@ public class BoardService
             userController.changeState(email, boardName, columnOrdinal, taskId);
             log.Info("taks: " + taskId + " was advanced by " + email);
             return new Response(null, "{}");
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    public Response joinBoard(string email, int id)
+    {
+        try
+        {
+            boardController.joinBoard(email, id);
+            log.Info("user: " + email + " joined board: " + id);
+            return new Response(null, "");
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    public Response transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
+    {
+        try
+        {
+            boardController.transferOwnerShip(currentOwnerEmail, newOwnerEmail, boardName);
+            log.Info("user: " + currentOwnerEmail + " transfered: " + boardName + " to user: " + newOwnerEmail);
+            return new Response(null, "");
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    public Response leaveBoard(string email, int boardId)
+    {
+        try
+        {
+            boardController.leaveBoard(email, boardId);
+            log.Info("user: " + email + " left board: " + boardId);
+            return new Response(null, "");
         }
         catch (Exception e)
         {

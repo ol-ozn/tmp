@@ -13,6 +13,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public TaskService taskService;
         public BoardService boardService;
         private UserController userController;
+        private BoardController boardController;
+
+        public BoardController BoardController
+        {
+            get { return boardController; }
+        }
 
         public UserController UserController
         {
@@ -39,6 +45,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             boardService = new BoardService(this);
             userController = new UserController();
             taskController = new TaskController(this);
+            boardController = new BoardController(this);
             return this;
         }
     }
