@@ -19,7 +19,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             users = new Dictionary<string, User>();
             usersIdCount = 0;
             boardIdCOunter = 0;
+            //get data into users
+            //users = (convert the list of users <userDTO> to be list of users <User>)
         }
+
+
 
         /// <summary>
         ///  This method creates a new user.
