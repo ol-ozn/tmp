@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using System.Text.Json;
 using IntroSE.Kanban.Backend.BusinessLayer;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 using Task = IntroSE.Kanban.Backend.BusinessLayer.Task;
 
 
@@ -19,14 +20,14 @@ namespace BackendTests
             // BoardService boardService = new BoardService(userService);
             // TaskService taskService = new TaskService(userService);
 
-            ServiceFactory serviceFactory = new ServiceFactory();
-
-
-            GradingService gradingService = new GradingService();
-            Console.WriteLine("if the user managed to register this should return: {} ");
-            Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
-
-            Console.WriteLine("\n");
+            // ServiceFactory serviceFactory = new ServiceFactory();
+            //
+            //
+            // GradingService gradingService = new GradingService();
+            // Console.WriteLine("if the user managed to register this should return: {} ");
+            // Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
+            //
+            // Console.WriteLine("\n");
 
             // Console.WriteLine("if the user managed to login, this should return the users email:  ");
             // Console.WriteLine(gradingService.Login("amir@gmail.com", "Test12345"));
@@ -119,6 +120,55 @@ namespace BackendTests
             // Console.WriteLine("if the column has any lists in it, this will return: a Response" +
             //                   " with the list of the columns tasks");
             // Console.WriteLine(gradingService.InProgressTasks("amir@gmail.com"));
+
+            UserDalController userDalController = new UserDalController();
+            // UserDTO user = new UserDTO(15, "olga@mail.com", "1234");
+            // UserDTO user2 = new UserDTO(16, "danny@mail.com", "1111");
+
+            // bool ans = userDalController.Delete(user);
+            // Console.WriteLine(ans);
+
+            // bool ans = userDalController.Insert(user2);
+            // Console.WriteLine(ans);
+            // List<UserDTO> messages = userDalController.SelectAllUsers();
+            // foreach (UserDTO m in messages)
+            // {
+            //     Console.WriteLine(m.Email);
+            // }
+            // Console.Read();
+
+            BoardDalController boardDalController = new BoardDalController();
+            // BoardDTO board1 = new BoardDTO(15,"board1",15,-1,-1,-1);
+            // BoardDTO board2 = new BoardDTO(16,"board2",16,-1,-1,-1);
+
+
+            // bool ans = boardDalController.Delete(board1);
+            // Console.WriteLine(ans);
+            //
+            // bool ans = boardDalController.Insert(board2);
+            // Console.WriteLine(ans);
+            //
+            // List<BoardDTO> messages = boardDalController.SelectAllBoards();
+            // foreach (BoardDTO m in messages)
+            // {
+            //     Console.WriteLine(m.BoardName);
+            // }
+
+            TaskDalController taskDalController = new TaskDalController();
+            TaskDTO task1 = new TaskDTO(15, "task1", "beep boop", 15, DateTime.Now,DateTime.Parse("Jan 1, 2023 13:00:00"));
+            TaskDTO task2 = new TaskDTO(16, "task2", "beep boop", 16, DateTime.Now, DateTime.Parse("Jan 3, 2023 13:00:00"));
+
+            // bool ans = taskDalController.Delete(task1);
+            // Console.WriteLine(ans);
+            
+            bool ans = taskDalController.Insert(task2);
+            Console.WriteLine(ans);
+
+            List<TaskDTO> messages = taskDalController.SelectAllTasks();
+            foreach (TaskDTO m in messages)
+            {
+                Console.WriteLine(m.Title);
+            }
         }
     }
 }
