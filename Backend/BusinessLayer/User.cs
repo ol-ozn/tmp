@@ -79,5 +79,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("The user doesn't own board with given id");
             }
         }
+
+        public int ID
+        {
+            get { return id; }
+        }
     }
 }

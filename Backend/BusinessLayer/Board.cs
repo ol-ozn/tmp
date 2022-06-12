@@ -17,6 +17,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private int limitInProgress = -1;
         private int limitDone = -1;
         private int owner;
+
+        public int Owner
+        {
+            get { return owner; }
+            set { owner = value; }
+        }
+
         private HashSet<string> memeberList; // each board holds its members
 
         public HashSet<string> MemeberList
