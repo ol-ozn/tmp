@@ -11,14 +11,61 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     {
         private Dictionary<int, Board> boards;
         private UserController userController;
+        private int boardIdCOunter;
 
 
-        public BoardController(ServiceFactory factory)
+        public BoardController(ServiceFactory serviceFactory)
         {
             boards = new Dictionary<int, Board>();
-            userController = factory.UserController;
+            userController = serviceFactory.UserController;
+            boardIdCOunter = 0;
         }
 
+
+        /// <summary>
+        ///  This method adds a board to a user and to the global boards list.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <returns>The created Board</returns>
+        public Board addBoard(string boardName, string email)
+        {
+            if (string.IsNullOrWhiteSpace(boardName)) // in case the user tries to enter an empty title
+            {
+                throw new Exception("board name is not valid");
+            }
+
+            User user = userController.getUser(email);
+
+            if (!user.getIsLoggedIn())
+            {
+                throw new Exception("User with email " + email + " isn't logged in");
+            }
+
+            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+
+            if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
+            {
+                throw new Exception("A board named " + boardName + " already exist");
+            }
+
+            int futureID = boardIdCOunter; //TODO: add counter for id 
+            Board toAdd = new Board(boardName, futureID);
+            toAdd.Owner = user.ID; //assigns the board owner to be the User
+            userBoardsbyName.Add(boardName, toAdd); // adds the board to users board list by name
+            userBoardsbyId.Add(futureID, toAdd); // adds the board to users board list by ID
+            boards.Add(futureID, toAdd); // adds the board to the global boards list
+            boardIdCOunter++; // advances the global board id counter
+            return toAdd;
+        }
+
+
+        /// <summary>
+        /// This method lets a user join a board. 
+        /// </summary>
+        /// <param name="email">// the email of the user that wants to join</param>
+        /// <param name="id">// the id of the user that wants to join</param>
         public void joinBoard(string email, int id)
         {
             User currentUser = userController.getUser(email);
@@ -61,6 +108,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+        /// <summary>
+        /// This method lets the owner of the board to transfer it's ownership. 
+        /// </summary>
+        /// <param name="currentOwnerEmail">// the mail of the owner of the board</param>
+        /// <param name="newOwnerEmail">// the mail of the user that will be the new owner of the board</param>
+        /// <param name="boardName">// the name of the board </param>
         public void transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             User currentOwner = userController.getUser(currentOwnerEmail);
@@ -75,7 +128,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 Board currentBoard =
                     currentOwner
                         .getBoardListByName()[
-                            boardName]; // but what happens if there are 2 boards with the same name???
+                            boardName]; //TODO: but what happens if there are 2 boards with the same name??? discuss with partners
                 if (currentBoard.Owner !=
                     currentOwner.ID) // if the user who's trying to perform the action is not the owner
                 {
@@ -83,7 +136,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
 
                 currentBoard.Owner =
-                    userController.getUser(newOwnerEmail).ID; // maybe I should also check whether the new user is part of that board and if not add him
+                    userController.getUser(newOwnerEmail)
+                        .ID; // TODO: maybe we should also check whether the new user is part of that board and if not add him. discuss with partners
             }
             else
             {
@@ -91,6 +145,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+
+        /// <summary>
+        /// This method lets a user leave a board unless he's an owner. 
+        /// </summary>
+        /// <param name="email">// the mail of the user that wants to leave the board</param>
+        /// <param name="boardId">// the Id of the board the user wants to leave </param>
         public void leaveBoard(string email, int boardId)
         {
             User leavingUser = userController.getUser(email);
@@ -112,13 +172,39 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             boardToLeave.MemeberList.Remove(email); // removes the user from the boards users list
             leavingUser.getBoardListById().Remove(boardId); // removes the board from the boardList by ID
-            leavingUser.getBoardListByName().Remove(boardToLeave.getName()); // removes board from the users list by name
-            //TODO: needs to implement all users tasks on this board that he's assigned to should change to unassigned 
+            leavingUser.getBoardListByName()
+                .Remove(boardToLeave.getName()); // removes board from the users list by name
+            //TODO: needs to implement all users tasks on this board that he's assigned to should change to unassigned
         }
 
-        public void removeBoard(string email, string name)
+        /// <summary>
+        /// This method lets a user remove a board if he's the owner
+        /// </summary>
+        /// <param name="boardName">// the mail of the user that wants to leave the board</param>
+        /// <param name="email">// the Id of the board the user wants to leave </param>
+        public void removeBoard(string boardName, string email)
         {
-            return;
+            User user = userController.getUser(email);
+            if (!user.getIsLoggedIn())
+            {
+                throw new Exception("User isn't logged in");
+            }
+
+
+            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+            if (userBoardsbyName.ContainsKey(boardName))
+            {
+                int boardId = userBoardsbyName[boardName].getID();
+                userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
+                userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
+                boards.Remove(boardId); // removes the board from the global board list
+            }
+            else
+            {
+                throw new Exception("Try to remove a board with the name " + boardName +
+                                    " which doesn't exist to the email: " + email);
+            }
         }
     }
 }

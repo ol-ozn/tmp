@@ -27,7 +27,7 @@ public class BoardService
     {
         try
         {
-            Board board = userController.addBoard(boardName, email);
+            Board board = boardController.addBoard(boardName, email);
             log.Info("Board: " + boardName + "was add by " + email);
             return new Response(null, "{}");
         }
@@ -49,7 +49,7 @@ public class BoardService
     {
         try
         {
-            userController.remove(boardName, email);
+            boardController.removeBoard(boardName, email);
             log.Info("Board: " + boardName + "was removed by " + email);
             return new Response(null, "{}");
         }

@@ -11,18 +11,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class UserController
     {
         private Dictionary<string, User> users;
+
         private int usersIdCount;
-        private int boardIdCOunter;
+        // private int boardIdCOunter;
 
         public UserController()
         {
             users = new Dictionary<string, User>();
             usersIdCount = 0;
-            boardIdCOunter = 0;
+            // boardIdCOunter = 0;
             //get data into users
             //users = (convert the list of users <userDTO> to be list of users <User>)
         }
-
 
 
         /// <summary>
@@ -196,6 +196,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return board.getColumnLimit(columnId);
         }
 
+
         /// <summary>
         ///  This method returns the column name of a given column in a given board.
         /// </summary>
@@ -215,6 +216,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board bord = user.hasBoardByName(boardName);
             return bord.getColumnName(columnId);
         }
+
 
         /// <summary>
         ///  This method sets the column limit of a given column in a given board.
@@ -241,6 +243,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board bord = user.hasBoardByName(boardName);
             bord.setColumnLimit(columnId, limit);
         }
+
 
         /// <summary>
         ///  This method returns a column from a board.
@@ -277,41 +280,43 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return users[email];
         }
 
-        /// <summary>
-        ///  This method adds a board to a user.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <returns>The created Board</returns>
-        public Board addBoard(string boardName, string email)
-        {
-            if (string.IsNullOrWhiteSpace(boardName))
-            {
-                throw new Exception("board name is not valid");
-            }
 
-            User user = getUser(email);
-
-            if (!user.getIsLoggedIn())
-            {
-                throw new Exception("User with email " + email + " isn't logged in");
-            }
-
-            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-
-            if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
-            {
-                throw new Exception("A board named " + boardName + " already exist");
-            }
-
-            int futureID = boardIdCOunter; //TODO: add counter for id 
-            Board toAdd = new Board(boardName, futureID);
-            userBoardsbyName.Add(boardName, toAdd); // add nre board to user board list
-            userBoardsbyId.Add(futureID, toAdd);
-            boardIdCOunter++;
-            return toAdd;
-        }
+        // moved to boradController
+        // /// <summary>
+        // ///  This method adds a board to a user.
+        // /// </summary>
+        // /// <param name="email">The email of the user</param>
+        // /// <param name="boardName">The name of the board</param>
+        // /// <returns>The created Board</returns>
+        // public Board addBoard(string boardName, string email)
+        // {
+        //     if (string.IsNullOrWhiteSpace(boardName))
+        //     {
+        //         throw new Exception("board name is not valid");
+        //     }
+        //
+        //     User user = getUser(email);
+        //
+        //     if (!user.getIsLoggedIn())
+        //     {
+        //         throw new Exception("User with email " + email + " isn't logged in");
+        //     }
+        //
+        //     Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+        //     Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+        //
+        //     if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
+        //     {
+        //         throw new Exception("A board named " + boardName + " already exist");
+        //     }
+        //
+        //     int futureID = boardIdCOunter; //TODO: add counter for id 
+        //     Board toAdd = new Board(boardName, futureID);
+        //     userBoardsbyName.Add(boardName, toAdd); // add nre board to user board list
+        //     userBoardsbyId.Add(futureID, toAdd);
+        //     boardIdCOunter++;
+        //     return toAdd;
+        // }
 
         /// <summary>
         ///  This method sets the removes a board from users' boards.
@@ -319,29 +324,32 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email">The email of the user</param>
         /// <param name="boardName">The name of the board</param>
         /// <returns></returns>
-        public void remove(string boardName, string email)
-        {
-            User user = getUser(email);
-            if (!user.getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+        ///
+        /// 
+        // public void remove(string boardName, string email)
+        // {
+        //     User user = getUser(email);
+        //     if (!user.getIsLoggedIn())
+        //     {
+        //         throw new Exception("User isn't logged in");
+        //     }
+        //
+        //
+        //     Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+        //     Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+        //     if (userBoardsbyName.ContainsKey(boardName))
+        //     {
+        //         int boardId = userBoardsbyName[boardName].getID();
+        //         userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
+        //         userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
+        //     }
+        //     else
+        //     {
+        //         throw new Exception("Try to remove a board with the name " + boardName +
+        //                             " which doesn't exist to the email: " + email);
+        //     }
+        // }
 
-
-            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-            if (userBoardsbyName.ContainsKey(boardName))
-            {
-                int boardId = userBoardsbyName[boardName].getID();
-                userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
-                userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
-            }
-            else
-            {
-                throw new Exception("Try to remove a board with the name " + boardName +
-                                    " which doesn't exist to the email: " + email);
-            }
-        }
 
         /// <summary>
         ///  This method changes the state of a task.
@@ -377,6 +385,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                         if (board.isColumnFull(columnOrdinal + 1)) //check column limit
                         {
                             throw new Exception("column overflow");
+                        }
+
+                        if (task.Assignie !=
+                            email) // in case the user who's trying to progress the task isn't the asignee 
+                        {
+                            throw new Exception("user: " + email + " tried to progress task:" + taskId +
+                                                "which he is not assigned to");
                         }
 
                         board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal

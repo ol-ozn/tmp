@@ -40,7 +40,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             if (!checkDescriptionValidity(description))
             {
-
                 throw new Exception("user tried to create a new task" +
                                     " with a description that has more than 300 characters");
             }
@@ -107,6 +106,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("this task does not exist in this column");
             }
+
             task.setDueTime(dueDate);
         }
 
@@ -134,6 +134,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("this task does not exist in this column");
             }
+
             task.setDescription(description);
         }
 
@@ -220,10 +221,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     continue;
                 }
 
-                
+
                 foreach (Task task in l)
                 {
-                    if (task.Assignie.Equals(currentUser.email))// add task only if the user is the assignie of the task
+                    if (task.Assignie.Equals(currentUser
+                            .email)) // add task only if the user is the assignie of the task
                     {
                         list.Add(task);
                     }
@@ -247,6 +249,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 task.Assignie = asignee;
             }
         }
-
     }
 }
