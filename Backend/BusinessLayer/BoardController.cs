@@ -83,8 +83,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
 
                 currentBoard.Owner =
-                    userController.getUser(newOwnerEmail)
-                        .ID; // maybe I should also check whether the new user is part of that board and if not add him
+                    userController.getUser(newOwnerEmail).ID; // maybe I should also check whether the new user is part of that board and if not add him
             }
             else
             {

@@ -19,6 +19,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             get { return id; }
         }
 
+        private string assignie;
+
+        public string Assignie
+        {
+            get { return assignie; }
+            set { assignie = value; }
+        }
+
         private readonly DateTime creationTime;
 
         public DateTime CreationTime

@@ -223,8 +223,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 
                 foreach (Task task in l)
                 {
-                    //TODO: add a condition to check whether the user is assigned to this task
-                    list.Add(task);
+                    if (task.Assignie.Equals(currentUser.email))// add task only if the user is the assignie of the task
+                    {
+                        list.Add(task);
+                    }
                 }
             }
 
@@ -235,5 +237,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             return list;
         }
+
+        public void assignTask(string email, string boardName, int columnOrdinal, int taskId, string asignee)
+        {
+            Board board = uc.getUser(email).getBoardListByName()[boardName];
+            Task task = board.findTaskById(taskId, columnOrdinal);
+            if (task.Assignie == null)
+            {
+                task.Assignie = asignee;
+            }
+        }
+
     }
 }
