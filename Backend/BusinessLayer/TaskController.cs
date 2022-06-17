@@ -26,7 +26,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public Task addTask(string title, string description, DateTime dueTime, string boardName, string email)
         {
-            User user = uc.getUser(email);
+            User user = uc.getUserAndLogeddin(email);
 
             if (!checkTitleValidity(title, user, boardName))
             {
@@ -50,7 +50,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             taskId++;
             Dictionary<string, Board> userBoardByName = user.getBoardListByName();
             Board boardbyName = userBoardByName[boardName];
-            boardbyName.getColumns()["backlog"].Add(newTask);
+            boardbyName.columns["backlog"].Add(newTask);
             return newTask;
         }
 
@@ -62,7 +62,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="title">// sets the title of the task</param>
         public void editTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
-            User currentUser = uc.getUser(email);
+            User currentUser = uc.getUserAndLogeddin(email);
             if (!checkTitleValidity(title, currentUser, boardName))
             {
                 throw new Exception("user tried to either enter an empty title or a title with more than: " +
@@ -87,7 +87,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="dueDate">// sets the DueDate of the task</param>
         public void editDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueTime)
         {
-            User user = uc.getUser(email);
+            User user = uc.getUserAndLogeddin(email);
 
             Board board = user.hasBoardByName(boardName);
             Task task = findTaskById(board, taskId, columnOrdinal);
@@ -107,7 +107,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="title">// sets the title of the task</param>
         public void editDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
         {
-            User user = uc.getUser(email);
+            User user = uc.getUserAndLogeddin(email);
 
             if (!checkDescriptionValidity(description))
             {
@@ -156,7 +156,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             Board board = user.hasBoardByName(boardName);
 
-            foreach (List<Task> list in board.getColumns().Values)
+            foreach (List<Task> list in board.columns.Values)
             {
                 foreach (Task task in list)
                 {
@@ -191,7 +191,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public List<Task> listTaskInProgress(string email)
         {
-            User currentUser = uc.getUser(email);
+            User currentUser = uc.getUserAndLogeddin(email);
             Dictionary<string, Board> boardListByName = currentUser.getBoardListByName();
             if (!boardListByName.Any())
             {
@@ -201,7 +201,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<Task> list = new List<Task>();
             foreach (Board board in boardListByName.Values)
             {
-                List<Task> l = (board.getColumns())["in progress"];
+                List<Task> l = board.columns["in progress"];
                 if (!l.Any())
                 {
                     continue;
@@ -228,11 +228,74 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public void assignTask(string email, string boardName, int columnOrdinal, int taskId, string asignee)
         {
-            Board board = uc.getUser(email).getBoardListByName()[boardName];
+            Board board = uc.getUserAndLogeddin(email).getBoardListByName()[boardName];
             Task task = board.findTaskById(taskId, columnOrdinal);
-            if (task.Assignie == null)
+            if (task.Assignie == null || task.Assignie.Equals(email))
             {
                 task.Assignie = asignee;
+            }
+        }
+
+        /// <summary>
+        ///  This method changes the state of a task.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnOrdinal">The id of the column</param>
+        /// <param name="taskId">The id of the task to advance</param>
+        /// <returns></returns>
+        public void changeState(string email, string boardName, int columnOrdinal, int taskId)
+        {
+            if (columnOrdinal > 2 || columnOrdinal < 0 )
+            {
+                throw new Exception(columnOrdinal + " is invalid");
+            }
+
+            User user = uc.getUserAndLogeddin(email); //user is logged in
+            bool found = false;
+
+            Board board = user.hasBoardByName(boardName);
+            List<Task> tasksList = board.getColumn(columnOrdinal);
+            Dictionary<string, Board> userBoards = user.getBoardListByName();
+            if (tasksList.Count == 0)
+            {
+                throw new Exception("Tried to find a task in an empty list");
+            }
+
+            foreach (Task task in tasksList)
+            {
+                if (task.Id == taskId)
+                {
+                    if (columnOrdinal < 2) //advance task to in progress
+                    {
+                        if (board.isColumnFull(columnOrdinal + 1)) //check column limit
+                        {
+                            throw new Exception("column overflow");
+                        }
+
+                        if (task.Assignie !=
+                            email) // in case the user who's trying to progress the task isn't the asignee 
+                        {
+                            throw new Exception("user: " + email + " tried to progress task:" + taskId +
+                                                "which he is not assigned to");
+                        }
+
+                        board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
+                        board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
+                        found = true;
+                        break;
+                    }
+
+                    else
+                    {
+                        throw new Exception("Try do advance from done \n");
+                    }
+                }
+            }
+
+            if (!found)
+            {
+                throw new Exception("task wasn't found in this column");
             }
         }
     }

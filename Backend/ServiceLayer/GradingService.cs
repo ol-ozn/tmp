@@ -90,28 +90,28 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 //         /// <param name="email">The email address of the user to login</param>
 //         /// <param name="password">The password of the user to login</param>
 //         /// <returns>Response with user email, unless an error occurs (see <see cref="GradingService"/>)</returns>
-//         public string Login(string email, string password)
-//         {
-//             return (JsonController.toJson(userService.login(email, password)));
-//         }
+         public string Login(string email, string password)
+         {
+             return (JsonController.toJson(serviceFactory.userService.login(email, password)));
+         }
 //
 //
-//         /// <summary>
-//         /// This method logs out a logged in user. 
-//         /// </summary>
-//         /// <param name="email">The email of the user to log out</param>
-//         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
-//         public string Logout(string email)
-//         {
-//             Response response = userService.logout(email);
-//             string s = (JsonController.toJson(response));
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
-//
-//             return s;
-//         }
+         /// <summary>
+         /// This method logs out a logged in user. 
+         /// </summary>
+         /// <param name="email">The email of the user to log out</param>
+         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
+         public string Logout(string email)
+         {
+             Response response = serviceFactory.userService.logout(email);
+             string s = (JsonController.toJson(response));
+             if (response.ErrorMessage == null)
+             {
+                 return (string)response.ReturnValue;
+             }
+
+             return s;
+         }
 //
 //         /// <summary>
 //         /// This method limits the number of tasks in a specific column.

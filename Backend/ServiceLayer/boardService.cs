@@ -153,26 +153,7 @@ public class BoardService
         }
     }
 
-    /// <summary>
-    /// This method changes the state of task. 
-    /// </summary>
-    /// <param name="id">The id of the board in which the task is in</param>
-    /// <param name="taskTitle">The title of the task of which to change state</param>
-    /// <returns>The string "{}", unless an error occurs</returns>
-    public Response changeState(string email, string boardName, int columnOrdinal, int taskId)
-    {
-        try
-        {
-            userController.changeState(email, boardName, columnOrdinal, taskId);
-            log.Info("taks: " + taskId + " was advanced by " + email);
-            return new Response(null, "{}");
-        }
-        catch (Exception e)
-        {
-            log.Debug(e.Message);
-            return new Response(e.Message, null);
-        }
-    }
+    
 
     public Response joinBoard(string email, int id)
     {

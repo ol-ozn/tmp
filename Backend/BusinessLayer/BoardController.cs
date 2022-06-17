@@ -35,7 +35,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("board name is not valid");
             }
 
-            User user = userController.getUser(email);
+            User user = userController.getUserAndLogeddin(email);
 
             if (!user.IsLoggedIn)
             {
@@ -52,7 +52,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             int futureID = boardIdCOunter; //TODO: add counter for id 
             Board toAdd = new Board(boardName, futureID);
-            toAdd.Owner = user.Id; //assigns the board owner to be the User
+            toAdd.owner = user.Id; //assigns the board owner to be the User
             userBoardsbyName.Add(boardName, toAdd); // adds the board to users board list by name
             userBoardsbyId.Add(futureID, toAdd); // adds the board to users board list by ID
             boards.Add(futureID, toAdd); // adds the board to the global boards list
@@ -68,8 +68,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="id">// the id of the user that wants to join</param>
         public void joinBoard(string email, int id)
         {
-            User currentUser = userController.getUser(email);
-            
+            User currentUser = userController.getUserAndLogeddin(email);
+
             if (boards.ContainsKey(id))
             {
                 Board boardToAdd = boards[id]; // the board to Add
@@ -111,26 +111,32 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="boardName">// the name of the board </param>
         public void transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            User currentOwner = userController.getUser(currentOwnerEmail);
-            
-            if (currentOwner.getBoardListByName()
-                .ContainsKey(boardName)) // checks if the user is a member of this board
-            {
-                Board currentBoard = currentOwner.getBoardListByName()[boardName];
-                //TODO: but what happens if there are 2 boards with the same name??? discuss with partners - handle mot allowed
-                if (currentBoard.Owner !=
-                    currentOwner.Id) // if the user who's trying to perform the action is not the owner
-                {
-                    throw new Exception("a user who is not the owner tried to transfer board ownership");
-                }
+            User currentOwner = userController.getUserAndLogeddin(currentOwnerEmail);
+            User newOwner = userController.getUser(newOwnerEmail);
 
-                currentBoard.Owner = userController.getUser(newOwnerEmail).Id;
-                // TODO: maybe we should also check whether the new user is part of that board and if not add him. discuss with partners
-            }
-            else
+
+            if (!currentOwner.getBoardListByName().ContainsKey(boardName)) // checks if the user is a member of this board
             {
                 throw new Exception("this board does not exist");
             }
+
+            if (newOwner.getBoardListByName().ContainsKey(boardName))
+            {
+                throw new Exception(newOwnerEmail + " already has board named: " + boardName);
+            }
+
+            Board currentBoard = currentOwner.getBoardListByName()[boardName];
+            if (currentBoard.owner != currentOwner.Id) // if the user who's trying to perform the action is not the owner
+            {
+                throw new Exception("a user who is not the owner tried to transfer board ownership");
+            }
+
+            if (!currentBoard.MemeberList.Contains(newOwnerEmail))
+            {
+                throw new Exception(newOwnerEmail + " isn't a member of " + boardName);
+            }
+
+            currentBoard.owner = userController.getUser(newOwnerEmail).Id;
         }
 
 
@@ -141,24 +147,37 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="boardId">// the Id of the board the user wants to leave </param>
         public void leaveBoard(string email, int boardId)
         {
-            User leavingUser = userController.getUser(email);
-            
+            User leavingUser = userController.getUserAndLogeddin(email);
+
             if (!leavingUser.getBoardListById().ContainsKey(boardId)) // if the user is already not part of this board
             {
                 throw new Exception("The user: " + email + " is already not part of board: " + boardId);
             }
 
             Board boardToLeave = boards[boardId];
-            if (leavingUser.Id == boardToLeave.Owner) // in case the user who's trying to leave is the owner
+            if (leavingUser.Id == boardToLeave.owner) // in case the user who's trying to leave is the owner
             {
                 throw new Exception("user: " + leavingUser + "who's a board owner tried to leave board: " + boardId);
             }
 
             boardToLeave.MemeberList.Remove(email); // removes the user from the boards users list
             leavingUser.getBoardListById().Remove(boardId); // removes the board from the boardList by ID
-            leavingUser.getBoardListByName()
-                .Remove(boardToLeave.Name); // removes board from the users list by name
-            //TODO: needs to implement all users tasks on this board that he's assigned to should change to unassigned -- handle brute force
+            leavingUser.getBoardListByName().Remove(boardToLeave.Name); // removes board from the users list by name
+            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId.FirstOrDefault(x => x.Value == "backlog").Key))
+            {
+                if (task.Assignie.Equals(email))
+                {
+                    task.Assignie = null;
+                }
+            }
+
+            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId.FirstOrDefault(x => x.Value == "in progress").Key))
+            {
+                if (task.Assignie.Equals(email))
+                {
+                    task.Assignie = null;
+                }
+            }
         }
 
         /// <summary>
@@ -168,22 +187,34 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email">// the Id of the board the user wants to leave </param>
         public void removeBoard(string boardName, string email)
         {
-            User user = userController.getUser(email);
+            User owner = userController.getUserAndLogeddin(email);
+
+            Dictionary<string, Board> userBoardsbyName = owner.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = owner.getBoardListById();
             
-            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-            if (userBoardsbyName.ContainsKey(boardName))
+            if (!userBoardsbyName.ContainsKey(boardName))
             {
-                int boardId = userBoardsbyName[boardName].Id;
-                userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
-                userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
-                boards.Remove(boardId); // removes the board from the global board list
+                throw new Exception("Try to remove a board with the name " + boardName + " which doesn't exist to the email: " + email);
             }
-            else
+            Board board = userBoardsbyName[boardName];
+            if (!board.owner.Equals(email))
             {
-                throw new Exception("Try to remove a board with the name " + boardName +
-                                    " which doesn't exist to the email: " + email);
+                throw new Exception(email + " is not the owner of " + boardName);
             }
+
+            foreach (string username in  board.MemeberList) //remove board from all members 
+            {
+                User user = userController.getUser(username);
+                user.getBoardListByName().Remove(boardName);
+                user.getBoardListById().Remove(board.Id);
+            }
+            
+            userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
+            userBoardsbyId.Remove(board.Id); // board has been removed from the userBoardById
+
+
+            boards.Remove(board.Id); // removes the board from the global board list
+           
         }
     }
 }

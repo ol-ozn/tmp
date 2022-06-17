@@ -33,21 +33,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>User object of the new user, unless an error occurs</returns>
         public User createUser(string email, string password)
         {
+            if (!emailValidity(email))
+            {
+                throw new Exception(email + " is invalid");
+            }
+            email = email.ToLower();
             //check if user with given email already exist
             if (userExists(email))
                 throw new Exception("User with email: " + email + " already exists.");
-
-
-            //check email validity
-            if (!emailValidity(email))
-                throw new Exception("Invalid email: " + email);
-
 
             //check password validity
             if (!passwordValidity(password))
                 throw new Exception(
                     "Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
-
 
             //if all the criteria above met- create new User object
             User newUser = new User(email, password, usersIdCount);
@@ -109,6 +107,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>User object of logged in user, unless an error occurs</returns>
         public User login(string email, string password)
         {
+            if (!emailValidity(email))
+            {
+                throw new Exception(email + " is invalid");
+            }
+            email = email.ToLower();
             if (!userExists(email))
                 throw new Exception("Attempt to log in to account with email: " + email + " that doesn't exist!");
 
@@ -170,6 +173,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public void logout(string email)
         {
+            if (!emailValidity(email))
+            {
+                throw new Exception(email + " is invalid");
+            }
+            email = email.ToLower();
             isLoggedIn(email);
             users[email].IsLoggedIn = false;
         }
@@ -184,7 +192,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>Limit of the given column</returns>
         public int getColumnLimit(string email, string boardName, int columnId)
         {
-            User user = getUser(email); //check if exists and if logged in is in getUser
+            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
@@ -205,7 +213,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>Name of the given column</returns>
         public string getColumnName(string email, string boardName, int columnId)
         {
-            User user = getUser(email); //check if exists and if logged in is in getUser
+            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
@@ -227,7 +235,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public void setColumnLimit(string email, string boardName, int columnId, int limit)
         {
-            User user = getUser(email); //check if exists and if logged in is in getUser
+            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
@@ -253,7 +261,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>List of tasks representing the column</returns>
         public List<Task> getColumn(string email, string boardName, int columnId)
         {
-            User user = getUser(email); //check if exists and if logged in is in getUser
+            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
 
             if (columnId < 0 || columnId > 2)
             {
@@ -269,9 +277,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <returns>User</returns>
-        public User getUser(string email)
+        public User getUserAndLogeddin(string email)
         {
             isLoggedIn(email);
+            return users[email];
+        }
+
+        public User getUser(string email)
+        {
+            if (!userExists(email))
+                throw new Exception("An account with " + email + " doesn't even exist!");
             return users[email];
         }
 
@@ -346,62 +361,62 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         // }
 
 
-        /// <summary>
-        ///  This method changes the state of a task.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The id of the column</param>
-        /// <param name="taskId">The id of the task to advance</param>
-        /// <returns></returns>
-        public void changeState(string email, string boardName, int columnOrdinal, int taskId)
-        {
-            User user = getUser(email); //user is logged in
-            bool found = false;
-            
-            Board board = user.hasBoardByName(boardName);
-            List<Task> tasksList = board.getColumn(columnOrdinal);
-            Dictionary<string, Board> userBoards = user.getBoardListByName();
-            if (tasksList.Count == 0)
-            {
-                throw new Exception("Tried to find a task in an empty list");
-            }
-
-            foreach (Task task in tasksList)
-            {
-                if (task.Id == taskId)
-                {
-                    if (columnOrdinal < 2) //advance task to in progress
-                    {
-                        if (board.isColumnFull(columnOrdinal + 1)) //check column limit
-                        {
-                            throw new Exception("column overflow");
-                        }
-
-                        if (task.Assignie !=
-                            email) // in case the user who's trying to progress the task isn't the asignee 
-                        {
-                            throw new Exception("user: " + email + " tried to progress task:" + taskId +
-                                                "which he is not assigned to");
-                        }
-
-                        board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
-                        board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
-                        found = true;
-                        break;
-                    }
-
-                    else
-                    {
-                        throw new Exception("Try do advance from done \n");
-                    }
-                }
-            }
-
-            if (!found)
-            {
-                throw new Exception("task wasn't found in this column");
-            }
-        }
+        // /// <summary>
+        // ///  This method changes the state of a task.
+        // /// </summary>
+        // /// <param name="email">The email of the user</param>
+        // /// <param name="boardName">The name of the board</param>
+        // /// <param name="columnOrdinal">The id of the column</param>
+        // /// <param name="taskId">The id of the task to advance</param>
+        // /// <returns></returns>
+        // public void changeState(string email, string boardName, int columnOrdinal, int taskId)
+        // {
+        //     User user = getUserAndLogeddin(email); //user is logged in
+        //     bool found = false;
+        //     
+        //     Board board = user.hasBoardByName(boardName);
+        //     List<Task> tasksList = board.getColumn(columnOrdinal);
+        //     Dictionary<string, Board> userBoards = user.getBoardListByName();
+        //     if (tasksList.Count == 0)
+        //     {
+        //         throw new Exception("Tried to find a task in an empty list");
+        //     }
+        //
+        //     foreach (Task task in tasksList)
+        //     {
+        //         if (task.Id == taskId)
+        //         {
+        //             if (columnOrdinal < 2) //advance task to in progress
+        //             {
+        //                 if (board.isColumnFull(columnOrdinal + 1)) //check column limit
+        //                 {
+        //                     throw new Exception("column overflow");
+        //                 }
+        //
+        //                 if (task.Assignie !=
+        //                     email) // in case the user who's trying to progress the task isn't the asignee 
+        //                 {
+        //                     throw new Exception("user: " + email + " tried to progress task:" + taskId +
+        //                                         "which he is not assigned to");
+        //                 }
+        //
+        //                 board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
+        //                 board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
+        //                 found = true;
+        //                 break;
+        //             }
+        //
+        //             else
+        //             {
+        //                 throw new Exception("Try do advance from done \n");
+        //             }
+        //         }
+        //     }
+        //
+        //     if (!found)
+        //     {
+        //         throw new Exception("task wasn't found in this column");
+        //     }
+        // }
     }
 }
