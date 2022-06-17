@@ -72,25 +72,25 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string Register(string email, string password)
         {
-            Response res = serviceFactory.userService.createUser(email, password);
-            string s = (JsonController.toJson(res));
-            if (res.ErrorMessage == null)
-            {
-                return (String)res.ReturnValue;
-            }
+            // Response res = serviceFactory.userService.createUser(email, password);
+            // string s = (JsonController.toJson(res));
+            // if (res.ErrorMessage == null)
+            // {
+            //     return (String)res.ReturnValue;
+            // }
 
-            return s;
+            return (JsonController.toJson(serviceFactory.userService.createUser(email, password)));
         }
 
 
-//
-//         /// <summary>
-//         ///  This method logs in an existing user.
-//         /// </summary>
-//         /// <param name="email">The email address of the user to login</param>
-//         /// <param name="password">The password of the user to login</param>
-//         /// <returns>Response with user email, unless an error occurs (see <see cref="GradingService"/>)</returns>
-         public string Login(string email, string password)
+        //
+        //         /// <summary>
+        //         ///  This method logs in an existing user.
+        //         /// </summary>
+        //         /// <param name="email">The email address of the user to login</param>
+        //         /// <param name="password">The password of the user to login</param>
+        //         /// <returns>Response with user email, unless an error occurs (see <see cref="GradingService"/>)</returns>
+        public string Login(string email, string password)
          {
              return (JsonController.toJson(serviceFactory.userService.login(email, password)));
          }
