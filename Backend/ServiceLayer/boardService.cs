@@ -51,7 +51,7 @@ public class BoardService
         {
             boardController.removeBoard(boardName, email);
             log.Info("Board: " + boardName + "was removed by " + email);
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -75,7 +75,7 @@ public class BoardService
             userController.setColumnLimit(email, boardName, columnOrdinal, limit);
             log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " was set to " + limit);
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -161,7 +161,7 @@ public class BoardService
         {
             boardController.joinBoard(email, id);
             log.Info("user: " + email + " joined board: " + id);
-            return new Response(null, "");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -176,7 +176,7 @@ public class BoardService
         {
             boardController.transferOwnerShip(currentOwnerEmail, newOwnerEmail, boardName);
             log.Info("user: " + currentOwnerEmail + " transfered: " + boardName + " to user: " + newOwnerEmail);
-            return new Response(null, "");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -191,7 +191,7 @@ public class BoardService
         {
             boardController.leaveBoard(email, boardId);
             log.Info("user: " + email + " left board: " + boardId);
-            return new Response(null, "");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -206,7 +206,7 @@ public class BoardService
         {
             boardController.removeBoard(email, name);
             log.Info("user: " + email + " deleted board: " + name);
-            return new Response(null, "");
+            return new Response(null, null);
         }
         catch (Exception e)
         {

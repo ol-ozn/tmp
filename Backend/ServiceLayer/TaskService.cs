@@ -59,7 +59,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.editTitle(email, boardName, columnOrdinal, taskId, title);
                 log.Debug("User: " + email + "edited the task's title");
-                return new Response(null, "{}");
+                return new Response(null, null);
             }
             catch (Exception e)
             {
@@ -81,7 +81,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.editDescription(email, boardName, columnOrdinal, taskId, description);
                 log.Debug("User: " + email + "edited thier task title");
-                return new Response("{}", null);
+                return new Response(null, null);
             }
             catch (Exception e)
             {
@@ -102,7 +102,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.editDueDate(email, boardName, columnOrdinal, taskId, dueDate);
                 log.Debug("User: " + email + "edited the task title");
-                return new Response(null, "{}");
+                return new Response(null, null);
             }
             catch (Exception e)
             {
@@ -136,7 +136,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.changeState(email, boardName, columnOrdinal, taskId);
                 log.Info("taks: " + taskId + " was advanced by " + email);
-                return new Response(null, "{}");
+                return new Response(null, null);
             }
             catch (Exception e)
             {

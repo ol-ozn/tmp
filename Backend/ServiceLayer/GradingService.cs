@@ -103,15 +103,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
          public string Logout(string email)
          {
-             Response response = serviceFactory.userService.logout(email);
-             string s = (JsonController.toJson(response));
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
+             // Response response = serviceFactory.userService.logout(email);
+             // string s = (JsonController.toJson(response));
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
 
-             return s;
-         }
+             return (JsonController.toJson(serviceFactory.userService.logout(email)));
+        }
 
          /// <summary>
          /// This method limits the number of tasks in a specific column.
@@ -123,14 +123,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
          public string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
          {
-             Response response = (serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit));
-             string s = JsonController.toJson(response);
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
+             // Response response = (serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit));
+             // string s = JsonController.toJson(response);
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
 
-             return s;
+             return (JsonController.toJson(serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit)));
          }
 
          /// <summary>
@@ -185,15 +185,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
          public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
          {
-             Response response = serviceFactory.taskService.editTaskDueDate(email, boardName, columnOrdinal, taskId,
-                 dueDate);
-             string s = JsonController.toJson(response);
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
+             // Response response = serviceFactory.taskService.editTaskDueDate(email, boardName, columnOrdinal, taskId,
+             //     dueDate);
+             // string s = JsonController.toJson(response);
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
 
-             return s;
+             return JsonController.toJson(serviceFactory.taskService.editTaskDueDate(email, boardName, columnOrdinal, taskId,
+                 dueDate));
          }
 
 
@@ -208,15 +209,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
          public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
          {
-             Response response = serviceFactory.taskService.editTaskTitle(email, boardName, columnOrdinal, taskId,
-                 title);
-             string s = JsonController.toJson(response);
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
+             // Response response = serviceFactory.taskService.editTaskTitle(email, boardName, columnOrdinal, taskId,
+             //     title);
+             // string s = JsonController.toJson(response);
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
 
-             return s;
+             return JsonController.toJson(serviceFactory.taskService.editTaskTitle(email, boardName, columnOrdinal, taskId,
+                 title));
          }
 
 
@@ -232,15 +234,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId,
              string description)
          {
-             Response response = serviceFactory.taskService.editTaskDescription(email, boardName, columnOrdinal, taskId,
-                 description);
-             string s = JsonController.toJson(response);
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
+             // Response response = serviceFactory.taskService.editTaskDescription(email, boardName, columnOrdinal, taskId,
+             //     description);
+             // string s = JsonController.toJson(response);
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
 
-             return s;
+             return JsonController.toJson(serviceFactory.taskService.editTaskDescription(email, boardName, columnOrdinal, taskId,
+                 description));
          }
 
 
@@ -254,14 +257,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
          public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
          {
-             Response response = serviceFactory.taskService.changeState(email, boardName, columnOrdinal, taskId);
-             string s = JsonController.toJson(response);
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
+             // Response response = serviceFactory.taskService.changeState(email, boardName, columnOrdinal, taskId);
+             // string s = JsonController.toJson(response);
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
 
-             return s;
+             return JsonController.toJson(serviceFactory.taskService.changeState(email, boardName, columnOrdinal, taskId));
          }
 
 
@@ -306,14 +309,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
          public string RemoveBoard(string email, string name)
          {
-             Response response = serviceFactory.boardService.remove(name, email);
-             string s = JsonController.toJson(response);
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
+             // Response response = serviceFactory.boardService.remove(name, email);
+             // string s = JsonController.toJson(response);
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
 
-             return s;
+             return JsonController.toJson(serviceFactory.boardService.remove(name, email));
          }
 
 

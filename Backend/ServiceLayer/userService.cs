@@ -46,7 +46,7 @@ public class UserService
         {
             User user = userController.createUser(email, password);
             log.Info("user with email " + email + " was created successfully");
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -65,7 +65,7 @@ public class UserService
         {
             userController.logout(email);
             log.Info("user with email: " + email + "has logged out successfully");
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -84,7 +84,7 @@ public class UserService
         {
             userController.deleteUser(email);
             log.Info("user with email: " + email + " has been deleted successfully");
-            return new Response("{}", null);
+            return new Response(null, null);
         }
         catch (Exception e)
         {
