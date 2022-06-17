@@ -30,10 +30,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>The created Board</returns>
         public Board addBoard(string boardName, string email)
         {
-            // if (string.IsNullOrWhiteSpace(boardName)) // in case the user tries to enter an empty title
-            // {
-            //     throw new Exception("board name is not valid");
-            // }
+            if (string.IsNullOrWhiteSpace(boardName)) // in case the user tries to enter an empty title
+            {
+                throw new Exception("board name is not valid");
+            }
 
             User user = userController.getUserAndLogeddin(email);
 

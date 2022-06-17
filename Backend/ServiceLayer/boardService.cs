@@ -29,7 +29,7 @@ public class BoardService
         {
             Board board = boardController.addBoard(boardName, email);
             log.Info("Board: " + boardName + "was add by " + email);
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {

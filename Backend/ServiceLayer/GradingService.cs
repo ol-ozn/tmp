@@ -286,14 +286,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
          /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
          public string AddBoard(string email, string name)
          {
-             Response response = serviceFactory.boardService.createBoard(name, email);
-             string s = JsonController.toJson(response);
-             if (response.ErrorMessage == null)
-             {
-                 return (string)response.ReturnValue;
-             }
-
-             return s;
+             // Response response = serviceFactory.boardService.createBoard(name, email);
+             // string s = JsonController.toJson(response);
+             // if (response.ErrorMessage == null)
+             // {
+             //     return (string)response.ReturnValue;
+             // }
+             //JsonController.toJson(serviceFactory.userService.login(email, password))
+             return JsonController.toJson(serviceFactory.boardService.createBoard(name, email));
+            // return s;
          }
 
 
