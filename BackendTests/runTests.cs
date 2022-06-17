@@ -171,7 +171,7 @@ namespace BackendTests
 
             GradingService gs = new GradingService();
             Console.WriteLine(gs.Register("olga@gmail.com", "12345Ab"));
-            Console.WriteLine(gs.AddBoard("olga@gmail.com","board1"));
+            Console.WriteLine(gs.AddBoard("olga@gmail.com", "board1"));
             // Console.WriteLine(gs.AddBoard("olga@gmail.com", "board1"));
             // Console.WriteLine(gs.AddBoard("olga@gmail.com", ""));
             // Console.WriteLine(gs.AddBoard("daniel@gmail.com", ""));
@@ -179,11 +179,21 @@ namespace BackendTests
             // Console.WriteLine(gs.AddBoard("daniel@gmail.com", "board1"));
             // Console.WriteLine(gs.Login("olga@gmail.com", "12345Ab"));
             Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title1", "f this s", DateTime.Now));
-            Console.WriteLine(gs.AddTask("amit@gmail.com", "board1", "title1", "f this s", DateTime.Now));
-            Console.WriteLine(gs.AddTask("olga@gmail.com", "board2", "title1", "f this s", DateTime.Now));
-            Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "", "f this s", DateTime.Now));
-            Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title2", "", DateTime.Now));
+            // Console.WriteLine(gs.AddTask("amit@gmail.com", "board1", "title1", "f this s", DateTime.Now));
+            // Console.WriteLine(gs.AddTask("olga@gmail.com", "board2", "title1", "f this s", DateTime.Now));
+            // Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "", "f this s", DateTime.Now));
+            // Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title2", "", DateTime.Now));
+            Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title2", "f this s", DateTime.Now));
+            // Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title3", "f this s", DateTime.Now));
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
 
+            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
 
         }
     }

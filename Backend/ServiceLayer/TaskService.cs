@@ -37,7 +37,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.addTask(title, description, dueTime, boardName, email);
                 log.Debug("a task was added to user: " + email);
-                return new Response(null, email);
+                // return new Response(null, email);
+                return new Response(null, null);
+
             }
             catch (Exception e)
             {

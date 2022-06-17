@@ -191,7 +191,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             Dictionary<string, Board> userBoardsbyName = owner.getBoardListByName();
             Dictionary<int, Board> userBoardsbyId = owner.getBoardListById();
-            
+
             if (!userBoardsbyName.ContainsKey(boardName))
             {
                 throw new Exception("Try to remove a board with the name " + boardName + " which doesn't exist to the email: " + email);
@@ -217,7 +217,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
             boards.Remove(board.Id); // removes the board from the global board list
-           
+
         }
     }
 }

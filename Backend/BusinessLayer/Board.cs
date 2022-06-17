@@ -18,7 +18,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             { 0, "backlog" },
             { 1, "in progress" },
             { 2, "done" }
-        }; 
+        };
 
         public Dictionary<string, List<Task>> columns { get; } // dictionary <board title, tasks list>
         private readonly int id;
@@ -26,12 +26,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public int LimitBacklog { get; set; }
         public int limitInProgress { get; set; }
         public int LimitDone { get; set; }
-        public int owner{ get; set; }
-        
+        public int owner { get; set; }
+
         private HashSet<string> memeberList; // each board holds its members
 
         public HashSet<string> MemeberList { get; }
-        
+
 
 
         public Board(String boardName, int id)
@@ -42,7 +42,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.id = id;
             owner = id;
             memeberList = new HashSet<string>();
-            
+
             this.LimitBacklog = UNLIMITED;
             this.limitInProgress = UNLIMITED;
             this.LimitDone = UNLIMITED;

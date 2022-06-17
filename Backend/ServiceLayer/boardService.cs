@@ -153,7 +153,7 @@ public class BoardService
         }
     }
 
-    
+
 
     public Response joinBoard(string email, int id)
     {

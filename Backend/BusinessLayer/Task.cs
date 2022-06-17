@@ -13,17 +13,47 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class Task
     {
         private int id;
-        public int Id { get; }
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
+
         private string assignie;
         public string Assignie { get; set; }
+
+
         private readonly DateTime creationTime;
-        public DateTime CreationTime { get; }
-        private string title;
-        public string Title { get; set; }
-        private string description;
-        public string Description { get; set; }
+        public DateTime CreationTime
+        {
+            get { return creationTime; }
+        }
+
         private DateTime dueTime;
-        public DateTime DueTime { get; set; }
+        public DateTime DueTime
+        {
+            get { return dueTime; }
+            set { dueTime = value; }
+        }
+
+        public string title;
+        public string Title
+        {
+            get { return title; }
+            set { title = value; }
+        }
+
+
+        private string description;
+        public string Description
+        {
+            get { return description; }
+            set { description = value; }
+        }
+
+
+
         private string boardName;
         public string BoardName { get; }
 

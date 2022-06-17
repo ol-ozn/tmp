@@ -15,7 +15,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public string email;
         private string password;
         private bool isLoggedIn;
-        public bool IsLoggedIn { get; set;}
+        public bool IsLoggedIn { get; set; }
         private Dictionary<string, Board> boardListByName; // Dict <boardName , Board Object>
         private Dictionary<int, Board> boardListById; // Dict < board Id , BoardObject>
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

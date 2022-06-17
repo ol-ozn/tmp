@@ -246,7 +246,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public void changeState(string email, string boardName, int columnOrdinal, int taskId)
         {
-            if (columnOrdinal > 2 || columnOrdinal < 0 )
+            if (columnOrdinal > 2 || columnOrdinal < 0)
             {
                 throw new Exception(columnOrdinal + " is invalid");
             }
