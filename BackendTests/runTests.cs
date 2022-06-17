@@ -16,25 +16,25 @@ namespace BackendTests
     {
         static void Main(string[] args)
         {
-            
+
             // ServiceFactory serviceFactory = new ServiceFactory();
             //
             //
-            GradingService gradingService = new GradingService();
-            Console.WriteLine("if the user managed to register this should return: {} ");
-            Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
-            
+            // GradingService gradingService = new GradingService();
+            // Console.WriteLine("if the user managed to register this should return: {} ");
+            // Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
+
             // Console.WriteLine("if the user managed to register this should return: {} ");
             // Console.WriteLine(gradingService.Register("Amir@gmail.com", "Test12345"));
-            Console.WriteLine("\n");
-            Console.WriteLine("if the user managed to logout this should return: {} ");
-            Console.WriteLine(gradingService.Logout("Amir@gmail.com"));
-            Console.WriteLine("if the user managed to login, this should return the users email:  ");
+            // Console.WriteLine("\n");
+            // Console.WriteLine("if the user managed to logout this should return: {} ");
+            // Console.WriteLine(gradingService.Logout("Amir@gmail.com"));
+            // Console.WriteLine("if the user managed to login, this should return the users email:  ");
             // Console.WriteLine(gradingService.Login("Amir@gmail.com", "Test12345"));
             //
             // Console.WriteLine("\n");
             //
-            
+
             //
             // Console.WriteLine("\n");
             //
@@ -169,7 +169,9 @@ namespace BackendTests
             //     Console.WriteLine(m.Title);
             // }
 
-
+            GradingService gs = new GradingService();
+            Console.WriteLine(gs.Register("olga@gmail.com", "12345Ab"));
+            Console.WriteLine(gs.AddBoard("olga@gmail.com","board1"));
         }
     }
 }

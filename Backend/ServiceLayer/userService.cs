@@ -8,9 +8,9 @@ public class UserService
 {
     public UserController userController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-    public UserService()
+    public UserService(ServiceFactory serviceFactory)
     {
-        userController = new UserController();
+        userController = serviceFactory.UserController;
     }
 
     /// <summary>

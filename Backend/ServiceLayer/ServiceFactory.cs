@@ -40,12 +40,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         private ServiceFactory create()
         {
-            userService = new UserService();
-            taskService = new TaskService(this);
-            boardService = new BoardService(this);
             userController = new UserController();
-            taskController = new TaskController(this);
+            userService = new UserService(this);
             boardController = new BoardController(this);
+            boardService = new BoardService(this);
+            taskController = new TaskController(this);
+            taskService = new TaskService(this);
             return this;
         }
     }
