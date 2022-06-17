@@ -37,7 +37,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             User user = userController.getUser(email);
 
-            if (!user.getIsLoggedIn())
+            if (!user.IsLoggedIn)
             {
                 throw new Exception("User with email " + email + " isn't logged in");
             }
@@ -45,14 +45,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
             Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
 
-            if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
+            if (userBoardsbyName.ContainsKey(boardName)) // check if user has board with given name
             {
                 throw new Exception("A board named " + boardName + " already exist");
             }
 
             int futureID = boardIdCOunter; //TODO: add counter for id 
             Board toAdd = new Board(boardName, futureID);
-            toAdd.Owner = user.ID; //assigns the board owner to be the User
+            toAdd.Owner = user.Id; //assigns the board owner to be the User
             userBoardsbyName.Add(boardName, toAdd); // adds the board to users board list by name
             userBoardsbyId.Add(futureID, toAdd); // adds the board to users board list by ID
             boards.Add(futureID, toAdd); // adds the board to the global boards list
@@ -69,11 +69,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void joinBoard(string email, int id)
         {
             User currentUser = userController.getUser(email);
-            if (!currentUser.getIsLoggedIn())
-            {
-                throw new Exception("User is not logged in");
-            }
-
+            
             if (boards.ContainsKey(id))
             {
                 Board boardToAdd = boards[id]; // the board to Add
@@ -81,10 +77,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     userBoardsByName = currentUser.getBoardListByName(); // the users boards by name
                 Dictionary<int, Board> userBoardsById = currentUser.getBoardListById(); // the user boards by Id
 
-                if (!userBoardsByName.ContainsKey(boardToAdd
-                        .getName())) // in case the user is not a part of this board 
+                if (!userBoardsByName.ContainsKey(boardToAdd.Name)) // in case the user is not a part of this board 
                 {
-                    userBoardsByName.Add(boardToAdd.getName(), boardToAdd); // adds the board to boards dict by name
+                    userBoardsByName.Add(boardToAdd.Name, boardToAdd); // adds the board to boards dict by name
                 }
                 else // else the user is already part of this board
                 {
@@ -117,27 +112,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             User currentOwner = userController.getUser(currentOwnerEmail);
-            if (!currentOwner.getIsLoggedIn()) // if the user is not logged in 
-            {
-                throw new Exception("User is not logged in");
-            }
-
+            
             if (currentOwner.getBoardListByName()
                 .ContainsKey(boardName)) // checks if the user is a member of this board
             {
-                Board currentBoard =
-                    currentOwner
-                        .getBoardListByName()[
-                            boardName]; //TODO: but what happens if there are 2 boards with the same name??? discuss with partners
+                Board currentBoard = currentOwner.getBoardListByName()[boardName];
+                //TODO: but what happens if there are 2 boards with the same name??? discuss with partners - handle mot allowed
                 if (currentBoard.Owner !=
-                    currentOwner.ID) // if the user who's trying to perform the action is not the owner
+                    currentOwner.Id) // if the user who's trying to perform the action is not the owner
                 {
                     throw new Exception("a user who is not the owner tried to transfer board ownership");
                 }
 
-                currentBoard.Owner =
-                    userController.getUser(newOwnerEmail)
-                        .ID; // TODO: maybe we should also check whether the new user is part of that board and if not add him. discuss with partners
+                currentBoard.Owner = userController.getUser(newOwnerEmail).Id;
+                // TODO: maybe we should also check whether the new user is part of that board and if not add him. discuss with partners
             }
             else
             {
@@ -154,18 +142,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void leaveBoard(string email, int boardId)
         {
             User leavingUser = userController.getUser(email);
-            if (!leavingUser.getIsLoggedIn()) // if the user is not logged in 
-            {
-                throw new Exception("User is not logged in");
-            }
-
+            
             if (!leavingUser.getBoardListById().ContainsKey(boardId)) // if the user is already not part of this board
             {
                 throw new Exception("The user: " + email + " is already not part of board: " + boardId);
             }
 
             Board boardToLeave = boards[boardId];
-            if (leavingUser.ID == boardToLeave.Owner) // in case the user who's trying to leave is the owner
+            if (leavingUser.Id == boardToLeave.Owner) // in case the user who's trying to leave is the owner
             {
                 throw new Exception("user: " + leavingUser + "who's a board owner tried to leave board: " + boardId);
             }
@@ -173,8 +157,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardToLeave.MemeberList.Remove(email); // removes the user from the boards users list
             leavingUser.getBoardListById().Remove(boardId); // removes the board from the boardList by ID
             leavingUser.getBoardListByName()
-                .Remove(boardToLeave.getName()); // removes board from the users list by name
-            //TODO: needs to implement all users tasks on this board that he's assigned to should change to unassigned
+                .Remove(boardToLeave.Name); // removes board from the users list by name
+            //TODO: needs to implement all users tasks on this board that he's assigned to should change to unassigned -- handle brute force
         }
 
         /// <summary>
@@ -185,17 +169,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void removeBoard(string boardName, string email)
         {
             User user = userController.getUser(email);
-            if (!user.getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
-
-
+            
             Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
             Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
             if (userBoardsbyName.ContainsKey(boardName))
             {
-                int boardId = userBoardsbyName[boardName].getID();
+                int boardId = userBoardsbyName[boardName].Id;
                 userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
                 userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
                 boards.Remove(boardId); // removes the board from the global board list

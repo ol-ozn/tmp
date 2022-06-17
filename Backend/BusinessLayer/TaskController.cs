@@ -26,12 +26,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public Task addTask(string title, string description, DateTime dueTime, string boardName, string email)
         {
-            if (!uc.getUser(email).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+            User user = uc.getUser(email);
 
-            if (!checkTitleValidity(title, uc.getUser(email), boardName))
+            if (!checkTitleValidity(title, user, boardName))
             {
                 throw new Exception("user tried to create a new task" +
                                     " with either an empty title or a title with more than" +
@@ -44,14 +41,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                                     " with a description that has more than 300 characters");
             }
 
-            if (uc.getUser(email).hasBoardByName(boardName).isColumnFull(0))
+            if (user.hasBoardByName(boardName).isColumnFull(0))
             {
                 throw new Exception("Column overflow");
             }
 
-            Task newTask = new Task(title, description, dueTime, boardName, uc.getUser(email), taskId);
+            Task newTask = new Task(title, description, dueTime, boardName, user, taskId);
             taskId++;
-            Dictionary<string, Board> userBoardByName = uc.getUser(email).getBoardListByName();
+            Dictionary<string, Board> userBoardByName = user.getBoardListByName();
             Board boardbyName = userBoardByName[boardName];
             boardbyName.getColumns()["backlog"].Add(newTask);
             return newTask;
@@ -65,11 +62,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="title">// sets the title of the task</param>
         public void editTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
-            if (!uc.getUser(email).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
-
             User currentUser = uc.getUser(email);
             if (!checkTitleValidity(title, currentUser, boardName))
             {
@@ -85,7 +77,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                                     "or not in this board");
             }
 
-            task.setTitle(title);
+            task.Title = title;
         }
 
 
@@ -93,21 +85,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// This method updates the dueDate of the task to the new dueDate entered by the user
         /// </summary>
         /// <param name="dueDate">// sets the DueDate of the task</param>
-        public void editDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
+        public void editDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueTime)
         {
-            if (!uc.getUser(email).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+            User user = uc.getUser(email);
 
-            Board board = uc.getUser(email).hasBoardByName(boardName);
+            Board board = user.hasBoardByName(boardName);
             Task task = findTaskById(board, taskId, columnOrdinal);
             if (task == null)
             {
                 throw new Exception("this task does not exist in this column");
             }
 
-            task.setDueTime(dueDate);
+            task.DueTime = dueTime;
         }
 
 
@@ -118,24 +107,21 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="title">// sets the title of the task</param>
         public void editDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
         {
-            if (!uc.getUser(email).getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
+            User user = uc.getUser(email);
 
             if (!checkDescriptionValidity(description))
             {
                 throw new Exception("user tried to edit a description with more than 300 characters");
             }
 
-            Board board = uc.getUser(email).hasBoardByName(boardName);
+            Board board = user.hasBoardByName(boardName);
             Task task = findTaskById(board, taskId, columnOrdinal);
             if (task == null)
             {
                 throw new Exception("this task does not exist in this column");
             }
 
-            task.setDescription(description);
+            task.Description = description;
         }
 
 
@@ -174,7 +160,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 foreach (Task task in list)
                 {
-                    if (task.getTitle() == title)
+                    if (task.Title == title)
                     {
                         return true;
                     }
@@ -194,7 +180,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             foreach (Task currentTask in currentTaskList)
             {
-                if (currentTask.getId() == taskId)
+                if (currentTask.Id == taskId)
                 {
                     return currentTask;
                 }

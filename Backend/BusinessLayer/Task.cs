@@ -13,51 +13,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class Task
     {
         private int id;
-
-        public int Id
-        {
-            get { return id; }
-        }
-
+        public int Id { get; }
         private string assignie;
-
-        public string Assignie
-        {
-            get { return assignie; }
-            set { assignie = value; }
-        }
-
+        public string Assignie { get; set; }
         private readonly DateTime creationTime;
-
-        public DateTime CreationTime
-        {
-            get { return creationTime; }
-        }
-
+        public DateTime CreationTime { get; }
         private string title;
-
-        public string Title
-        {
-            get { return title; }
-        }
-
+        public string Title { get; set; }
         private string description;
-
-        public string Description
-        {
-            get { return description; }
-        }
-
-
+        public string Description { get; set; }
         private DateTime dueTime;
-
-        public DateTime DueDate
-        {
-            get { return dueTime; }
-        }
-
-
+        public DateTime DueTime { get; set; }
         private string boardName;
+        public string BoardName { get; }
 
 
         /// <summary>
@@ -79,35 +47,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.id = id;
         }
 
-
-        public int getId()
-        {
-            return id;
-        }
-
-        public string getBoardName()
-        {
-            return boardName;
-        }
-
-        public string getTitle()
-        {
-            return title;
-        }
-
-        public void setTitle(string title)
-        {
-            this.title = title;
-        }
-
-        public void setDescription(string description)
-        {
-            this.description = description;
-        }
-
-        public void setDueTime(DateTime dueTime)
-        {
-            this.dueTime = dueTime;
-        }
     }
 }

@@ -53,7 +53,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             User newUser = new User(email, password, usersIdCount);
             usersIdCount++;
             users.Add(email, newUser);
-            newUser.setIsLoggedIn(true); //setting automatically the user is logged in
+            newUser.IsLoggedIn = true; //setting automatically the user is logged in
 
             return newUser;
         }
@@ -112,15 +112,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (!userExists(email))
                 throw new Exception("Attempt to log in to account with email: " + email + " that doesn't exist!");
 
-            if (!users[email].isPassword(password))
+            User user = users[email];
+
+            if (!user.isPassword(password))
                 throw new Exception("Attempt to log in to " + email + " with wrong password!");
 
-            if (isLoggedIn(email))
+            if (user.IsLoggedIn)
                 throw new Exception("User already logged in"); //TODO: check with the guys about this one
 
-            users[email].setIsLoggedIn(true);
+            user.IsLoggedIn = true;
 
-            return users[email];
+            return user;
         }
 
         /// <summary>
@@ -151,11 +153,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <returns>True if the user is logged in, false otherwise</returns>
-        public bool isLoggedIn(string email) //function in order to have access from the outside
+        public void isLoggedIn(string email) //function in order to have access from the outside
         {
             if (!userExists(email))
-                throw new Exception("An account with that email doesn't even exist!");
-            return users[email].getIsLoggedIn();
+                throw new Exception("An account with " + email + " doesn't even exist!");
+            if (!users[email].IsLoggedIn)
+            {
+                throw new Exception(email + " isn't Logged in");
+            }
         }
 
         /// <summary>
@@ -165,14 +170,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public void logout(string email)
         {
-            if (!userExists(email))
-                throw new Exception("An account with that email doesn't even exist!");
-            else if (isLoggedIn(email))
-                users[email].setIsLoggedIn(false);
-            else
-            {
-                throw new Exception("already logged out.");
-            }
+            isLoggedIn(email);
+            users[email].IsLoggedIn = false;
         }
 
 
@@ -272,11 +271,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>User</returns>
         public User getUser(string email)
         {
-            if (!userExists(email))
-                throw new Exception("User with email: " + email + " doesn't exist");
-            if (!isLoggedIn(email))
-                throw new Exception("User with email: " + email + " is logged out");
-
+            isLoggedIn(email);
             return users[email];
         }
 
@@ -361,13 +356,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public void changeState(string email, string boardName, int columnOrdinal, int taskId)
         {
-            User user = getUser(email);
+            User user = getUser(email); //user is logged in
             bool found = false;
-            if (!user.getIsLoggedIn())
-            {
-                throw new Exception("User with email: " + email + " isn't logged in");
-            }
-
+            
             Board board = user.hasBoardByName(boardName);
             List<Task> tasksList = board.getColumn(columnOrdinal);
             Dictionary<string, Board> userBoards = user.getBoardListByName();
@@ -378,7 +369,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             foreach (Task task in tasksList)
             {
-                if (task.getId() == taskId)
+                if (task.Id == taskId)
                 {
                     if (columnOrdinal < 2) //advance task to in progress
                     {

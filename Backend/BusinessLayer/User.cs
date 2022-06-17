@@ -11,9 +11,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class User
     {
         private readonly int id;
+        public int Id { get; }
         public string email;
         private string password;
         private bool isLoggedIn;
+        public bool IsLoggedIn { get; set;}
         private Dictionary<string, Board> boardListByName; // Dict <boardName , Board Object>
         private Dictionary<int, Board> boardListById; // Dict < board Id , BoardObject>
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -29,15 +31,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardListById = new Dictionary<int, Board>();
         }
 
-        public bool getIsLoggedIn()
-        {
-            return isLoggedIn;
-        }
-
-        public void setIsLoggedIn(bool value)
-        {
-            isLoggedIn = value;
-        }
 
         public bool isPassword(string possiblePassword)
         {
@@ -80,9 +73,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
-        public int ID
-        {
-            get { return id; }
-        }
     }
 }

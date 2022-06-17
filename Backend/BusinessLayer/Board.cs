@@ -9,13 +9,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Board
     {
-        private String name;
+        private string name;
+        public string Name { get; }
         private Dictionary<int, string> columnsId; // dictionary< columnsId, ColumnsTitle>
         private Dictionary<string, List<Task>> columns; // dictionary <board title, tasks list>
         private readonly int id;
-        private int limitBacklog = -1;
-        private int limitInProgress = -1;
-        private int limitDone = -1;
+        public int Id { get; }
+        private int limitBacklog;
+        public int LimitBacklog { get; set; }
+        private int limitInProgress;
+        public int LimitInProgress { get; set; }
+        private int limitDone;
+        public int LimitDone { get; set; }
         private int owner;
 
         public int Owner
@@ -42,6 +47,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             initialColumnsId(columnsId);
             owner = id;
             memeberList = new HashSet<string>();
+            this.limitBacklog = -1;
+            this.limitInProgress = -1;
+            this.limitDone = -1;
         }
 
         public void initColumns()
@@ -51,50 +59,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             columns.Add("done", new List<Task>());
         }
 
-        public String getName()
-        {
-            return name;
-        }
-
-        public int getID()
-        {
-            return id;
-        }
 
         public Dictionary<string, List<Task>> getColumns()
         {
             return columns;
         }
 
-        public int getLimitToDo()
-        {
-            return limitDone;
-        }
-
-        public void setLimitToDo(int newLimit)
-        {
-            this.limitDone = newLimit;
-        }
-
-        public int getLimitInProgress()
-        {
-            return limitInProgress;
-        }
-
-        public void setLimitInProgress(int newLimit)
-        {
-            this.limitInProgress = newLimit;
-        }
-
-        public int getLimitDone()
-        {
-            return limitDone;
-        }
-
-        public void setLimitDone(int newLimit)
-        {
-            this.limitDone = newLimit;
-        }
 
         private void initialColumnsId(Dictionary<int, string> columnsId)
         {
@@ -112,16 +82,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (columnId == 0)
             {
-                return getLimitToDo();
+                return limitBacklog;
             }
 
             else if (columnId == 1)
             {
-                return getLimitInProgress();
+                return limitInProgress;
             }
             else
             {
-                return getLimitDone();
+                return limitDone;
             }
         }
 
@@ -129,16 +99,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (columnId == 0)
             {
-                setLimitToDo(newLimit);
+                limitBacklog = newLimit;
             }
 
             else if (columnId == 1)
             {
-                setLimitInProgress(newLimit);
+                limitInProgress = newLimit;
             }
             else
             {
-                setLimitDone(newLimit);
+                limitDone = newLimit;
             }
         }
 
@@ -163,7 +133,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<Task> currentTaskList = getColumn(columnOrdinal);
             foreach (Task currentTask in currentTaskList)
             {
-                if (currentTask.getId() == id)
+                if (currentTask.Id == id)
                 {
                     return currentTask;
                 }
