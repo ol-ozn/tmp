@@ -172,14 +172,18 @@ namespace BackendTests
             GradingService gs = new GradingService();
             Console.WriteLine(gs.Register("olga@gmail.com", "12345Ab"));
             Console.WriteLine(gs.AddBoard("olga@gmail.com","board1"));
-            Console.WriteLine(gs.AddBoard("olga@gmail.com", "board1"));
+            // Console.WriteLine(gs.AddBoard("olga@gmail.com", "board1"));
             // Console.WriteLine(gs.AddBoard("olga@gmail.com", ""));
             // Console.WriteLine(gs.AddBoard("daniel@gmail.com", ""));
-            Console.WriteLine(gs.Register("daniel@gmail.com", "12345Ab"));
-            Console.WriteLine(gs.AddBoard("daniel@gmail.com", "board1"));
+            // Console.WriteLine(gs.Register("daniel@gmail.com", "12345Ab"));
+            // Console.WriteLine(gs.AddBoard("daniel@gmail.com", "board1"));
             // Console.WriteLine(gs.Login("olga@gmail.com", "12345Ab"));
-            Console.WriteLine(gs.AddBoard("olga@gmail.com", ""));
-            Console.WriteLine(gs.AddBoard("olga@gmail.com", null));
+            Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title1", "f this s", DateTime.Now));
+            Console.WriteLine(gs.AddTask("amit@gmail.com", "board1", "title1", "f this s", DateTime.Now));
+            Console.WriteLine(gs.AddTask("olga@gmail.com", "board2", "title1", "f this s", DateTime.Now));
+            Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "", "f this s", DateTime.Now));
+            Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title2", "", DateTime.Now));
+
 
         }
     }

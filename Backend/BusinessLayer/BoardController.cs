@@ -197,18 +197,21 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Try to remove a board with the name " + boardName + " which doesn't exist to the email: " + email);
             }
             Board board = userBoardsbyName[boardName];
-            if (!board.owner.Equals(email))
+            if (!board.owner.Equals(owner.Id))
             {
                 throw new Exception(email + " is not the owner of " + boardName);
             }
 
-            foreach (string username in  board.MemeberList) //remove board from all members 
+            if (board.MemeberList != null) //no need for exception, if null then only owner is in the board
             {
-                User user = userController.getUser(username);
-                user.getBoardListByName().Remove(boardName);
-                user.getBoardListById().Remove(board.Id);
+                foreach (string username in board.MemeberList) //remove board from all members 
+                {
+                    User user = userController.getUser(username);
+                    user.getBoardListByName().Remove(boardName);
+                    user.getBoardListById().Remove(board.Id);
+                }
             }
-            
+
             userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
             userBoardsbyId.Remove(board.Id); // board has been removed from the userBoardById
 
