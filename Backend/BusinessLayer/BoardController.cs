@@ -37,10 +37,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             User user = userController.getUserAndLogeddin(email);
 
-            if (!user.IsLoggedIn)
-            {
-                throw new Exception("User with email " + email + " isn't logged in");
-            }
+            // if (!user.IsLoggedIn) //TODO: this can be removed
+            // {
+            //     throw new Exception("User with email " + email + " isn't logged in");
+            // }
 
             Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
             Dictionary<int, Board> userBoardsbyId = user.getBoardListById();

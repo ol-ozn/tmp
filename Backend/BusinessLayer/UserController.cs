@@ -37,7 +37,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception(email + " is invalid");
             }
-            email = email.ToLower();
+            // email = email.ToLower(); //todo: inspect this
             //check if user with given email already exist
             if (userExists(email))
                 throw new Exception("User with email: " + email + " already exists.");
@@ -111,7 +111,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception(email + " is invalid");
             }
-            email = email.ToLower();
+            // email = email.ToLower();
             if (!userExists(email))
                 throw new Exception("Attempt to log in to account with email: " + email + " that doesn't exist!");
 
@@ -177,7 +177,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception(email + " is invalid");
             }
-            email = email.ToLower();
+            // email = email.ToLower();
             isLoggedIn(email);
             users[email].IsLoggedIn = false;
         }
