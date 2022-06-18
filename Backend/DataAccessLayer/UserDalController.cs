@@ -67,6 +67,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
+
         public long getSeq()
         {
             // List<DTO> results = new List<DTO>();

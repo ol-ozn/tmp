@@ -51,12 +51,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception(email + " is invalid");
             }
-            // email = email.ToLower(); //todo: inspect this
-            //check if user with given email already exist
             if (userExists(email))
                 throw new Exception("User with email: " + email + " already exists.");
 
-            //check password validity
             if (!passwordValidity(password))
                 throw new Exception(
                     "Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
@@ -154,18 +151,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return users.ContainsKey(email);
         }
 
-        /// <summary>
-        ///  This method deletes an existing user.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <returns>User object of logged in user, unless an error occurs</returns>
-        public void deleteUser(string email)
-        {
-            if (!userExists(email))
-                throw new Exception("Attempt to delete an account with an email that doesn't exist.");
-
-            users.Remove(email);
-        }
+        // /// <summary>
+        // ///  This method deletes an existing user.
+        // /// </summary>
+        // /// <param name="email">The email of the user</param>
+        // /// <returns>User object of logged in user, unless an error occurs</returns>
+        // public void deleteUser(string email)
+        // {
+        //     if (!userExists(email))
+        //         throw new Exception("Attempt to delete an account with an email that doesn't exist.");
+        //
+        //     userDalController.Delete(email);
+        // }
 
         /// <summary>
         ///  This method checks if an account is logged in.
