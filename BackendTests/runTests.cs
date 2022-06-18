@@ -196,14 +196,24 @@ namespace BackendTests
 
             Console.WriteLine("trying to advance a task");
             Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
-            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 1, 0));
-            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 2, 0));
+            // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 1, 0));
+            // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 2, 0));
 
+
+            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 1));
+
+            Console.WriteLine("\n");
+            Console.WriteLine("backlog: ");
             Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
-            //
+            Console.WriteLine("\n");
+            Console.WriteLine("in progress: ");
             Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
+            Console.WriteLine("\n");
+            Console.WriteLine("done: ");
             Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
             // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
+
+            Console.WriteLine(gs.InProgressTasks("olga@gmail.com"));
         }
     }
 }

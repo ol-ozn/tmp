@@ -202,7 +202,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             foreach (Board board in boardListByName.Values)
             {
                 List<Task> l = board.columns["in progress"];
-                if (!l.Any())
+                if (!l.Any()) //in case the current list is null
                 {
                     continue;
                 }
@@ -210,11 +210,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
                 foreach (Task task in l)
                 {
-                    if (task.Assignie.Equals(currentUser
-                            .email)) // add task only if the user is the assignie of the task
-                    {
+                    // if (task.Assignie.Equals(currentUser
+                    //         .email)) // add task only if the user is the assignie of the task
+                    // {
                         list.Add(task);
-                    }
+                    // }
                 }
             }
 
