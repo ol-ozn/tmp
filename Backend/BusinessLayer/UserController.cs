@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
@@ -14,14 +15,27 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private int usersIdCount;
         // private int boardIdCOunter;
+        private UserDalController userDalController;
 
         public UserController()
         {
-            users = new Dictionary<string, User>();
-            usersIdCount = 0;
+            userDalController = new UserDalController();
+            users = loadData();
+            usersIdCount = (int) userDalController.getSeq() + 1; 
             // boardIdCOunter = 0;
             //get data into users
             //users = (convert the list of users <userDTO> to be list of users <User>)
+        }
+
+        private Dictionary<string, User> loadData()
+        {
+            Dictionary<string, User> usersLoaded = new Dictionary<string, User>();
+            List<UserDTO> userDtos = userDalController.SelectAllUsers();
+            foreach (UserDTO userDto in userDtos)
+            {
+                usersLoaded.Add(userDto.Email, new User(userDto.Email, userDto.Password, (int) userDto.id));
+            }
+            return usersLoaded;
         }
 
 
@@ -48,7 +62,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     "Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
 
             //if all the criteria above met- create new User object
+            
             User newUser = new User(email, password, usersIdCount);
+            userDalController.Insert(new UserDTO(usersIdCount, email, password));
             usersIdCount++;
             users.Add(email, newUser);
             newUser.IsLoggedIn = true; //setting automatically the user is logged in

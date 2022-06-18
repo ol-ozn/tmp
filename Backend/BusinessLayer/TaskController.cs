@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using log4net;
 
@@ -15,11 +16,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private UserController uc;
         private int taskId;
+        private TaskDalController taskDalController;
 
         public TaskController(ServiceFactory serviceFactory)
         {
             this.uc = serviceFactory.UserController;
             this.taskId = 0;
+            taskDalController = new TaskDalController();
         }
 
 

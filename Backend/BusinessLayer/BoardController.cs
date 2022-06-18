@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
@@ -12,6 +13,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private Dictionary<int, Board> boards;
         private UserController userController;
         private int boardIdCOunter;
+        private BoardDalController boardDalController;
 
 
         public BoardController(ServiceFactory serviceFactory)
@@ -19,6 +21,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boards = new Dictionary<int, Board>();
             userController = serviceFactory.UserController;
             boardIdCOunter = 0;
+            boardDalController = new BoardDalController();
         }
 
 
