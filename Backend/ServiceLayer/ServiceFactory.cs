@@ -48,5 +48,18 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             taskService = new TaskService(this);
             return this;
         }
+
+        // public void loadData()
+        // {
+        //     try
+        //     {
+        //
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine(e);
+        //         throw;
+        //     }
+        // }
     }
 }

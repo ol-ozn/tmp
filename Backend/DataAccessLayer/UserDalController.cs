@@ -68,39 +68,39 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         }
 
 
-        public long getSeq()
-        {
-            // List<DTO> results = new List<DTO>();
-            long seq = 0;
-            using (var connection = new SQLiteConnection(_connectionString))
-            {
-                SQLiteCommand command = new SQLiteCommand(null, connection);
-                command.CommandText = $"select * from {UsersTableName};";
-                SQLiteDataReader dataReader = null;
-                try
-                {
-                    connection.Open();
-                    dataReader = command.ExecuteReader();
-
-                    while (dataReader.Read())
-                    {
-                        // results.Add(ConvertReaderToObject(dataReader));
-                        seq = ConvertReaderToObject(dataReader).id;
-                    }
-                }
-                finally
-                {
-                    if (dataReader != null)
-                    {
-                        dataReader.Close();
-                    }
-
-                    command.Dispose();
-                    connection.Close();
-                }
-
-            }
-            return seq;
-        }
+        // public long getSeq()
+        // {
+        //     // List<DTO> results = new List<DTO>();
+        //     long seq = 0;
+        //     using (var connection = new SQLiteConnection(_connectionString))
+        //     {
+        //         SQLiteCommand command = new SQLiteCommand(null, connection);
+        //         command.CommandText = $"select * from {UsersTableName};";
+        //         SQLiteDataReader dataReader = null;
+        //         try
+        //         {
+        //             connection.Open();
+        //             dataReader = command.ExecuteReader();
+        //
+        //             while (dataReader.Read())
+        //             {
+        //                 // results.Add(ConvertReaderToObject(dataReader));
+        //                 seq = ConvertReaderToObject(dataReader).id;
+        //             }
+        //         }
+        //         finally
+        //         {
+        //             if (dataReader != null)
+        //             {
+        //                 dataReader.Close();
+        //             }
+        //
+        //             command.Dispose();
+        //             connection.Close();
+        //         }
+        //
+        //     }
+        //     return seq;
+        // }
     }
 }

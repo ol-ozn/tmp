@@ -59,9 +59,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     "Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
 
             //if all the criteria above met- create new User object
-            
+            bool successInsert = userDalController.Insert(new UserDTO(usersIdCount, email, password));
+            if (!successInsert)
+            {
+                throw new Exception("Problem occurred to add user: " + email + "  to DataBase");
+            }
             User newUser = new User(email, password, usersIdCount);
-            userDalController.Insert(new UserDTO(usersIdCount, email, password));
+            
             usersIdCount++;
             users.Add(email, newUser);
             newUser.IsLoggedIn = true; //setting automatically the user is logged in

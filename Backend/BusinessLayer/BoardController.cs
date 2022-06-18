@@ -20,8 +20,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             boards = new Dictionary<int, Board>();
             userController = serviceFactory.UserController;
-            boardIdCOunter = 0;
+            boardIdCOunter = (int) boardDalController.getSeq() + 1;
             boardDalController = new BoardDalController();
+        }
+
+        private Dictionary<int, Board> loadData()
+        {
+            Dictionary<int, Board> boardsLoaded = new Dictionary<int, Board>();
+            List<BoardDTO> boardsDtos = boardDalController.SelectAllBoards();
+            foreach (BoardDTO boardDTO in boardsDtos)
+            {
+                boardsLoaded.Add((int) boardDTO.id, new Board(boardDTO.BoardName,(int) boardDTO.id));
+            }
+            return boardsLoaded;
         }
 
 
@@ -53,13 +64,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("A board named " + boardName + " already exist");
             }
 
-            int futureID = boardIdCOunter; //TODO: add counter for id 
-            Board toAdd = new Board(boardName, futureID);
+            bool successInsert = boardDalController.Insert(new BoardDTO(boardIdCOunter, boardName, user.Id,
+                Board.UNLIMITED, Board.UNLIMITED, Board.UNLIMITED));
+            if (!successInsert)
+            {
+                throw new Exception("Problem occurred to add board: " + boardName + "  to DataBase");
+            }
+            Board toAdd = new Board(boardName, boardIdCOunter);
             toAdd.owner = user.Id; //assigns the board owner to be the User
             userBoardsbyName.Add(boardName, toAdd); // adds the board to users board list by name
-            userBoardsbyId.Add(futureID, toAdd); // adds the board to users board list by ID
-            boards.Add(futureID, toAdd); // adds the board to the global boards list
+            userBoardsbyId.Add(boardIdCOunter, toAdd); // adds the board to users board list by ID
+            boards.Add(boardIdCOunter, toAdd); // adds the board to the global boards list
+            
             boardIdCOunter++; // advances the global board id counter
+            
             return toAdd;
         }
 

@@ -78,19 +78,19 @@ public class UserService
     /// This method deletes the current account. 
     /// </summary>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public Response deleteAccount(string email)
-    {
-        try
-        {
-            userController.deleteUser(email);
-            log.Info("user with email: " + email + " has been deleted successfully");
-            return new Response(null, null);
-        }
-        catch (Exception e)
-        {
-            log.Debug(e.Message);
-            return new Response(e.Message, null);
-        }
-    }
+    // public Response deleteAccount(string email)
+    // {
+    //     try
+    //     {
+    //         userController.deleteUser(email);
+    //         log.Info("user with email: " + email + " has been deleted successfully");
+    //         return new Response(null, null);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         log.Debug(e.Message);
+    //         return new Response(e.Message, null);
+    //     }
+    // }
 
 }

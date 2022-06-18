@@ -9,7 +9,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Board
     {
-        private const int UNLIMITED = -1;
+        public const int UNLIMITED = -1;
         private string name;
         public string Name { get; }
 
