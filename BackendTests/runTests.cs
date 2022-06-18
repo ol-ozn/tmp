@@ -16,7 +16,6 @@ namespace BackendTests
     {
         static void Main(string[] args)
         {
-
             // ServiceFactory serviceFactory = new ServiceFactory();
             //
             //
@@ -185,16 +184,26 @@ namespace BackendTests
             // Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title2", "", DateTime.Now));
             Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title2", "f this s", DateTime.Now));
             // Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title3", "f this s", DateTime.Now));
-            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
-            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
-            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
+            // Console.WriteLine("\n");
+            // Console.WriteLine("if the column has any lists in it, this will return: a Response" +
+            //                   " with the list of the columns tasks");
+            //
+            // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+            // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
+            // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
 
+            Console.WriteLine("\n");
+
+            Console.WriteLine("trying to advance a task");
             Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
-            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 1, 0));
+            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 2, 0));
 
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+            //
             Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
             Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
-
+            // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
         }
     }
 }
