@@ -96,7 +96,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("this task does not exist in this column");
             }
 
-            task.DueTime = dueTime;
+            task.DueDate = dueTime;
         }
 
 
@@ -218,10 +218,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
             }
 
-            if (!list.Any())
-            {
-                throw new Exception("no tasks in in progress");
-            }
+            // if (!list.Any())
+            // {
+            //     throw new Exception("no tasks in in progress");
+            // }
 
             return list;
         }
