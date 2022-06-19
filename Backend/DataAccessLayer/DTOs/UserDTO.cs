@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.BusinessLayer;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
@@ -16,6 +17,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         
         private string password;
         public string Password { get => password; set { password = value; _controller.Update(id, UsersPasswordColumnName, value); } }
+
+        private List<BoardDTO> userBoardsDTOs;
 
         public UserDTO(long id, string email, string password) : base(new UserDalController())
         {
