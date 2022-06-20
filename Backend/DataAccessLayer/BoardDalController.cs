@@ -73,5 +73,44 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 return res > 0;
             }
         }
+
+        public bool setColumnLimit(int boardId, string columnName, int newlimit)
+        {
+            using (var connection = new SQLiteConnection(_connectionString))
+            {
+                SQLiteCommand command = new SQLiteCommand(null, connection);
+                int res = -1;
+                try
+                {
+                    connection.Open();
+                    command.CommandText =
+                        $"UPDATE {BoardsTableName} SET {columnName} = @newlimit Where id = @boardid; ";
+
+
+                    SQLiteParameter boardidParam = new SQLiteParameter(@"boardid", boardId);
+                    // SQLiteParameter columnnameParam = new SQLiteParameter(@"columnname", columnName);
+                    SQLiteParameter newlimitParam = new SQLiteParameter(@"newlimit", newlimit);
+
+                    command.Parameters.Add(boardidParam);
+                    // command.Parameters.Add(columnnameParam);
+                    command.Parameters.Add(newlimitParam);
+
+
+                    command.Prepare();
+                    res = command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    //log error
+                }
+                finally
+                {
+                    command.Dispose();
+                    connection.Close();
+
+                }
+                return res > 0;
+            }
+        }
     }
 }

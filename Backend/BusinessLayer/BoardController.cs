@@ -201,7 +201,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
             }
 
-            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId.FirstOrDefault(x => x.Value == "in progress").Key))
+            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId.FirstOrDefault(x => x.Value == "in_progress").Key))
             {
                 if (task.Assignie.Equals(email))
                 {
@@ -245,6 +245,30 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
             userBoardsbyId.Remove(board.Id); // board has been removed from the userBoardById
             boards.Remove(board.Id); // removes the board from the global board list
+        }
+
+        /// <summary>
+        //         /// This method limits the number of tasks in a specific column.
+        //         /// </summary>
+        //         /// <param name="email">The email address of the user, must be logged in</param>
+        //         /// <param name="boardName">The name of the board</param>
+        //         /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
+        //         /// <param name="limit">The new limit value. A value of -1 indicates no limit.</param>
+        //         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
+        public void LimitColumn(string email, string boardName, int columnOrdinal, int limit)
+        {
+            if (columnOrdinal > 2 || columnOrdinal < 0)
+            {
+                throw new Exception(columnOrdinal + " is invalid");
+            }
+            User user = userController.getUserAndLogeddin(email);
+            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
+            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
+            Board board = userBoardsbyName[boardName];
+
+            board.setColumnLimit(columnOrdinal, limit);
+            boardDalController.setColumnLimit(board.Id , board.columnsId[columnOrdinal], limit);
+
         }
 
         public void loadData()

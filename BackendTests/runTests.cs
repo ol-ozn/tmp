@@ -218,7 +218,7 @@ namespace BackendTests
             // Console.WriteLine("\n");
             //
             // Console.WriteLine("trying to advance a task");
-            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
+            // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
            
             // // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board2", 0, 1));
             // //
@@ -229,7 +229,8 @@ namespace BackendTests
             Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
             // Console.WriteLine("\n");
             // Console.WriteLine("in progress: ");
-            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
+            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+            Console.WriteLine(gs.LimitColumn("olga@gmail.com", "board1", 1, 5));
             // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board2", 1));
             // Console.WriteLine("\n");
             // Console.WriteLine("done: ");

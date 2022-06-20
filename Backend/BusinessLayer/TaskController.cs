@@ -53,14 +53,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board boardbyName = userBoardByName[boardName];
             Task newTask = new Task(title, description, dueTime, taskId);
             bool successtaskinsert = taskDalController.Insert(new TaskDTO(taskId, title, description, boardbyName.Id,
-                newTask.CreationTime, dueTime, "backlog"));
+                newTask.CreationTime, dueTime, "backlog", newTask.Assignie));
             if (!successtaskinsert)
             {
                 throw new Exception("Problem occurred to add task: " + title + "  Tasks Table");
             }
+
             taskId++;
-            
-            
+
+
             boardbyName.columns["backlog"].Add(newTask);
             return newTask;
         }
@@ -212,7 +213,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<Task> list = new List<Task>();
             foreach (Board board in boardListByName.Values)
             {
-                List<Task> l = board.columns["in progress"];
+                List<Task> l = board.columns["in_progress"];
                 if (!l.Any()) //in case the current list is null
                 {
                     continue;
@@ -258,53 +259,71 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception(columnOrdinal + " is invalid");
             }
 
+            if (columnOrdinal == 2)
+            {
+                throw new Exception("cannot advance task from done");
+            }
+
             User user = uc.getUserAndLogeddin(email); //user is logged in
             bool found = false;
 
             Board board = user.hasBoardByName(boardName);
+            Task task = findTaskById(board, taskId, columnOrdinal);
+            if ((!email.Equals(task.Assignie)) && task.Assignie != null) // in case the user who's trying to progress the task isn't the asignee 
+            {
+                throw new Exception("user: " + email + " tried to progress task:" + taskId +
+                                    "which he is not assigned to");
+            }
+
+            string newColumnOrdinal = board.getColumnName(board.getColumnNumber(task.columnOrdinal) + 1);
+            task.columnOrdinal = newColumnOrdinal;
             List<Task> tasksList = board.getColumn(columnOrdinal);
-            Dictionary<string, Board> userBoards = user.getBoardListByName();
-            if (tasksList.Count == 0)
-            {
-                throw new Exception("Tried to find a task in an empty list");
-            }
-
-            foreach (Task task in tasksList)
-            {
-                if (task.Id == taskId)
-                {
-                    if (columnOrdinal < 2) //advance task to in progress
-                    {
-                        if (board.isColumnFull(columnOrdinal + 1)) //check column limit
-                        {
-                            throw new Exception("column overflow");
-                        }
-
-
-                        if (task.Assignie !=
-                            email) // in case the user who's trying to progress the task isn't the asignee 
-                        {
-                            throw new Exception("user: " + email + " tried to progress task:" + taskId +
-                                                "which he is not assigned to");
-                        }
-
-                        board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
-                        board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
-                        found = true;
-                        break;
-                    }
-
-                    else
-                    {
-                        throw new Exception("Try do advance from done \n");
-                    }
-                }
-            }
-
-            if (!found)
-            {
-                throw new Exception("task wasn't found in this column");
-            }
+            tasksList.Remove(task);
+            List<Task> newtasksList = board.getColumn(columnOrdinal + 1);
+            newtasksList.Add(task);
+            taskDalController.Advance(taskId, newColumnOrdinal);
+            // Dictionary<string, Board> userBoards = user.getBoardListByName();
+            // if (tasksList.Count == 0)
+            // {
+            //     throw new Exception("Tried to find a task in an empty list");
+            // }
+            //
+            // foreach (Task task in tasksList)
+            // {
+            //     if (task.Id == taskId)
+            //     {
+            //         if (columnOrdinal < 2) //advance task to in progress
+            //         {
+            //             if (board.isColumnFull(columnOrdinal + 1)) //check column limit
+            //             {
+            //                 throw new Exception("column overflow");
+            //             }
+            //
+            //
+            //             if (task.Assignie !=
+            //                 email) // in case the user who's trying to progress the task isn't the asignee 
+            //             {
+            //                 throw new Exception("user: " + email + " tried to progress task:" + taskId +
+            //                                     "which he is not assigned to");
+            //             }
+            //
+            //             board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
+            //             board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
+            //             found = true;
+            //             break;
+            //         }
+            //
+            //         else
+            //         {
+            //             throw new Exception("Try do advance from done \n");
+            //         }
+            //     }
+            // }
+            //
+            // if (!found)
+            // {
+            //     throw new Exception("task wasn't found in this column");
+            // }
         }
     }
 }

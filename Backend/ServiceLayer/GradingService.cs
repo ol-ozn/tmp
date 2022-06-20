@@ -116,12 +116,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
         {
-            // Response response = (serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit));
-            // string s = JsonController.toJson(response);
-            // if (response.ErrorMessage == null)
-            // {
-            //     return (string)response.ReturnValue;
-            // }
+            Response response = (serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit));
+            string s = JsonController.toJson(response);
+            if (response.ErrorMessage == null)
+            {
+                return (string)response.ReturnValue;
+            }
 
             return (JsonController.toJson(serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit)));
         }

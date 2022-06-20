@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
@@ -16,13 +17,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public readonly Dictionary<int, string> columnsId = new Dictionary<int, string> // dictionary< columnsId, ColumnsTitle>
         {
             { 0, "backlog" },
-            { 1, "in progress" },
+            { 1, "in_progress" },
             { 2, "done" }
         };
 
         public Dictionary<string, List<Task>> columns { get; } // dictionary <column name, tasks list>
         private readonly int id;
-        public int Id { get; }
+
+        public int Id
+        {
+            get { return id; }
+        }
         public int LimitBacklog { get; set; }
         public int limitInProgress { get; set; }
         public int LimitDone { get; set; }
@@ -51,7 +56,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void initColumns()
         {
             columns.Add("backlog", new List<Task>());
-            columns.Add("in progress", new List<Task>());
+            columns.Add("in_progress", new List<Task>());
             columns.Add("done", new List<Task>());
         }
 
@@ -68,7 +73,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return LimitBacklog;
             }
 
-            else if (columnId == columnsId.FirstOrDefault(x => x.Value == "in progress").Key)
+            else if (columnId == columnsId.FirstOrDefault(x => x.Value == "in_progress").Key)
             {
                 return limitInProgress;
             }
@@ -85,14 +90,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 LimitBacklog = newLimit;
             }
 
-            else if (columnId == columnsId.FirstOrDefault(x => x.Value == "in progress").Key)
+            if (columnId == columnsId.FirstOrDefault(x => x.Value == "in_progress").Key)
             {
                 limitInProgress = newLimit;
             }
-            else
+
+            if (columnId == columnsId.FirstOrDefault(x => x.Value == "done").Key)
             {
                 LimitDone = newLimit;
             }
+            
         }
 
         public List<Task> getColumn(int id)
@@ -123,6 +130,29 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
 
             throw new Exception("This Task Does not exist in this column");
+        }
+
+        public int getColumnNumber(string columnName)
+        {
+            if (columnName.Equals("backlog"))
+            {
+                return 0;
+            }
+
+            if (columnName.Equals("in_progress"))
+            {
+                return 1;
+            }
+
+            if (columnName.Equals("done"))
+            {
+                return 2;
+            }
+
+            else
+            {
+                throw new Exception(columnName + "is invalid");
+            }
         }
 
     }

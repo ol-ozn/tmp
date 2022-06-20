@@ -11,9 +11,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
     {
         public const string BoardsBoardNameColumnName = "board_name";
         public const string BoardsBoardOwnerIdColumnName = "board_owner";
-        public const string BoardsBacklogLimitColumnName = "backlog_limit";
-        public const string BoardsInProgressLimitColumnName = "inProgress_limit";
-        public const string BoardsDoneLimitColumnName = "done_limit";
+        public const string BoardsBacklogLimitColumnName = "backlog";
+        public const string BoardsInProgressLimitColumnName = "in_progress";
+        public const string BoardsDoneLimitColumnName = "done";
 
         private string boardName;
         public string BoardName { get => boardName; set { boardName = value; _controller.Update(id, BoardsBoardNameColumnName, value); } }

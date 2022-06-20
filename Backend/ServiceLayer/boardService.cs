@@ -72,7 +72,7 @@ public class BoardService
     {
         try
         {
-            userController.setColumnLimit(email, boardName, columnOrdinal, limit);
+            boardController.LimitColumn(email, boardName, columnOrdinal, limit);
             log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " was set to " + limit);
             return new Response(null, null);
