@@ -20,7 +20,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             { 2, "done" }
         };
 
-        public Dictionary<string, List<Task>> columns { get; } // dictionary <board title, tasks list>
+        public Dictionary<string, List<Task>> columns { get; } // dictionary <column name, tasks list>
         private readonly int id;
         public int Id { get; }
         public int LimitBacklog { get; set; }

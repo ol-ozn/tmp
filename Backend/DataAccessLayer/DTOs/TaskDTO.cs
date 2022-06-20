@@ -13,6 +13,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public const string TasksBoardIdColumnName = "board_id";
         public const string TasksCreationTimeColumnName = "creation_time";
         public const string TasksDueDateColumnName = "due_date";
+        public const string TaskColumnOrdianlName = "column_ordinal";
 
         private string title;
 
@@ -36,7 +37,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public DateTime DueDate { get => dueDate; set { dueDate = value; _controller.Update(id, TasksDueDateColumnName, value.ToString()); } }
 
-        public TaskDTO(long id, string title, string description, int boardId, DateTime creationTime, DateTime dueDate) : base(new TaskDalController())
+        private string columnOrdinal;
+
+        public string ColumnOrdinal { get => columnOrdinal; set { columnOrdinal = value; _controller.Update(id, TaskColumnOrdianlName, value); } }
+
+        public TaskDTO(long id, string title, string description, int boardId, DateTime creationTime, DateTime dueDate, string columnOrdinal) : base(new TaskDalController())
         {
             this.id = id;
             this.title = title;
@@ -44,6 +49,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.boardId = boardId;
             this.creationTime = creationTime;
             this.dueDate = dueDate;
+            this.columnOrdinal = columnOrdinal;
         }
     }
 }

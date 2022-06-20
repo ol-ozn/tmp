@@ -48,10 +48,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Column overflow");
             }
 
-            Task newTask = new Task(title, description, dueTime, boardName, user, taskId);
-            taskId++;
+
             Dictionary<string, Board> userBoardByName = user.getBoardListByName();
             Board boardbyName = userBoardByName[boardName];
+            Task newTask = new Task(title, description, dueTime, taskId);
+            bool successtaskinsert = taskDalController.Insert(new TaskDTO(taskId, title, description, boardbyName.Id,
+                newTask.CreationTime, dueTime, "backlog"));
+            if (!successtaskinsert)
+            {
+                throw new Exception("Problem occurred to add task: " + title + "  Tasks Table");
+            }
+            taskId++;
+            
+            
             boardbyName.columns["backlog"].Add(newTask);
             return newTask;
         }

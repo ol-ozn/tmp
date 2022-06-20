@@ -11,7 +11,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class User
     {
         private readonly int id;
-        public int Id { get; }
+        public int Id
+        {
+            get { return id; }
+        }
         public string email;
         private string password;
         private bool isLoggedIn;

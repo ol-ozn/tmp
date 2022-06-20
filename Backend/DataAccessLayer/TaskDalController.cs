@@ -25,7 +25,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         protected override DTO ConvertReaderToObject(SQLiteDataReader reader)
         {
-            TaskDTO result = new TaskDTO((long)reader.GetValue(0), reader.GetString(1), reader.GetString(2), (int)(long)reader.GetValue(3), DateTime.Parse(reader.GetString(4)), DateTime.Parse(reader.GetString(4)));
+            TaskDTO result = new TaskDTO((long)reader.GetValue(0), reader.GetString(1), reader.GetString(2), (int)(long)reader.GetValue(3), DateTime.Parse(reader.GetString(4)), DateTime.Parse(reader.GetString(5)), reader.GetString(6));
 
             return result;
         }
@@ -39,8 +39,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 try
                 {
                     connection.Open();
-                    command.CommandText = $"INSERT INTO {TasksTableName} ({DTO.IDColumnName} ,{TaskDTO.TasksTitleColumnName}, {TaskDTO.TasksDescriptionColumnName}, {TaskDTO.TasksBoardIdColumnName}, {TaskDTO.TasksCreationTimeColumnName}, {TaskDTO.TasksDueDateColumnName}) " +
-                        $"VALUES (@idVal,@titleVal,@descriptionVal,@boardIdVal,@creationTimeVal,@dueDateVal);";
+                    command.CommandText = $"INSERT INTO {TasksTableName} ({DTO.IDColumnName} ,{TaskDTO.TasksTitleColumnName}, {TaskDTO.TasksDescriptionColumnName}, {TaskDTO.TasksBoardIdColumnName}, {TaskDTO.TasksCreationTimeColumnName}, {TaskDTO.TasksDueDateColumnName}, {TaskDTO.TaskColumnOrdianlName}) " +
+                        $"VALUES (@idVal,@titleVal,@descriptionVal,@boardIdVal,@creationTimeVal,@dueDateVal,@ordinalVal);";
 
                     SQLiteParameter idParam = new SQLiteParameter(@"idVal", task.id);
                     SQLiteParameter titleParam = new SQLiteParameter(@"titleVal", task.Title);
@@ -48,6 +48,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     SQLiteParameter boardIdParam = new SQLiteParameter(@"boardIdVal", task.BoardId);
                     SQLiteParameter creationTimeParam = new SQLiteParameter(@"creationTimeVal", task.CreationTime);
                     SQLiteParameter dueDateParam = new SQLiteParameter(@"dueDateVal", task.DueDate);
+                    SQLiteParameter ordinalParam = new SQLiteParameter(@"ordinalVal", task.ColumnOrdinal);
 
 
                     command.Parameters.Add(idParam);
@@ -56,6 +57,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     command.Parameters.Add(boardIdParam);
                     command.Parameters.Add(creationTimeParam);
                     command.Parameters.Add(dueDateParam);
+                    command.Parameters.Add(ordinalParam);
 
                     command.Prepare();
                     res = command.ExecuteNonQuery();

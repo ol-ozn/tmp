@@ -29,8 +29,8 @@ public class UserTest
         logout1();
         logout2();
         logout3();
-        delete1();
-        delete2();
+        // delete1();
+        // delete2();
     }
 
     public void createUser1() //should be correct
@@ -169,21 +169,21 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    public void delete1() //should work well
-    {
-        Response res = us.deleteAccount("olga1@gmail.com");
-        if (res.ErrorMessage == null)
-            Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
-        else
-            Console.WriteLine(res.ErrorMessage);
-    }
+    // public void delete1() //should work well
+    // {
+    //     Response res = us.deleteAccount("olga1@gmail.com");
+    //     if (res.ErrorMessage == null)
+    //         Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
+    //     else
+    //         Console.WriteLine(res.ErrorMessage);
+    // }
 
-    public void delete2() //should return user doesn't exist
-    {
-        Response res = us.deleteAccount("olga1@gmail.com");
-        if (res.ErrorMessage == null)
-            Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
-        else
-            Console.WriteLine(res.ErrorMessage);
-    }
+    // public void delete2() //should return user doesn't exist
+    // {
+    //     Response res = us.deleteAccount("olga1@gmail.com");
+    //     if (res.ErrorMessage == null)
+    //         Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
+    //     else
+    //         Console.WriteLine(res.ErrorMessage);
+    // }
 }

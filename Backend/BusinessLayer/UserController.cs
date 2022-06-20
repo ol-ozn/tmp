@@ -20,23 +20,23 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public UserController()
         {
             userDalController = new UserDalController();
-            users = loadData();
+            users = new Dictionary<string, User>() ;
             usersIdCount = (int) userDalController.getSeq() + 1; 
             // boardIdCOunter = 0;
             //get data into users
             //users = (convert the list of users <userDTO> to be list of users <User>)
         }
 
-        private Dictionary<string, User> loadData()
-        {
-            Dictionary<string, User> usersLoaded = new Dictionary<string, User>();
-            List<UserDTO> userDtos = userDalController.SelectAllUsers();
-            foreach (UserDTO userDto in userDtos)
-            {
-                usersLoaded.Add(userDto.Email, new User(userDto.Email, userDto.Password, (int) userDto.id));
-            }
-            return usersLoaded;
-        }
+        // private Dictionary<string, User> loadData()
+        // {
+        //     Dictionary<string, User> usersLoaded = new Dictionary<string, User>();
+        //     List<UserDTO> userDtos = userDalController.SelectAllUsers();
+        //     foreach (UserDTO userDto in userDtos)
+        //     {
+        //         usersLoaded.Add(userDto.Email, new User(userDto.Email, userDto.Password, (int) userDto.id));
+        //     }
+        //     return usersLoaded;
+        // }
 
 
         /// <summary>
@@ -307,133 +307,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return users[email];
         }
 
+        public void loadData()
+        {
+            users = DataUtilities.loadData(userDalController);
+            
+        }
 
-        // moved to boradController
-        // /// <summary>
-        // ///  This method adds a board to a user.
-        // /// </summary>
-        // /// <param name="email">The email of the user</param>
-        // /// <param name="boardName">The name of the board</param>
-        // /// <returns>The created Board</returns>
-        // public Board addBoard(string boardName, string email)
-        // {
-        //     if (string.IsNullOrWhiteSpace(boardName))
-        //     {
-        //         throw new Exception("board name is not valid");
-        //     }
-        //
-        //     User user = getUser(email);
-        //
-        //     if (!user.getIsLoggedIn())
-        //     {
-        //         throw new Exception("User with email " + email + " isn't logged in");
-        //     }
-        //
-        //     Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-        //     Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-        //
-        //     if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
-        //     {
-        //         throw new Exception("A board named " + boardName + " already exist");
-        //     }
-        //
-        //     int futureID = boardIdCOunter; //TODO: add counter for id 
-        //     Board toAdd = new Board(boardName, futureID);
-        //     userBoardsbyName.Add(boardName, toAdd); // add nre board to user board list
-        //     userBoardsbyId.Add(futureID, toAdd);
-        //     boardIdCOunter++;
-        //     return toAdd;
-        // }
-
-        /// <summary>
-        ///  This method sets the removes a board from users' boards.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <returns></returns>
-        ///
-        /// 
-        // public void remove(string boardName, string email)
-        // {
-        //     User user = getUser(email);
-        //     if (!user.getIsLoggedIn())
-        //     {
-        //         throw new Exception("User isn't logged in");
-        //     }
-        //
-        //
-        //     Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-        //     Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-        //     if (userBoardsbyName.ContainsKey(boardName))
-        //     {
-        //         int boardId = userBoardsbyName[boardName].getID();
-        //         userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
-        //         userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
-        //     }
-        //     else
-        //     {
-        //         throw new Exception("Try to remove a board with the name " + boardName +
-        //                             " which doesn't exist to the email: " + email);
-        //     }
-        // }
-
-
-        // /// <summary>
-        // ///  This method changes the state of a task.
-        // /// </summary>
-        // /// <param name="email">The email of the user</param>
-        // /// <param name="boardName">The name of the board</param>
-        // /// <param name="columnOrdinal">The id of the column</param>
-        // /// <param name="taskId">The id of the task to advance</param>
-        // /// <returns></returns>
-        // public void changeState(string email, string boardName, int columnOrdinal, int taskId)
-        // {
-        //     User user = getUserAndLogeddin(email); //user is logged in
-        //     bool found = false;
-        //     
-        //     Board board = user.hasBoardByName(boardName);
-        //     List<Task> tasksList = board.getColumn(columnOrdinal);
-        //     Dictionary<string, Board> userBoards = user.getBoardListByName();
-        //     if (tasksList.Count == 0)
-        //     {
-        //         throw new Exception("Tried to find a task in an empty list");
-        //     }
-        //
-        //     foreach (Task task in tasksList)
-        //     {
-        //         if (task.Id == taskId)
-        //         {
-        //             if (columnOrdinal < 2) //advance task to in progress
-        //             {
-        //                 if (board.isColumnFull(columnOrdinal + 1)) //check column limit
-        //                 {
-        //                     throw new Exception("column overflow");
-        //                 }
-        //
-        //                 if (task.Assignie !=
-        //                     email) // in case the user who's trying to progress the task isn't the asignee 
-        //                 {
-        //                     throw new Exception("user: " + email + " tried to progress task:" + taskId +
-        //                                         "which he is not assigned to");
-        //                 }
-        //
-        //                 board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
-        //                 board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
-        //                 found = true;
-        //                 break;
-        //             }
-        //
-        //             else
-        //             {
-        //                 throw new Exception("Try do advance from done \n");
-        //             }
-        //         }
-        //     }
-        //
-        //     if (!found)
-        //     {
-        //         throw new Exception("task wasn't found in this column");
-        //     }
-        // }
     }
 }
