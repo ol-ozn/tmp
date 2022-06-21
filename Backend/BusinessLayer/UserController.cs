@@ -25,21 +25,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             usersByName = new Dictionary<string, User>();
             usersById = new Dictionary<int, User>();
             usersIdCount = (int)userDalController.getSeq() + 1;
-            // boardIdCOunter = 0;
-            //get data into usersByName
-            //usersByName = (convert the list of usersByName <userDTO> to be list of usersByName <User>)
         }
-
-        // private Dictionary<string, User> loadData()
-        // {
-        //     Dictionary<string, User> usersLoaded = new Dictionary<string, User>();
-        //     List<UserDTO> userDtos = userDalController.SelectAllUsers();
-        //     foreach (UserDTO userDto in userDtos)
-        //     {
-        //         usersLoaded.Add(userDto.Email, new User(userDto.Email, userDto.Password, (int) userDto.id));
-        //     }
-        //     return usersLoaded;
-        // }
 
 
         /// <summary>
@@ -161,19 +147,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return usersByName.ContainsKey(email);
         }
 
-        // /// <summary>
-        // ///  This method deletes an existing user.
-        // /// </summary>
-        // /// <param name="email">The email of the user</param>
-        // /// <returns>User object of logged in user, unless an error occurs</returns>
-        // public void deleteUser(string email)
-        // {
-        //     if (!userExists(email))
-        //         throw new Exception("Attempt to delete an account with an email that doesn't exist.");
-        //
-        //     userDalController.Delete(email);
-        // }
-
         /// <summary>
         ///  This method checks if an account is logged in.
         /// </summary>
@@ -201,103 +174,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception(email + " is invalid");
             }
 
-            // email = email.ToLower();
+            // email = email.ToLower(); //TODO: check if case-sensitivity is needed
             isLoggedIn(email);
             usersByName[email].IsLoggedIn = false;
         }
-
-        //
-        // /// <summary>
-        // ///  This method returns the column limit of a given column in a given board.
-        // /// </summary>
-        // /// <param name="email">The email of the user</param>
-        // /// <param name="boardName">The name of the board</param>
-        // /// <param name="columnId">The id of the column</param>
-        // /// <returns>Limit of the given column</returns>
-        // public int getColumnLimit(string email, string boardName, int columnId)
-        // {
-        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
-        //
-        //     if (columnId < 0 || columnId > 2)
-        //     {
-        //         throw new Exception("invalid columnId");
-        //     }
-        //
-        //     Board board = user.hasBoardByName(boardName);
-        //     return board.getColumnLimit(columnId);
-        // }
-
-
-        // /// <summary>
-        // ///  This method returns the column name of a given column in a given board.
-        // /// </summary>
-        // /// <param name="email">The email of the user</param>
-        // /// <param name="boardName">The name of the board</param>
-        // /// <param name="columnId">The id of the column</param>
-        // /// <returns>Name of the given column</returns>
-        // public string getColumnName(string email, string boardName, int columnId)
-        // {
-        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
-        //
-        //     if (columnId < 0 || columnId > 2)
-        //     {
-        //         throw new Exception("invalid columnId");
-        //     }
-        //
-        //     Board bord = user.hasBoardByName(boardName);
-        //     return bord.getColumnName(columnId);
-        // }
-
-        // //
-        // //
-        // /// <summary>
-        // ///  This method sets the column limit of a given column in a given board.
-        // /// </summary>
-        // /// <param name="email">The email of the user</param>
-        // /// <param name="boardName">The name of the board</param>
-        // /// <param name="columnId">The id of the column</param>
-        // /// <param name="limit">The wanted limit for the column</param>
-        // /// <returns></returns>
-        // public void setColumnLimit(string email, string boardName, int columnId, int limit)
-        // {
-        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
-        //
-        //     if (columnId < 0 || columnId > 2)
-        //     {
-        //         throw new Exception("invalid columnId");
-        //     }
-        //
-        //     if (limit < -1)
-        //     {
-        //         throw new Exception("invalid column limit");
-        //     }
-        //
-        //     Board board = user.hasBoardByName(boardName);
-        //     board.setColumnLimit(columnId, limit);
-        // }
-
-
-        //
-
-        // /// <summary>
-        // ///  This method returns a column from a board.
-        // /// </summary>
-        // /// <param name="email">The email of the user</param>
-        // /// <param name="boardName">The name of the board</param>
-        // /// <param name="columnId">The id of the column</param>
-        // /// <returns>List of tasks representing the column</returns>
-        // public List<Task> getColumn(string email, string boardName, int columnId)
-        // {
-        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
-        //
-        //     if (columnId < 0 || columnId > 2)
-        //     {
-        //         throw new Exception("invalid columnId");
-        //     }
-        //
-        //     Board board = user.hasBoardByName(boardName);
-        //     return board.getColumn(columnId);
-        // }
 
         /// <summary>
         ///  This method returns a user.
@@ -337,6 +217,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             User user = getUserAndLogeddin(email); //todo: check if user has to be logged in
             List<int> userBoardsIds = user.getBoardListById().Keys.ToList();
             return userBoardsIds; 
+        }
+
+        public void resetData()
+        {
+            userDalController.resetTable();
         }
     }
 }

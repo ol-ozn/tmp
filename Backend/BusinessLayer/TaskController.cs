@@ -15,8 +15,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class TaskController
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private UserController uc;
+
         private int taskId;
+        private UserController uc;
+
         private TaskDalController taskDalController;
         private BoardsTasksContainDalController boardsTasksContainDalController;
         public TaskController(ServiceFactory serviceFactory)
@@ -27,7 +29,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.taskId = (int)taskDalController.getSeq() + 1;
             
         }
-
 
         public Task addTask(string title, string description, DateTime dueTime, string boardName, string email)
         {
@@ -53,26 +54,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
             Dictionary<string, Board> userBoardByName = user.getBoardListByName();
-            Board boardbyName = userBoardByName[boardName];
+            Board boardbyName = userBoardByName[boardName]; //getting the needed board from list of user's boards
             Task newTask = new Task(title, description, dueTime, taskId, boardbyName.Id);
-            bool successtaskinsert = taskDalController.Insert(new TaskDTO(taskId, title, description, boardbyName.Id,
+            
+            //adding to db
+            taskDalController.Insert(new TaskDTO(taskId, title, description, boardbyName.Id,
                 newTask.CreationTime, dueTime, "backlog", newTask.Assignie));
-            if (!successtaskinsert)
-            {
-                throw new Exception("Problem occurred to add task: " + title + "  Tasks Table");
-            }
-
-            bool successBoardTaskInsert =
-                boardsTasksContainDalController.Insert(new BoardsTasksContainDTO(boardbyName.Id, user.Id));
-            if (!successBoardTaskInsert)
-            {
-                throw new Exception("Problem occurred to add task: " + title + "  BoardsTasksContain Table");
-            }
-
-            taskId++;
-
-
+            boardsTasksContainDalController.Insert(new BoardsTasksContainDTO(boardbyName.Id, user.Id));
+            
+            taskId++; 
             boardbyName.columns["backlog"].Add(newTask);
+            
             return newTask;
         }
 
@@ -99,6 +91,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                                     "or not in this board");
             }
 
+            //updating in db
             taskDalController.Update(taskId, "title", title);
             task.Title = title;
         }
@@ -119,6 +112,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("this task does not exist in this column");
             }
 
+            //updating in db
             taskDalController.Update(taskId, "due_date" ,dueTime.ToString());
             task.DueDate = dueTime;
         }
@@ -145,6 +139,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("this task does not exist in this column");
             }
 
+            //updating in db
             taskDalController.Update(taskId, "description", description);
             task.Description = description;
 
@@ -257,14 +252,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("user assignee with email " + asignee + " doesn't exist");
             }
             Task task = board.findTaskById(taskId, columnOrdinal);
-            if (task.Assignie == null || email.Equals(task.Assignie))
+            if (task.Assignie == "unassigned" || email.Equals(task.Assignie))
             {
                 task.Assignie = asignee; // sets the new assignee in the RAM
-                // taskDalController.Assign(taskId, asignee); // updates the assingee in the db
                 taskDalController.Update(taskId, "assignee", asignee);
             }
-
-            
         }
 
         /// <summary>
@@ -311,48 +303,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<Task> newtasksList = board.getColumn(columnOrdinal + 1);
             newtasksList.Add(task);
             taskDalController.Advance(taskId, newColumnOrdinal);
-            // Dictionary<string, Board> userBoards = user.getBoardListByName();
-            // if (tasksList.Count == 0)
-            // {
-            //     throw new Exception("Tried to find a task in an empty list");
-            // }
-            //
-            // foreach (Task task in tasksList)
-            // {
-            //     if (task.Id == taskId)
-            //     {
-            //         if (columnOrdinal < 2) //advance task to in progress
-            //         {
-            //             if (board.isColumnFull(columnOrdinal + 1)) //check column limit
-            //             {
-            //                 throw new Exception("column overflow");
-            //             }
-            //
-            //
-            //             if (task.Assignie !=
-            //                 email) // in case the user who's trying to progress the task isn't the asignee 
-            //             {
-            //                 throw new Exception("user: " + email + " tried to progress task:" + taskId +
-            //                                     "which he is not assigned to");
-            //             }
-            //
-            //             board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
-            //             board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
-            //             found = true;
-            //             break;
-            //         }
-            //
-            //         else
-            //         {
-            //             throw new Exception("Try do advance from done \n");
-            //         }
-            //     }
-            // }
-            //
-            // if (!found)
-            // {
-            //     throw new Exception("task wasn't found in this column");
-            // }
+        }
+
+        public void resetData()
+        {
+            taskDalController.resetTable();
         }
     }
 }

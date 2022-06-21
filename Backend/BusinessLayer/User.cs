@@ -34,7 +34,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardListById = new Dictionary<int, Board>();
         }
 
-
         public bool isPassword(string possiblePassword)
         {
             if (possiblePassword.Equals(password))
@@ -75,6 +74,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("The user doesn't own board with given id");
             }
         }
-
     }
 }

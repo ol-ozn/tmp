@@ -189,9 +189,13 @@ namespace BackendTests
             // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
             // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
 
+            GradingService gs = new GradingService();
+            Console.WriteLine(gs.LoadData());
+
+            /*
             Console.WriteLine("\n");
 
-            GradingService gs = new GradingService();
+            // GradingService gs = new GradingService();
             Console.WriteLine("if the user managed to register this should return: {} ");
             Console.WriteLine(gs.Register("olga@gmail.com", "12345Ab"));
 
@@ -204,14 +208,6 @@ namespace BackendTests
             Console.WriteLine("if the user added a task, this should return: {} :");
             Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title1", "f this s", DateTime.Now));
 
-
-
-
-            //
-            // // Console.WriteLine("\n");
-            // // Console.WriteLine("if the user advanced a task, this should return: {} :");
-            // // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
-            //
             Console.WriteLine(gs.Register("yonatna@gmail.com", "12345Ab"));
             //
             Console.WriteLine("if the user managed to register this should return: {} ");
@@ -230,7 +226,9 @@ namespace BackendTests
 
             Console.WriteLine("if the user managed to register this should return: {} ");
             Console.WriteLine(gs.TransferOwnership("olga@gmail.com", "amit@gmail.com", "board1"));
+             */
 
+            // Console.WriteLine(gs.DeleteData());
 
             //
             // // ServiceFactory sf = new ServiceFactory();

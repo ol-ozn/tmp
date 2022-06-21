@@ -42,11 +42,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     command.CommandText = $"INSERT INTO {UsersTableName} ( {UserDTO.UsersEmailColumnName},{UserDTO.UsersPasswordColumnName}) " +
                         $"VALUES (@emailVal,@passwordVal);";
 
-                    // SQLiteParameter idParam = new SQLiteParameter(@"idVal", user.id);
                     SQLiteParameter emailParam = new SQLiteParameter(@"emailVal", user.Email);
                     SQLiteParameter passwordParam = new SQLiteParameter(@"passwordVal", user.Password);
 
-                    // command.Parameters.Add(idParam);
                     command.Parameters.Add(emailParam);
                     command.Parameters.Add(passwordParam);
 
@@ -66,41 +64,5 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 return res > 0;
             }
         }
-
-
-        // public long getSeq()
-        // {
-        //     // List<DTO> results = new List<DTO>();
-        //     long seq = 0;
-        //     using (var connection = new SQLiteConnection(_connectionString))
-        //     {
-        //         SQLiteCommand command = new SQLiteCommand(null, connection);
-        //         command.CommandText = $"select * from {UsersTableName};";
-        //         SQLiteDataReader dataReader = null;
-        //         try
-        //         {
-        //             connection.Open();
-        //             dataReader = command.ExecuteReader();
-        //
-        //             while (dataReader.Read())
-        //             {
-        //                 // results.Add(ConvertReaderToObject(dataReader));
-        //                 seq = ConvertReaderToObject(dataReader).id;
-        //             }
-        //         }
-        //         finally
-        //         {
-        //             if (dataReader != null)
-        //             {
-        //                 dataReader.Close();
-        //             }
-        //
-        //             command.Dispose();
-        //             connection.Close();
-        //         }
-        //
-        //     }
-        //     return seq;
-        // }
     }
 }

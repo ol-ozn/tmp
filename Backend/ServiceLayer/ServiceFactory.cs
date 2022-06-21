@@ -12,6 +12,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public UserService userService;
         public TaskService taskService;
         public BoardService boardService;
+        public DataService dataService;
+
         private UserController userController;
         private BoardController boardController;
 
@@ -37,7 +39,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             create();
         }
 
-
         private ServiceFactory create()
         {
             userController = new UserController();
@@ -46,22 +47,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             boardService = new BoardService(this);
             taskController = new TaskController(this);
             taskService = new TaskService(this);
-
-            DataService dataService = new DataService(userController,boardController,taskController);
+            dataService = new DataService(userController,boardController,taskController);
             return this;
         }
-
-        // public void loadData()
-        // {
-        //     try
-        //     {
-        //
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //         throw;
-        //     }
-        // }
     }
 }

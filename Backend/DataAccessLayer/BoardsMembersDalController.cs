@@ -112,7 +112,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     command.Dispose();
                     connection.Close();
                 }
-
             }
             return res > 0;
         }

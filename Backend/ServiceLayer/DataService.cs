@@ -45,8 +45,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             try
             {
-                
-                log.Info("Data has been loaded successfully");
+                userController.resetData();
+                boardController.resetData();
+                taskController.resetData();
+                log.Info("Data has been deleted successfully");
                 return new Response(null, null);
             }
             catch (Exception e)

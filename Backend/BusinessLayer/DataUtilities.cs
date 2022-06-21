@@ -72,13 +72,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return boardsOwners;
         }
-        internal static Dictionary<int, int> loadData(BoardsMembersDalController boardsMembersDalController)
+        internal static List<(int boardId, int memberId)> loadData(BoardsMembersDalController boardsMembersDalController)
         {
-            Dictionary<int, int> boardsMembers = new Dictionary<int, int>();
+            List<(int boardId, int memberId)> boardsMembers = new List<(int boardId, int memberId)>();
             List<BoardsMembersDTO> BoardsMembersDtos = boardsMembersDalController.SelectAllBoardsMembersDtos();
             foreach (BoardsMembersDTO boardMembersDto in BoardsMembersDtos)
             {
-                boardsMembers.Add(boardMembersDto.BoardId, boardMembersDto.MemberID);
+                boardsMembers.Add((boardMembersDto.BoardId, boardMembersDto.MemberID));
             }
             return boardsMembers;
         }

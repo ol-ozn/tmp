@@ -19,9 +19,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             set { id = value; }
         }
 
-
         private string assignie;
-        public string Assignie { get; set; }
+        public string Assignie
+        {
+            get { return assignie; }
+            set { assignie = value; }
+        }
 
 
         private readonly DateTime creationTime;
@@ -57,11 +60,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         [JsonIgnore]
         public int boardId { get; set; }
 
-        //TODO: find our if resident
-        // private string boardName;
-        // public string BoardName { get; }
-        //
-
         /// <summary>
         ///  constructor
         /// </summary>
@@ -77,10 +75,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.title = title;
             this.description = description;
             this.dueDate = dueDate;
-            // this.boardName = boardName;
             this.id = id;
             this.columnOrdinal = "backlog";
             this.boardId = boardId;
+            this.assignie = "unassigned";
         }
 
     }

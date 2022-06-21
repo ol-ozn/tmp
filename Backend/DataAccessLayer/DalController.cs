@@ -12,6 +12,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
     {
         protected readonly string _connectionString;
         private readonly string _tableName;
+
         public DalController(string tableName)
         {
             string path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "kanban.db"));
@@ -47,6 +48,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
 
             }
+
             return res > 0;
         }
 
@@ -74,6 +76,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
 
             }
+
             return res > 0;
         }
 
@@ -108,6 +111,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
 
             }
+
             return results;
         }
 
@@ -136,11 +140,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
 
             }
+
             return res > 0;
         }
+
         public long getSeq()
         {
-            // List<DTO> results = new List<DTO>();
             long seq = 0;
             using (var connection = new SQLiteConnection(_connectionString))
             {
@@ -170,7 +175,35 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
 
             }
+
             return seq;
+        }
+
+        public bool resetTable()
+        {
+            int res = -1;
+            using (var connection = new SQLiteConnection(_connectionString))
+            {
+                var command = new SQLiteCommand
+                {
+                    Connection = connection,
+                    CommandText = $"delete from {_tableName}; UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME=\"{_tableName}\";"
+                    // CommandText = $"delete from {_tableName};"
+
+                };
+                try
+                {
+                    connection.Open();
+                    res = command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    command.Dispose();
+                    connection.Close();
+                }
+            }
+            return res > 0;
         }
     }
 }
+

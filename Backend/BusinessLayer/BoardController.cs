@@ -348,15 +348,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void loadData()
         {
             boards = DataUtilities.loadData(boardDalController); // loading boards info from db
-            
-            //loading boards and members in <board_id,member_id> format
-            Dictionary<int,int> boardsMembers = DataUtilities.loadData(boardsMembersDalController);
+
+            List<(int boardId, int memberId)> boardsMembers = DataUtilities.loadData(boardsMembersDalController);
 
             //adding the boards of every user
-            foreach (KeyValuePair<int, int> entry in boardsMembers)
+            foreach ((int boardId, int memberId) entry in boardsMembers)
             {
-                Board board = boards[entry.Key];
-                User user = userController.getUser(entry.Value);
+                Board board = boards[entry.boardId];
+                User user = userController.getUser(entry.memberId);
                 user.getBoardListById().Add(board.Id, board);
                 user.getBoardListByName().Add(board.Name, board);
             }
@@ -379,6 +378,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("board with id = " + boardId + " doesn't exist!");
             }
             return boards[boardId].Name;
+        }
+
+        public void resetData()
+        {
+            boardDalController.resetTable();
+            boardsMembersDalController.resetTable();
         }
     }
 }

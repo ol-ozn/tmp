@@ -326,9 +326,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string LoadData()
         {
-            /*DataUtilities.loadData(serviceFactory.BoardController.BoardDalController);*/
-            serviceFactory.BoardController.loadData();
-            throw new NotImplementedException();
+            return JsonController.toJson(serviceFactory.dataService.LoadData());
         }
 
         ///<summary>This method deletes all persisted data.
@@ -340,7 +338,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         ///<returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string DeleteData()
         {
-            throw new NotImplementedException();
+            return JsonController.toJson(serviceFactory.dataService.DeleteData());
         }
 
         /// <summary>
