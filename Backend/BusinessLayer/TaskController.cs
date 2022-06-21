@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.DataAccessLayer;
+using IntroSE.Kanban.Backend.DataAccessLayer.DTOs;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using log4net;
 
@@ -17,12 +18,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private UserController uc;
         private int taskId;
         private TaskDalController taskDalController;
-
+        private BoardsTasksContainDalController boardsTasksContainDalController;
         public TaskController(ServiceFactory serviceFactory)
         {
-            this.uc = serviceFactory.UserController;
-            this.taskId = 0;
             taskDalController = new TaskDalController();
+            boardsTasksContainDalController = new BoardsTasksContainDalController();
+            this.uc = serviceFactory.UserController;
+            this.taskId = (int)taskDalController.getSeq() + 1;
+            
         }
 
 
@@ -57,6 +60,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (!successtaskinsert)
             {
                 throw new Exception("Problem occurred to add task: " + title + "  Tasks Table");
+            }
+
+            bool successBoardTaskInsert =
+                boardsTasksContainDalController.Insert(new BoardsTasksContainDTO(boardbyName.Id, user.Id));
+            if (!successBoardTaskInsert)
+            {
+                throw new Exception("Problem occurred to add task: " + title + "  BoardsTasksContain Table");
             }
 
             taskId++;
@@ -108,6 +118,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("this task does not exist in this column");
             }
 
+            taskDalController.Update(taskId, "due_date" ,dueTime.ToString());
             task.DueDate = dueTime;
         }
 

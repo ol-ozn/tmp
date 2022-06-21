@@ -145,7 +145,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-            //todo: change id
             return JsonController.toJson(serviceFactory.taskService.add(title, description, dueDate, boardName, email));
         }
 
@@ -161,7 +160,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
         {
-            throw new NotImplementedException();
+            return JsonController.toJson(serviceFactory.taskService.editTaskDueDate(email, boardName, columnOrdinal, taskId, dueDate));
         }
 
 

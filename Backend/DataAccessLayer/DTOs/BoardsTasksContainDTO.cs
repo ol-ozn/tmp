@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntroSE.Kanban.Backend.DataAccessLayer
+namespace IntroSE.Kanban.Backend.DataAccessLayer.DTOs
 {
-    internal class BoardsTasksContainDTO :DTO
+    public class BoardsTasksContainDTO : DTO
     {
         public const string boardIdColumn = "board_id";
         public const string taskIdColumn = "task_id";

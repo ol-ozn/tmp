@@ -39,10 +39,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 try
                 {
                     connection.Open();
-                    command.CommandText = $"INSERT INTO {BoardsTasksContainTableName} ( {boardsTasksDTO.BoardId},{boardsTasksDTO.TaskID}) " +
-                                          $"VALUES (@boardIdVal,@memberIdVal);";
+                    command.CommandText = $"INSERT INTO {BoardsTasksContainTableName} (board_id, task_id) " + //TODO: fix constant
+                                          $"VALUES (@boardIdVal,@taskIdVal);";
 
-                    SQLiteParameter taskIdParam = new SQLiteParameter(@"memberIdVal", boardsTasksDTO.TaskID);
+                    SQLiteParameter taskIdParam = new SQLiteParameter(@"taskIdVal", boardsTasksDTO.TaskID);
                     SQLiteParameter boardIdParam = new SQLiteParameter(@"boardIdVal", boardsTasksDTO.BoardId);
 
                     command.Parameters.Add(taskIdParam);
