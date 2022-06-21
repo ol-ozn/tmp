@@ -11,29 +11,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class Board
     {
         public const int UNLIMITED = -1;
+
         private string name;
         public string Name
         {
             get { return name; }
         }
 
-        public readonly Dictionary<int, string> columnsId = new Dictionary<int, string> // dictionary< columnsId, ColumnsTitle>
-        {
-            { 0, "backlog" },
-            { 1, "in progress" },
-            { 2, "done" }
-        };
-
-        public Dictionary<string, List<Task>> columns { get; } // dictionary <column name, tasks list>
         private readonly int id;
-
         public int Id
         {
             get { return id; }
         }
-        public int LimitBacklog { get; set; }
-        public int limitInProgress { get; set; }
-        public int LimitDone { get; set; }
 
         private int owner;
         public int Owner
@@ -43,28 +32,37 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
         private HashSet<string> memeberList; // each board holds its members
-
         public HashSet<string> MemeberList
         {
             get { return memeberList; }
         }
 
+        public int LimitBacklog { get; set; }
+        public int limitInProgress { get; set; }
+        public int LimitDone { get; set; }
 
+        public Dictionary<string, List<Task>> columns { get; } // dictionary <column name, tasks list>
+        public readonly Dictionary<int, string> columnsId = new Dictionary<int, string> // dictionary< columnsId, ColumnsTitle>
+        {
+            { 0, "backlog" },
+            { 1, "in progress" },
+            { 2, "done" }
+        };
 
         public Board(String boardName, int id)
         {
-            name = boardName;
-            columns = new Dictionary<string, List<Task>>();
-            initColumns();
+            this.name = boardName;
             this.id = id;
-            owner = id;
+            this.owner = id;
             memeberList = new HashSet<string>();
 
+            columns = new Dictionary<string, List<Task>>();
+            initColumns();
+            
             this.LimitBacklog = UNLIMITED;
             this.limitInProgress = UNLIMITED;
             this.LimitDone = UNLIMITED;
 
-            memeberList = new HashSet<string>();
         }
 
         public void initColumns()
@@ -82,12 +80,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public int getColumnLimit(int columnId)
         {
-            if (columnId == columnsId.FirstOrDefault(x => x.Value == "backlog").Key)
+            if (columnId == getColumnNumber("backlog"))
             {
                 return LimitBacklog;
             }
 
-            else if (columnId == columnsId.FirstOrDefault(x => x.Value == "in progress").Key)
+            else if (columnId == getColumnNumber("in progress"))
             {
                 return limitInProgress;
             }
@@ -99,17 +97,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public void setColumnLimit(int columnId, int newLimit)
         {
-            if (columnId == columnsId.FirstOrDefault(x => x.Value == "backlog").Key)
+            if (columnId == getColumnNumber("backlog"))
             {
                 LimitBacklog = newLimit;
             }
 
-            if (columnId == columnsId.FirstOrDefault(x => x.Value == "in progress").Key)
+            if (columnId == getColumnNumber("in progress"))
             {
                 limitInProgress = newLimit;
             }
 
-            if (columnId == columnsId.FirstOrDefault(x => x.Value == "done").Key)
+            if (columnId == getColumnNumber("d"))
             {
                 LimitDone = newLimit;
             }

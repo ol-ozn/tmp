@@ -115,41 +115,67 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        public bool Assign(int taskId, string asignee)
+        // public bool Assign(int taskId, string asignee)
+        // {
+        //     using (var connection = new SQLiteConnection(_connectionString))
+        //     {
+        //         SQLiteCommand command = new SQLiteCommand(null, connection);
+        //         int res = -1;
+        //         try
+        //         {
+        //             connection.Open();
+        //             command.CommandText =
+        //                 $"UPDATE {TasksTableName} SET asignee = @newAsignee Where id = @taskid; ";
+        //
+        //
+        //             SQLiteParameter taskidParam = new SQLiteParameter(@"taskid", taskId);
+        //             SQLiteParameter assigneeParam = new SQLiteParameter(@"newAsignee", asignee);
+        //
+        //             command.Parameters.Add(taskidParam);
+        //             command.Parameters.Add(assigneeParam);
+        //
+        //
+        //             command.Prepare();
+        //             res = command.ExecuteNonQuery();
+        //         }
+        //         catch (Exception ex)
+        //         {
+        //             //log error
+        //         }
+        //         finally
+        //         {
+        //             command.Dispose();
+        //             connection.Close();
+        //
+        //         }
+        //         return res > 0;
+        //     }
+        // }
+
+        public bool DeleteBoard(int boardId)
         {
+            int res = -1;
+
             using (var connection = new SQLiteConnection(_connectionString))
             {
-                SQLiteCommand command = new SQLiteCommand(null, connection);
-                int res = -1;
+                var command = new SQLiteCommand
+                {
+                    Connection = connection,
+                    CommandText = $"delete from {TasksTableName} where board_id={boardId}"
+                };
                 try
                 {
                     connection.Open();
-                    command.CommandText =
-                        $"UPDATE {TasksTableName} SET asignee = @newAsignee Where id = @taskid; ";
-
-
-                    SQLiteParameter taskidParam = new SQLiteParameter(@"taskid", taskId);
-                    SQLiteParameter assigneeParam = new SQLiteParameter(@"newAsignee", asignee);
-
-                    command.Parameters.Add(taskidParam);
-                    command.Parameters.Add(assigneeParam);
-
-
-                    command.Prepare();
                     res = command.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    //log error
                 }
                 finally
                 {
                     command.Dispose();
                     connection.Close();
-
                 }
-                return res > 0;
+
             }
+            return res > 0;
         }
     }
 }

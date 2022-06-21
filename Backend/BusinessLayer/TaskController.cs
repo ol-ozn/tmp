@@ -54,7 +54,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             Dictionary<string, Board> userBoardByName = user.getBoardListByName();
             Board boardbyName = userBoardByName[boardName];
-            Task newTask = new Task(title, description, dueTime, taskId);
+            Task newTask = new Task(title, description, dueTime, taskId, boardbyName.Id);
             bool successtaskinsert = taskDalController.Insert(new TaskDTO(taskId, title, description, boardbyName.Id,
                 newTask.CreationTime, dueTime, "backlog", newTask.Assignie));
             if (!successtaskinsert)
@@ -99,6 +99,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                                     "or not in this board");
             }
 
+            taskDalController.Update(taskId, "title", title);
             task.Title = title;
         }
 
@@ -144,7 +145,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("this task does not exist in this column");
             }
 
+            taskDalController.Update(taskId, "description", description);
             task.Description = description;
+
+
         }
 
 
@@ -248,12 +252,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void assignTask(string email, string boardName, int columnOrdinal, int taskId, string asignee)
         {
             Board board = uc.getUserAndLogeddin(email).getBoardListByName()[boardName];
+            if (!uc.userExists(asignee))
+            {
+                throw new Exception("user assignee with email " + asignee + " doesn't exist");
+            }
             Task task = board.findTaskById(taskId, columnOrdinal);
             if (task.Assignie == null || email.Equals(task.Assignie))
             {
                 task.Assignie = asignee; // sets the new assignee in the RAM
-                taskDalController.Assign(taskId, asignee); // updates the assingee in the db
+                // taskDalController.Assign(taskId, asignee); // updates the assingee in the db
+                taskDalController.Update(taskId, "assignee", asignee);
             }
+
+            
         }
 
         /// <summary>
@@ -286,6 +297,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("user: " + email + " tried to progress task:" + taskId +
                                     "which he is not assigned to");
+            }
+
+            if (board.isColumnFull(columnOrdinal + 1)) //check column limit
+            {
+                throw new Exception("next column is full");
             }
 
             string newColumnOrdinal = board.getColumnName(board.getColumnNumber(task.columnOrdinal) + 1);

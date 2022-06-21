@@ -35,15 +35,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             try
             {
-                // taskController.addTask(title, description, dueTime, boardName, email);
-
-                Task task = taskController.addTask(title, description, dueTime, boardName, email);
+                taskController.addTask(title, description, dueTime, boardName, email);
                 log.Debug("a task was added to user: " + email);
-                // return new Response(null, email)
-                // return new Response(null, null);
-                return new Response(null, task);
-
-
+                return new Response(null, null);
             }
             catch (Exception e)
             {
@@ -142,6 +136,21 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 taskController.changeState(email, boardName, columnOrdinal, taskId);
                 log.Info("taks: " + taskId + " was advanced by " + email);
+                return new Response(null, null);
+            }
+            catch (Exception e)
+            {
+                log.Debug(e.Message);
+                return new Response(e.Message, null);
+            }
+        }
+
+        public Response AssignTask(string email, string boardName, int columnOrdinal, int taskId, string emailAssignee)
+        {
+            try
+            {
+                taskController.assignTask(email, boardName, columnOrdinal, taskId, emailAssignee);
+                log.Info("task " + taskId + " was assigned to " + emailAssignee);
                 return new Response(null, null);
             }
             catch (Exception e)

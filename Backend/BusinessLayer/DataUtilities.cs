@@ -28,6 +28,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return boardsLoaded;
         }
 
+        internal static List<Task> loadData(TaskDalController taskDalController)
+        {
+            List<Task> tasksLoaded = new List<Task>();
+            List<TaskDTO> tasksDTOs = taskDalController.SelectAllTasks();
+            foreach (TaskDTO taskDto in tasksDTOs)
+            {
+                tasksLoaded.Add(new Task(taskDto.Title, taskDto.Description, taskDto.DueDate, (int)taskDto.id, (int)taskDto.BoardId));
+            }
+            return tasksLoaded;
+        }
+
         /// <summary>
         /// loads the data of every user(id,email,password)
         /// </summary>
@@ -47,7 +58,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return returnValue;
         }
 
-
         /// <summary>
         /// loads the data of board and his owner(board_id, owner_id)
         /// </summary>
@@ -62,7 +72,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return boardsOwners;
         }
-
         internal static Dictionary<int, int> loadData(BoardsMembersDalController boardsMembersDalController)
         {
             Dictionary<int, int> boardsMembers = new Dictionary<int, int>();
@@ -73,6 +82,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return boardsMembers;
         }
-
     }
 }

@@ -156,7 +156,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email to check existence of a user with</param>
         /// <returns>True if user exists, false otherwise</returns>
-        private bool userExists(string email)
+        public bool userExists(string email)
         {
             return usersByName.ContainsKey(email);
         }

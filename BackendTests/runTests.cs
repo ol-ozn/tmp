@@ -199,13 +199,12 @@ namespace BackendTests
             Console.WriteLine("if the user managed to register this should return: {} ");
             Console.WriteLine(gs.AddBoard("olga@gmail.com", "board1"));
 
-            //
             Console.WriteLine("\n");
             
             Console.WriteLine("if the user added a task, this should return: {} :");
             Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title1", "f this s", DateTime.Now));
 
-            Console.WriteLine(gs.UpdateTaskDueDate("olga@gmail.com", "board1", 0, 0, DateTime.Now ));
+
 
 
             //
@@ -213,14 +212,24 @@ namespace BackendTests
             // // Console.WriteLine("if the user advanced a task, this should return: {} :");
             // // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
             //
-            // Console.WriteLine(gs.Register("yonatna@gmail.com", "12345Ab"));
+            Console.WriteLine(gs.Register("yonatna@gmail.com", "12345Ab"));
             //
-            // Console.WriteLine("if the user managed to register this should return: {} ");
-            // Console.WriteLine(gs.JoinBoard("yonatna@gmail.com", 1));
+            Console.WriteLine("if the user managed to register this should return: {} ");
+            Console.WriteLine(gs.JoinBoard("yonatna@gmail.com", 1));
             //
             //
-            // Console.WriteLine("if the user managed to register this should return: {} ");
-            // Console.WriteLine(gs.RemoveBoard("olga@gmail.com", "board1"));
+
+            Console.WriteLine("if the user managed to register this should return: {} ");
+            Console.WriteLine(gs.Register("amit@gmail.com", "12345Ab"));
+
+            Console.WriteLine("if the user managed to register this should return: {} ");
+            Console.WriteLine(gs.TransferOwnership("olga@gmail.com","amit@gmail.com", "board1"));
+
+            Console.WriteLine("if the user managed to register this should return: {} ");
+            Console.WriteLine(gs.JoinBoard("amit@gmail.com", 1));
+
+            Console.WriteLine("if the user managed to register this should return: {} ");
+            Console.WriteLine(gs.TransferOwnership("olga@gmail.com", "amit@gmail.com", "board1"));
 
 
             //

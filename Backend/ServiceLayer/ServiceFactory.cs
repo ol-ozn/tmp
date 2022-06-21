@@ -46,6 +46,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             boardService = new BoardService(this);
             taskController = new TaskController(this);
             taskService = new TaskService(this);
+
+            DataService dataService = new DataService(userController,boardController,taskController);
             return this;
         }
 

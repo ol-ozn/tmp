@@ -175,7 +175,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
-            throw new NotImplementedException();
+            return JsonController.toJson(serviceFactory.taskService.editTaskTitle(email, boardName, columnOrdinal, taskId, title));
         }
 
 
@@ -191,7 +191,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId,
             string description)
         {
-            throw new NotImplementedException();
+            return JsonController.toJson(serviceFactory.taskService.editTaskDescription(email, boardName, columnOrdinal, taskId, description));
         }
 
 
@@ -205,7 +205,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
-            throw new NotImplementedException();
+            return JsonController.toJson(serviceFactory.taskService.changeState(email, boardName, columnOrdinal, taskId));
         }
 
 
@@ -314,7 +314,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
         {
-            throw new NotImplementedException();
+            return JsonController.toJson(serviceFactory.taskService.AssignTask(email, boardName,columnOrdinal,taskID, emailAssignee));
         }
 
         ///<summary>This method loads all persisted data.

@@ -17,7 +17,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         {
         }
 
-        public List<BoardsTasksContainDTO> SelectAllBoardsMembersDtos()
+        public List<BoardsTasksContainDTO> SelectAllBoardsTasksContainDtos()
             {
                 List<BoardsTasksContainDTO> result = Select().Cast<BoardsTasksContainDTO>().ToList();
 
@@ -30,6 +30,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
             return result;
         }
+
         public bool Insert(BoardsTasksContainDTO boardsTasksDTO)
         {
             using (var connection = new SQLiteConnection(_connectionString))
@@ -39,8 +40,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 try
                 {
                     connection.Open();
-                    command.CommandText = $"INSERT INTO {BoardsTasksContainTableName} (board_id, task_id) " + //TODO: fix constant
-                                          $"VALUES (@boardIdVal,@taskIdVal);";
+                    // command.CommandText = $"INSERT INTO {BoardsTasksContainTableName} (board_id, task_id) " + //TODO: fix constant
+                    //                       $"VALUES (@boardIdVal,@taskIdVal);";
+
+                    command.CommandText =
+                        $"INSERT INTO {BoardsTasksContainTableName} ( {BoardsTasksContainDTO.boardIdColumn},{BoardsTasksContainDTO.taskIdColumn}) " +
+                        $"VALUES (@boardIdVal,@taskIdVal);";
 
                     SQLiteParameter taskIdParam = new SQLiteParameter(@"taskIdVal", boardsTasksDTO.TaskID);
                     SQLiteParameter boardIdParam = new SQLiteParameter(@"boardIdVal", boardsTasksDTO.BoardId);
@@ -61,8 +66,36 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     connection.Close();
 
                 }
+
+                return res > 0;
+            }
+        }
+
+        public bool DeleteBoard(int boardId)
+            {
+                int res = -1;
+
+                using (var connection = new SQLiteConnection(_connectionString))
+                {
+                    var command = new SQLiteCommand
+                    {
+                        Connection = connection,
+                        CommandText = $"delete from {BoardsTasksContainTableName} where board_id={boardId}"
+                    };
+                    try
+                    {
+                        connection.Open();
+                        res = command.ExecuteNonQuery();
+                    }
+                    finally
+                    {
+                        command.Dispose();
+                        connection.Close();
+                    }
+
+                }
                 return res > 0;
             }
         }
     }
-}
+

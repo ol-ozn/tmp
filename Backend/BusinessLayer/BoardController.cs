@@ -15,24 +15,26 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private Dictionary<int, Board> boards;
         private UserController userController;
         private int boardIdCOunter;
+
         private BoardDalController boardDalController;
-        private Dictionary<int, int> boardsOwnerId; //<boardId, OwnerId>
-        private Dictionary<int, int> boardsMembers; //<boardId, MemberId>
         private BoardsUserOwnershipDalController boardOwnershipDalController;
         private BoardsMembersDalController boardsMembersDalController;
         private BoardsTasksContainDalController boardsTasksContainDalController;
-
+        private TaskDalController taskDalController;
 
         public BoardController(ServiceFactory serviceFactory)
         {
             boardOwnershipDalController = new BoardsUserOwnershipDalController();
             boardsMembersDalController = new BoardsMembersDalController();
             boardDalController = new BoardDalController();
+            boardsTasksContainDalController = new BoardsTasksContainDalController();
+            taskDalController = new TaskDalController();
+
             userController = serviceFactory.UserController;
-            boards = new Dictionary<int, Board>();
+
             boardIdCOunter = (int)boardDalController.getSeq() + 1;
-            boardsOwnerId = new Dictionary<int, int>(); //<boardId, OwnerId>
-            boardsMembers = new Dictionary<int, int>();
+
+            boards = new Dictionary<int, Board>();
         }
 
 
@@ -51,11 +53,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             User user = userController.getUserAndLogeddin(email);
 
-            // if (!user.IsLoggedIn) //TODO: this can be removed
-            // {
-            //     throw new Exception("User with email " + email + " isn't logged in");
-            // }
-
             Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
             Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
 
@@ -64,28 +61,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("A board named " + boardName + " already exist");
             }
 
-            bool successInsertBoards = boardDalController.Insert(new BoardDTO(boardIdCOunter, boardName, user.Id,
+            boardDalController.Insert(new BoardDTO(boardIdCOunter, boardName, user.Id,
                 Board.UNLIMITED, Board.UNLIMITED, Board.UNLIMITED));
-
-            if (!successInsertBoards)
-            {
-                throw new Exception("Problem occurred to add board: " + boardName + "  Boards Table");
-            }
-
-            bool successInsertBoardsOwner =
-                boardOwnershipDalController.Insert(new BoardUserOwnershipDTO(boardIdCOunter, user.Id));
-            if (!successInsertBoardsOwner)
-            {
-                throw new Exception("Problem occurred to add board: " + boardName + "  to ownership table");
-            }
+            boardOwnershipDalController.Insert(new BoardUserOwnershipDTO(boardIdCOunter, user.Id));
+            boardsMembersDalController.Insert(new BoardsMembersDTO(boardIdCOunter,user.Id));
 
             Board toAdd = new Board(boardName, boardIdCOunter);
             //assigne the board owner to the board boardId 
-            boardsOwnerId.Add(boardIdCOunter, user.Id);
+            // boardsOwnerId.Add(boardIdCOunter, user.Id);
             toAdd.Owner = user.Id; //assigns the board owner to be the User
             userBoardsbyName.Add(boardName, toAdd); // adds the board to users board list by name
             userBoardsbyId.Add(boardIdCOunter, toAdd); // adds the board to users board list by ID
             boards.Add(boardIdCOunter, toAdd); // adds the board to the global boards list
+            toAdd.MemeberList.Add(user.email); //adds the board owner to members of the board
 
             boardIdCOunter++; // advances the global board boardId counter
 
@@ -115,7 +103,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
                 else // else the user is already part of this board
                 {
-                    // throw new Exception("user: " + email + " is already part of this board");
                     throw new Exception("user: " + email + " is already a member of a board " + boardToAdd.Name);
                 }
 
@@ -128,16 +115,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     throw new Exception("user: " + email + " is already part of this board");
                 }
 
-                bool successInsertBoards = boardsMembersDalController.Insert(new BoardsMembersDTO(boardToAdd.Id, currentUser.Id));
+               boardsMembersDalController.Insert(new BoardsMembersDTO(boardToAdd.Id, currentUser.Id));
 
-                if (!successInsertBoards)
-                {
-                    throw new Exception("Problem occurred to add user: " + currentUser.email +" to board: " + boardToAdd.Name + " to BoardsMembers Table");
-                }
-
-                boardToAdd.MemeberList.Add(email); //adds the user to the members list of the board
-                // currentUser.getBoardListByName().Add(boardToAdd.Name, boardToAdd); //adds the board to user's list of boards (by name)
-                // currentUser.getBoardListById().Add(boardId, boardToAdd); //adds the board to user's list of boards (by id)
+               boardToAdd.MemeberList.Add(email); //adds the user to the members list of the board
             }
             else
             {
@@ -151,11 +131,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="currentOwnerEmail">// the mail of the owner of the board</param>
         /// <param name="newOwnerEmail">// the mail of the user that will be the new owner of the board</param>
         /// <param name="boardName">// the name of the board </param>
-        public void transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName) //TODO: change 
+        public void transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             User currentOwner = userController.getUserAndLogeddin(currentOwnerEmail);
-            User newOwner = userController.getUser(newOwnerEmail); //todo: check if he has to be logged in
-
+            User newOwner = userController.getUser(newOwnerEmail);
 
             if (!currentOwner.getBoardListByName()
                     .ContainsKey(boardName)) // checks if the user is a member of this board
@@ -163,13 +142,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("this board does not exist");
             }
 
-            // i erased this condition bc we requiered the new owner to both be a member and not to have and board with that name
-            // if (newOwner.getBoardListByName().ContainsKey(boardName))
-            // {
-            //     throw new Exception(newOwnerEmail + " already has board named: " + boardName);
-            // }
-
             Board currentBoard = currentOwner.getBoardListByName()[boardName];
+
             if (currentBoard.Owner !=
                 currentOwner.Id) // if the user who's trying to perform the action is not the owner
             {
@@ -183,25 +157,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             //updating in database the new owner's id
             boardDalController.Update(currentBoard.Id, "board_owner", newOwner.Id);
+            currentBoard.Owner = newOwner.Id;
 
+            //todo: erase after deleting ownership table
             //updating the ownership table todo: maybe make an update func that will do 'set userId = newOwnerId where boardId=boardId and userId = currOwnerId' - so that there's only one access to database
             boardOwnershipDalController.Delete(new BoardUserOwnershipDTO(currentBoard.Id, currentOwner.Id));
             boardOwnershipDalController.Insert(new BoardUserOwnershipDTO(currentBoard.Id, newOwner.Id));
-
-            currentBoard.Owner = newOwner.Id;
-
-            //todo: if the (previous) owner is not in "mamber list" (which he isnt)-
-            //todo: he should be added to it, and new Owner should be deleted.
-
-            //locally perform the switch in membeships of the table
-            currentBoard.MemeberList.Add(currentOwnerEmail);
-            currentBoard.MemeberList.Remove(newOwnerEmail);
-
-            //updating the membership table todo: maybe make an update func that will do 'set memberId = newOwnerId where boardId=boardId and memberId = currOwnerId' - so that there's only one access to database
-            boardOwnershipDalController.Delete(new BoardUserOwnershipDTO(currentBoard.Id, currentOwner.Id));
-            boardsMembersDalController.Delete(new BoardsMembersDTO(currentBoard.Id, newOwner.Id));
-            boardsMembersDalController.Insert(new BoardsMembersDTO(currentBoard.Id, currentOwner.Id));
-
         }
 
 
@@ -228,6 +189,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardToLeave.MemeberList.Remove(email); // removes the user from the boards users list
             leavingUser.getBoardListById().Remove(boardId); // removes the board from the boardList by ID
             leavingUser.getBoardListByName().Remove(boardToLeave.Name); // removes board from the users list by name
+            
             foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId
                          .FirstOrDefault(x => x.Value == "backlog").Key))
             {
@@ -286,8 +248,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardDalController.Delete(new BoardDTO(board.Id, board.Name, board.Owner, board.LimitBacklog,
                 board.limitInProgress, board.LimitDone));
 
+            //todo: if erasing linking tables delete 253,255
             boardsMembersDalController.DeleteBoard(board.Id);
             boardOwnershipDalController.Delete(new BoardUserOwnershipDTO(board.Id, owner.Id));
+
+            boardsTasksContainDalController.DeleteBoard(board.Id);
+            taskDalController.DeleteBoard(board.Id);
 
             userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
             userBoardsbyId.Remove(board.Id); // board has been removed from the userBoardById
@@ -379,31 +345,30 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return board.getColumn(columnId);
         }
 
-
-
         public void loadData()
         {
             boards = DataUtilities.loadData(boardDalController); // loading boards info from db
-            boardsOwnerId = DataUtilities.loadData(boardOwnershipDalController); // loading boards info from db
+            
+            //loading boards and members in <board_id,member_id> format
+            Dictionary<int,int> boardsMembers = DataUtilities.loadData(boardsMembersDalController);
 
-            foreach (KeyValuePair<int,int> entry in boardsOwnerId)
-            {
-                Board board = boards[entry.Key];
-                User user = userController.getUser(entry.Value);
-                user.getBoardListById().Add(board.Id, board);
-                user.getBoardListByName().Add(board.Name, board);
-            }
-           
-            // add to every user the boards its a member of
-
-            boardsMembers = DataUtilities.loadData(boardsMembersDalController);
-
+            //adding the boards of every user
             foreach (KeyValuePair<int, int> entry in boardsMembers)
             {
                 Board board = boards[entry.Key];
                 User user = userController.getUser(entry.Value);
                 user.getBoardListById().Add(board.Id, board);
                 user.getBoardListByName().Add(board.Name, board);
+            }
+
+            //loading all tasks from db
+            List<Task> tasks = DataUtilities.loadData(taskDalController);
+
+            //adding tasks to its respective board in its respective column
+            foreach (Task task in tasks)
+            {
+                Board board = boards[task.boardId];
+                board.getColumn(board.getColumnNumber(task.columnOrdinal)).Add(task);
             }
         }
 

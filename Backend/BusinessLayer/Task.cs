@@ -43,6 +43,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             get { return description; }
             set { description = value; }
         }
+        
         private DateTime dueDate;
         public DateTime DueDate
         {
@@ -53,7 +54,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         [JsonIgnore]
         public string columnOrdinal { get; set; }
 
-        
+        [JsonIgnore]
+        public int boardId { get; set; }
 
         //TODO: find our if resident
         // private string boardName;
@@ -69,7 +71,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="boardId">The id of the board that the task is in</param>
         /// <param name="id">The id of the task</param>
         /// <returns> creates a new task >
-        public Task(string title, string description, DateTime dueDate, int id)
+        public Task(string title, string description, DateTime dueDate, int id,int boardId)
         {
             this.creationTime = DateTime.Now;
             this.title = title;
@@ -78,6 +80,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             // this.boardName = boardName;
             this.id = id;
             this.columnOrdinal = "backlog";
+            this.boardId = boardId;
         }
 
     }
