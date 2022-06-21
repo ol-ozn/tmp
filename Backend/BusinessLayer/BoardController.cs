@@ -338,8 +338,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public void loadData()
         {
-            boards = DataUtilities.loadData(boardDalController);
-            boardsOwnerId = DataUtilities.loadData(boardOwnershipDalController);
+            boards = DataUtilities.loadData(boardDalController); // loading boards info from db
+            boardsOwnerId = DataUtilities.loadData(boardOwnershipDalController); // loading boards info from db
+
+            foreach (KeyValuePair<int,int> entry in boardsOwnerId)
+            {
+                
+            }
+           
         }
     }
 }

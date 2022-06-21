@@ -11,20 +11,23 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class UserController
     {
-        private Dictionary<string, User> users;
+        private Dictionary<string, User> usersByName;
+        private Dictionary<int, User> usersById;
 
         private int usersIdCount;
+
         // private int boardIdCOunter;
         private UserDalController userDalController;
 
         public UserController()
         {
             userDalController = new UserDalController();
-            users = new Dictionary<string, User>() ;
-            usersIdCount = (int) userDalController.getSeq() + 1; 
+            usersByName = new Dictionary<string, User>();
+            usersById = new Dictionary<int, User>();
+            usersIdCount = (int)userDalController.getSeq() + 1;
             // boardIdCOunter = 0;
-            //get data into users
-            //users = (convert the list of users <userDTO> to be list of users <User>)
+            //get data into usersByName
+            //usersByName = (convert the list of usersByName <userDTO> to be list of usersByName <User>)
         }
 
         // private Dictionary<string, User> loadData()
@@ -51,6 +54,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception(email + " is invalid");
             }
+
             if (userExists(email))
                 throw new Exception("User with email: " + email + " already exists.");
 
@@ -64,8 +68,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("Problem occurred to add user: " + email + "  to DataBase");
             }
+
             User newUser = new User(email, password, usersIdCount);
-            users.Add(email, newUser);
+            usersByName.Add(email, newUser);
+            usersById.Add(usersIdCount, newUser);
             usersIdCount++;
             newUser.IsLoggedIn = true; //setting automatically the user is logged in
 
@@ -127,11 +133,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception(email + " is invalid");
             }
+
             // email = email.ToLower();
             if (!userExists(email))
                 throw new Exception("Attempt to log in to account with email: " + email + " that doesn't exist!");
 
-            User user = users[email];
+            User user = usersByName[email];
 
             if (!user.isPassword(password))
                 throw new Exception("Attempt to log in to " + email + " with wrong password!");
@@ -151,7 +158,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>True if user exists, false otherwise</returns>
         private bool userExists(string email)
         {
-            return users.ContainsKey(email);
+            return usersByName.ContainsKey(email);
         }
 
         // /// <summary>
@@ -176,7 +183,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!userExists(email))
                 throw new Exception("An account with " + email + " doesn't even exist!");
-            if (!users[email].IsLoggedIn)
+            if (!usersByName[email].IsLoggedIn)
             {
                 throw new Exception(email + " isn't Logged in");
             }
@@ -193,9 +200,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception(email + " is invalid");
             }
+
             // email = email.ToLower();
             isLoggedIn(email);
-            users[email].IsLoggedIn = false;
+            usersByName[email].IsLoggedIn = false;
         }
 
         //
@@ -220,8 +228,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         // }
 
 
-        
-        
         // /// <summary>
         // ///  This method returns the column name of a given column in a given board.
         // /// </summary>
@@ -272,7 +278,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
         //
-        
+
         // /// <summary>
         // ///  This method returns a column from a board.
         // /// </summary>
@@ -301,21 +307,29 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public User getUserAndLogeddin(string email)
         {
             isLoggedIn(email);
-            return users[email];
+            return usersByName[email];
         }
 
         public User getUser(string email)
         {
             if (!userExists(email))
                 throw new Exception("An account with " + email + " doesn't even exist!");
-            return users[email];
+            return usersByName[email];
+        }
+
+        public User getUser(int id)
+        {
+            if (!usersById.ContainsKey(id))
+                throw new Exception("An account with " + id + " does not exist!");
+            return usersById[id];
         }
 
         public void loadData()
         {
-            users = DataUtilities.loadData(userDalController);
-            
+            Dictionary<Dictionary<string, User>, Dictionary<int, User>> returnValue =
+                DataUtilities.loadData(userDalController);
+            usersByName = returnValue.Keys.First();
+            usersById = returnValue.Values.First();
         }
-
     }
 }

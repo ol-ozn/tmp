@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,16 +32,21 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// loads the data of every user(id,email,password)
         /// </summary>
         /// <param name="userDalController">// the users dal controller</param>
-        internal static Dictionary<string, User> loadData(UserDalController userDalController)
+        internal static Dictionary<Dictionary<string, User>, Dictionary<int, User>> loadData(UserDalController userDalController)
         {
-            Dictionary<string, User> usersLoaded = new Dictionary<string, User>();
+            Dictionary<Dictionary<string, User>, Dictionary<int, User>> returnValue = new Dictionary<Dictionary<string, User>, Dictionary<int, User>>();
+            Dictionary<string, User> userByName = new Dictionary<string, User>();
+            Dictionary<int, User> userById = new Dictionary<int, User>();
             List<UserDTO> userDtos = userDalController.SelectAllUsers();
             foreach (UserDTO userDto in userDtos)
             {
-                usersLoaded.Add(userDto.Email, new User(userDto.Email, userDto.Password, (int)userDto.id));
+                userByName.Add(userDto.Email, new User(userDto.Email, userDto.Password, (int)userDto.id));
+                userById.Add((int) userDto.id, new User(userDto.Email, userDto.Password, (int)userDto.id));
             }
-            return usersLoaded;
+            returnValue.Add(userByName,userById);
+            return returnValue;
         }
+
 
         /// <summary>
         /// loads the data of board and his owner(board_id, owner_id)
@@ -56,5 +62,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return boardsOwners;
         }
+
+
+
     }
 }
