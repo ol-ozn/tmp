@@ -213,7 +213,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<Task> list = new List<Task>();
             foreach (Board board in boardListByName.Values)
             {
-                List<Task> l = board.columns["in_progress"];
+                List<Task> l = board.columns["in progress"];
                 if (!l.Any()) //in case the current list is null
                 {
                     continue;
@@ -238,9 +238,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             Board board = uc.getUserAndLogeddin(email).getBoardListByName()[boardName];
             Task task = board.findTaskById(taskId, columnOrdinal);
-            if (task.Assignie == null || task.Assignie.Equals(email))
+            if (task.Assignie == null || email.Equals(task.Assignie))
             {
-                task.Assignie = asignee;
+                task.Assignie = asignee; // sets the new assignee in the RAM
+                taskDalController.Assign(taskId, asignee); // updates the assingee in the db
             }
         }
 
@@ -269,7 +270,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             Board board = user.hasBoardByName(boardName);
             Task task = findTaskById(board, taskId, columnOrdinal);
-            if ((!email.Equals(task.Assignie)) && task.Assignie != null) // in case the user who's trying to progress the task isn't the asignee 
+            if ((!email.Equals(task.Assignie)) &&
+                task.Assignie != null) // in case the user who's trying to progress the task isn't the asignee 
             {
                 throw new Exception("user: " + email + " tried to progress task:" + taskId +
                                     "which he is not assigned to");

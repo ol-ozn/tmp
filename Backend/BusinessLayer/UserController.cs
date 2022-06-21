@@ -65,9 +65,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Problem occurred to add user: " + email + "  to DataBase");
             }
             User newUser = new User(email, password, usersIdCount);
-            
-            usersIdCount++;
             users.Add(email, newUser);
+            usersIdCount++;
             newUser.IsLoggedIn = true; //setting automatically the user is logged in
 
             return newUser;
@@ -199,95 +198,100 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             users[email].IsLoggedIn = false;
         }
 
-
-        /// <summary>
-        ///  This method returns the column limit of a given column in a given board.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <returns>Limit of the given column</returns>
-        public int getColumnLimit(string email, string boardName, int columnId)
-        {
-            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
-
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
-            }
-
-            Board board = user.hasBoardByName(boardName);
-            return board.getColumnLimit(columnId);
-        }
-
-
-        /// <summary>
-        ///  This method returns the column name of a given column in a given board.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <returns>Name of the given column</returns>
-        public string getColumnName(string email, string boardName, int columnId)
-        {
-            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
-
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
-            }
-
-            Board bord = user.hasBoardByName(boardName);
-            return bord.getColumnName(columnId);
-        }
+        //
+        // /// <summary>
+        // ///  This method returns the column limit of a given column in a given board.
+        // /// </summary>
+        // /// <param name="email">The email of the user</param>
+        // /// <param name="boardName">The name of the board</param>
+        // /// <param name="columnId">The id of the column</param>
+        // /// <returns>Limit of the given column</returns>
+        // public int getColumnLimit(string email, string boardName, int columnId)
+        // {
+        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+        //
+        //     if (columnId < 0 || columnId > 2)
+        //     {
+        //         throw new Exception("invalid columnId");
+        //     }
+        //
+        //     Board board = user.hasBoardByName(boardName);
+        //     return board.getColumnLimit(columnId);
+        // }
 
 
-        /// <summary>
-        ///  This method sets the column limit of a given column in a given board.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <param name="limit">The wanted limit for the column</param>
-        /// <returns></returns>
-        public void setColumnLimit(string email, string boardName, int columnId, int limit)
-        {
-            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+        
+        
+        // /// <summary>
+        // ///  This method returns the column name of a given column in a given board.
+        // /// </summary>
+        // /// <param name="email">The email of the user</param>
+        // /// <param name="boardName">The name of the board</param>
+        // /// <param name="columnId">The id of the column</param>
+        // /// <returns>Name of the given column</returns>
+        // public string getColumnName(string email, string boardName, int columnId)
+        // {
+        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+        //
+        //     if (columnId < 0 || columnId > 2)
+        //     {
+        //         throw new Exception("invalid columnId");
+        //     }
+        //
+        //     Board bord = user.hasBoardByName(boardName);
+        //     return bord.getColumnName(columnId);
+        // }
 
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
-            }
+        // //
+        // //
+        // /// <summary>
+        // ///  This method sets the column limit of a given column in a given board.
+        // /// </summary>
+        // /// <param name="email">The email of the user</param>
+        // /// <param name="boardName">The name of the board</param>
+        // /// <param name="columnId">The id of the column</param>
+        // /// <param name="limit">The wanted limit for the column</param>
+        // /// <returns></returns>
+        // public void setColumnLimit(string email, string boardName, int columnId, int limit)
+        // {
+        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+        //
+        //     if (columnId < 0 || columnId > 2)
+        //     {
+        //         throw new Exception("invalid columnId");
+        //     }
+        //
+        //     if (limit < -1)
+        //     {
+        //         throw new Exception("invalid column limit");
+        //     }
+        //
+        //     Board board = user.hasBoardByName(boardName);
+        //     board.setColumnLimit(columnId, limit);
+        // }
 
-            if (limit < -1)
-            {
-                throw new Exception("invalid column limit");
-            }
 
-            Board bord = user.hasBoardByName(boardName);
-            bord.setColumnLimit(columnId, limit);
-        }
-
-
-        /// <summary>
-        ///  This method returns a column from a board.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <returns>List of tasks representing the column</returns>
-        public List<Task> getColumn(string email, string boardName, int columnId)
-        {
-            User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
-
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
-            }
-
-            Board board = user.hasBoardByName(boardName);
-            return board.getColumn(columnId);
-        }
+        //
+        
+        // /// <summary>
+        // ///  This method returns a column from a board.
+        // /// </summary>
+        // /// <param name="email">The email of the user</param>
+        // /// <param name="boardName">The name of the board</param>
+        // /// <param name="columnId">The id of the column</param>
+        // /// <returns>List of tasks representing the column</returns>
+        // public List<Task> getColumn(string email, string boardName, int columnId)
+        // {
+        //     User user = getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+        //
+        //     if (columnId < 0 || columnId > 2)
+        //     {
+        //         throw new Exception("invalid columnId");
+        //     }
+        //
+        //     Board board = user.hasBoardByName(boardName);
+        //     return board.getColumn(columnId);
+        // }
 
         /// <summary>
         ///  This method returns a user.

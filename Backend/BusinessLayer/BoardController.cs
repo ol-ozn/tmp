@@ -20,19 +20,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private BoardsUserOwnershipDalController boardOwnershipDalController;
 
 
-
         public BoardController(ServiceFactory serviceFactory)
         {
             boardOwnershipDalController = new BoardsUserOwnershipDalController();
             boardDalController = new BoardDalController();
             userController = serviceFactory.UserController;
             boards = new Dictionary<int, Board>();
-            boardIdCOunter = (int) boardDalController.getSeq() + 1;
+            boardIdCOunter = (int)boardDalController.getSeq() + 1;
             boardsOwnerId = new Dictionary<int, int>(); //<boardId, OwnerId>
-
         }
-
-       
 
 
         /// <summary>
@@ -65,7 +61,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             bool successInsertBoards = boardDalController.Insert(new BoardDTO(boardIdCOunter, boardName, user.Id,
                 Board.UNLIMITED, Board.UNLIMITED, Board.UNLIMITED));
-            
+
             if (!successInsertBoards)
             {
                 throw new Exception("Problem occurred to add board: " + boardName + "  Boards Table");
@@ -77,6 +73,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("Problem occurred to add board: " + boardName + "  to ownership table");
             }
+
             Board toAdd = new Board(boardName, boardIdCOunter);
             //assigne the board owner to the board id 
             boardsOwnerId.Add(boardIdCOunter, user.Id);
@@ -84,9 +81,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             userBoardsbyName.Add(boardName, toAdd); // adds the board to users board list by name
             userBoardsbyId.Add(boardIdCOunter, toAdd); // adds the board to users board list by ID
             boards.Add(boardIdCOunter, toAdd); // adds the board to the global boards list
-            
+
             boardIdCOunter++; // advances the global board id counter
-            
+
             return toAdd;
         }
 
@@ -145,7 +142,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             User newOwner = userController.getUser(newOwnerEmail);
 
 
-            if (!currentOwner.getBoardListByName().ContainsKey(boardName)) // checks if the user is a member of this board
+            if (!currentOwner.getBoardListByName()
+                    .ContainsKey(boardName)) // checks if the user is a member of this board
             {
                 throw new Exception("this board does not exist");
             }
@@ -156,7 +154,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
 
             Board currentBoard = currentOwner.getBoardListByName()[boardName];
-            if (currentBoard.owner != currentOwner.Id) // if the user who's trying to perform the action is not the owner
+            if (currentBoard.owner !=
+                currentOwner.Id) // if the user who's trying to perform the action is not the owner
             {
                 throw new Exception("a user who is not the owner tried to transfer board ownership");
             }
@@ -193,7 +192,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardToLeave.MemeberList.Remove(email); // removes the user from the boards users list
             leavingUser.getBoardListById().Remove(boardId); // removes the board from the boardList by ID
             leavingUser.getBoardListByName().Remove(boardToLeave.Name); // removes board from the users list by name
-            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId.FirstOrDefault(x => x.Value == "backlog").Key))
+            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId
+                         .FirstOrDefault(x => x.Value == "backlog").Key))
             {
                 if (task.Assignie.Equals(email))
                 {
@@ -201,7 +201,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
             }
 
-            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId.FirstOrDefault(x => x.Value == "in_progress").Key))
+            foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId
+                         .FirstOrDefault(x => x.Value == "in progress").Key))
             {
                 if (task.Assignie.Equals(email))
                 {
@@ -224,8 +225,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             if (!userBoardsbyName.ContainsKey(boardName))
             {
-                throw new Exception("Try to remove a board with the name " + boardName + " which doesn't exist to the email: " + email);
+                throw new Exception("Try to remove a board with the name " + boardName +
+                                    " which doesn't exist to the email: " + email);
             }
+
             Board board = userBoardsbyName[boardName];
             if (!board.owner.Equals(owner.Id))
             {
@@ -248,28 +251,90 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
         /// <summary>
-        //         /// This method limits the number of tasks in a specific column.
-        //         /// </summary>
-        //         /// <param name="email">The email address of the user, must be logged in</param>
-        //         /// <param name="boardName">The name of the board</param>
-        //         /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
-        //         /// <param name="limit">The new limit value. A value of -1 indicates no limit.</param>
-        //         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
-        public void LimitColumn(string email, string boardName, int columnOrdinal, int limit)
+        ///  This method sets the column limit of a given column in a given board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <param name="limit">The wanted limit for the column</param>
+        /// <returns></returns>
+        public void setColumnLimit(string email, string boardName, int columnOrdinal, int limit)
         {
             if (columnOrdinal > 2 || columnOrdinal < 0)
             {
                 throw new Exception(columnOrdinal + " is invalid");
             }
+
             User user = userController.getUserAndLogeddin(email);
-            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-            Board board = userBoardsbyName[boardName];
+            Board board = user.hasBoardByName(boardName);
 
             board.setColumnLimit(columnOrdinal, limit);
-            boardDalController.setColumnLimit(board.Id , board.columnsId[columnOrdinal], limit);
-
+            boardDalController.setColumnLimit(board.Id, board.columnsId[columnOrdinal], limit);
         }
+
+
+        /// <summary>
+        ///  This method returns the column limit of a given column in a given board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <returns>Limit of the given column</returns>
+        public int getColumnLimit(string email, string boardName, int columnId)
+        {
+            User user = userController.getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+
+            if (columnId < 0 || columnId > 2)
+            {
+                throw new Exception("invalid columnId");
+            }
+
+            Board board = user.hasBoardByName(boardName);
+            return board.getColumnLimit(columnId);
+        }
+
+        /// <summary>
+        ///  This method returns the column name of a given column in a given board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <returns>Name of the given column</returns>
+        public string getColumnName(string email, string boardName, int columnId)
+        {
+            User user = userController.getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+
+            if (columnId < 0 || columnId > 2)
+            {
+                throw new Exception("invalid columnId");
+            }
+
+            Board board = user.hasBoardByName(boardName);
+            return board.getColumnName(columnId);
+        }
+
+
+        /// <summary>
+        ///  This method returns a column from a board.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board</param>
+        /// <param name="columnId">The id of the column</param>
+        /// <returns>List of tasks representing the column</returns>
+        public List<Task> getColumn(string email, string boardName, int columnId)
+        {
+            User user = userController.getUserAndLogeddin(email); //check if exists and if logged in is in getUser
+
+            if (columnId < 0 || columnId > 2)
+            {
+                throw new Exception("invalid columnId");
+            }
+
+            Board board = user.hasBoardByName(boardName);
+            return board.getColumn(columnId);
+        }
+
+
 
         public void loadData()
         {

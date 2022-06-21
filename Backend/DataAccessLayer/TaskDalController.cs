@@ -39,8 +39,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 try
                 {
                     connection.Open();
-                    command.CommandText = $"INSERT INTO {TasksTableName} ({DTO.IDColumnName} ,{TaskDTO.TasksTitleColumnName}, {TaskDTO.TasksDescriptionColumnName}, {TaskDTO.TasksBoardIdColumnName}, {TaskDTO.TasksCreationTimeColumnName}, {TaskDTO.TasksDueDateColumnName}, {TaskDTO.TaskColumnOrdianlName}, {TaskDTO.Taskassignie}) " +
-                        $"VALUES (@idVal,@titleVal,@descriptionVal,@boardIdVal,@creationTimeVal,@dueDateVal,@ordinalVal,@assignieVal);";
+                    command.CommandText = $"INSERT INTO {TasksTableName} ({DTO.IDColumnName} ,{TaskDTO.TasksTitleColumnName}, {TaskDTO.TasksDescriptionColumnName}, {TaskDTO.TasksBoardIdColumnName}, {TaskDTO.TasksCreationTimeColumnName}, {TaskDTO.TasksDueDateColumnName}, {TaskDTO.TaskColumnOrdianlName}, {TaskDTO.TaskAssigneeName}) " +
+                        $"VALUES (@idVal,@titleVal,@descriptionVal,@boardIdVal,@creationTimeVal,@dueDateVal,@ordinalVal,@assigneeVal);";
 
                     SQLiteParameter idParam = new SQLiteParameter(@"idVal", task.id);
                     SQLiteParameter titleParam = new SQLiteParameter(@"titleVal", task.Title);
@@ -49,7 +49,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     SQLiteParameter creationTimeParam = new SQLiteParameter(@"creationTimeVal", task.CreationTime);
                     SQLiteParameter dueDateParam = new SQLiteParameter(@"dueDateVal", task.DueDate);
                     SQLiteParameter ordinalParam = new SQLiteParameter(@"ordinalVal", task.ColumnOrdinal);
-                    SQLiteParameter assignieParam = new SQLiteParameter(@"assignieVal", task.Assignie);
+                    SQLiteParameter assignieParam = new SQLiteParameter(@"assigneeVal", task.Assignee);
 
 
                     command.Parameters.Add(idParam);
@@ -88,14 +88,51 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 {
                     connection.Open();
                     command.CommandText =
-                        $"UPDATE {TasksTableName} SET column_ordinal = @ordinal Where id = @taskid; ";
+                        $"UPDATE {TasksTableName} SET column_ordinal = @ordinal Where id = @taskId; ";
 
 
-                    SQLiteParameter taskidParam = new SQLiteParameter(@"taskid", taskId);
+                    SQLiteParameter taskidParam = new SQLiteParameter(@"taskId", taskId);
                     SQLiteParameter ordinalParam = new SQLiteParameter(@"ordinal", newColumnOrdinal);
 
                     command.Parameters.Add(taskidParam);
                     command.Parameters.Add(ordinalParam);
+
+
+                    command.Prepare();
+                    res = command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    //log error
+                }
+                finally
+                {
+                    command.Dispose();
+                    connection.Close();
+
+                }
+                return res > 0;
+            }
+        }
+
+        public bool Assign(int taskId, string asignee)
+        {
+            using (var connection = new SQLiteConnection(_connectionString))
+            {
+                SQLiteCommand command = new SQLiteCommand(null, connection);
+                int res = -1;
+                try
+                {
+                    connection.Open();
+                    command.CommandText =
+                        $"UPDATE {TasksTableName} SET asignee = @newAsignee Where id = @taskid; ";
+
+
+                    SQLiteParameter taskidParam = new SQLiteParameter(@"taskid", taskId);
+                    SQLiteParameter assigneeParam = new SQLiteParameter(@"newAsignee", asignee);
+
+                    command.Parameters.Add(taskidParam);
+                    command.Parameters.Add(assigneeParam);
 
 
                     command.Prepare();

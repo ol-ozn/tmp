@@ -14,39 +14,96 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public const string TasksCreationTimeColumnName = "creation_time";
         public const string TasksDueDateColumnName = "due_date";
         public const string TaskColumnOrdianlName = "column_ordinal";
-        public const string Taskassignie = "assignie";
+        public const string TaskAssigneeName = "assignee";
 
         private string title;
 
-        public string Title { get => title; set { title = value; _controller.Update(id, TasksTitleColumnName, value); } }
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                _controller.Update(id, TasksTitleColumnName, value);
+            }
+        }
 
         private string description;
 
-        public string Description { get => description; set { description = value; _controller.Update(id, TasksDescriptionColumnName, value); } }
+        public string Description
+        {
+            get => description;
+            set
+            {
+                description = value;
+                _controller.Update(id, TasksDescriptionColumnName, value);
+            }
+        }
 
         private int boardId;
 
-        public int BoardId { get => boardId; set { boardId = value; _controller.Update(id, TasksBoardIdColumnName, value); } }
+        public int BoardId
+        {
+            get => boardId;
+            set
+            {
+                boardId = value;
+                _controller.Update(id, TasksBoardIdColumnName, value);
+            }
+        }
 
 
         private DateTime creationTime;
 
-        public DateTime CreationTime { get => creationTime; set { creationTime = value; _controller.Update(id, TasksCreationTimeColumnName, value.ToString()); } }
+        public DateTime CreationTime
+        {
+            get => creationTime;
+            set
+            {
+                creationTime = value;
+                _controller.Update(id, TasksCreationTimeColumnName, value.ToString());
+            }
+        }
 
 
         private DateTime dueDate;
 
-        public DateTime DueDate { get => dueDate; set { dueDate = value; _controller.Update(id, TasksDueDateColumnName, value.ToString()); } }
+        public DateTime DueDate
+        {
+            get => dueDate;
+            set
+            {
+                dueDate = value;
+                _controller.Update(id, TasksDueDateColumnName, value.ToString());
+            }
+        }
 
         private string columnOrdinal;
 
-        public string ColumnOrdinal { get => columnOrdinal; set { columnOrdinal = value; _controller.Update(id, TaskColumnOrdianlName, value); } }
+        public string ColumnOrdinal
+        {
+            get => columnOrdinal;
+            set
+            {
+                columnOrdinal = value;
+                _controller.Update(id, TaskColumnOrdianlName, value);
+            }
+        }
 
-        private string assignie;
+        private string assignee;
 
-        public string Assignie { get => assignie; set { assignie= value; _controller.Update(id, TaskColumnOrdianlName, value); } }
+        public string Assignee
+        {
+            get => assignee;
+            set
+            {
+                assignee = value;
+                _controller.Update(id, TaskColumnOrdianlName, value);
+            }
+        }
 
-        public TaskDTO(long id, string title, string description, int boardId, DateTime creationTime, DateTime dueDate, string columnOrdinal, string assignie) : base(new TaskDalController())
+        public TaskDTO(long id, string title, string description, int boardId, DateTime creationTime, DateTime dueDate,
+            string columnOrdinal, string assignee) : base(new TaskDalController())
         {
             this.id = id;
             this.title = title;
@@ -55,6 +112,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.creationTime = creationTime;
             this.dueDate = dueDate;
             this.columnOrdinal = columnOrdinal;
+            this.assignee = assignee;
         }
     }
 }

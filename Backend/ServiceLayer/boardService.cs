@@ -72,8 +72,8 @@ public class BoardService
     {
         try
         {
-            boardController.LimitColumn(email, boardName, columnOrdinal, limit);
-            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            boardController.setColumnLimit(email, boardName, columnOrdinal, limit);
+            log.Info("The limit of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " was set to " + limit);
             return new Response(null, null);
         }
@@ -95,8 +95,8 @@ public class BoardService
     {
         try
         {
-            int columnLimit = userController.getColumnLimit(email, boardName, columnOrdinal);
-            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            int columnLimit = boardController.getColumnLimit(email, boardName, columnOrdinal);
+            log.Info("The limit of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " has been accessed");
             return new Response(null, columnLimit);
         }
@@ -118,8 +118,8 @@ public class BoardService
     {
         try
         {
-            string columnName = userController.getColumnName(email, boardName, columnOrdinal);
-            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            string columnName = boardController.getColumnName(email, boardName, columnOrdinal);
+            log.Info("The name of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " has been accessed");
             return new Response(null, columnName);
         }
@@ -141,8 +141,8 @@ public class BoardService
     {
         try
         {
-            List<Task> column = userController.getColumn(email, boardName, columnOrdinal);
-            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            List<Task> column = boardController.getColumn(email, boardName, columnOrdinal);
+            log.Info("The name of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " has been accessed");
             return new Response(null, column);
         }

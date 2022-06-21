@@ -10,8 +10,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public static class DataUtilities
     {
-       
 
+
+        /// <summary>
+        /// loads the data of every board(id,board_name,board_owner,backlog_limit etc)
+        /// </summary>
+        /// <param name="boardDalController">// the boards dal controller</param>
         internal static Dictionary<int, Board> loadData(BoardDalController boardDalController)
         {
             Dictionary<int, Board> boardsLoaded = new Dictionary<int, Board>();
@@ -23,6 +27,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return boardsLoaded;
         }
 
+        /// <summary>
+        /// loads the data of every user(id,email,password)
+        /// </summary>
+        /// <param name="userDalController">// the users dal controller</param>
         internal static Dictionary<string, User> loadData(UserDalController userDalController)
         {
             Dictionary<string, User> usersLoaded = new Dictionary<string, User>();
@@ -34,6 +42,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return usersLoaded;
         }
 
+        /// <summary>
+        /// loads the data of board and his owner(board_id, owner_id)
+        /// </summary>
+        /// <param name="boardsUserOwnershipDalController">// the board owners dal controller</param>
         internal static Dictionary<int, int> loadData(BoardsUserOwnershipDalController boardsUserOwnershipDalController)
         {
             Dictionary<int, int> boardsOwners = new Dictionary<int, int>();

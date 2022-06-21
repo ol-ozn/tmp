@@ -17,7 +17,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public readonly Dictionary<int, string> columnsId = new Dictionary<int, string> // dictionary< columnsId, ColumnsTitle>
         {
             { 0, "backlog" },
-            { 1, "in_progress" },
+            { 1, "in progress" },
             { 2, "done" }
         };
 
@@ -56,7 +56,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void initColumns()
         {
             columns.Add("backlog", new List<Task>());
-            columns.Add("in_progress", new List<Task>());
+            columns.Add("in progress", new List<Task>());
             columns.Add("done", new List<Task>());
         }
 
@@ -73,7 +73,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return LimitBacklog;
             }
 
-            else if (columnId == columnsId.FirstOrDefault(x => x.Value == "in_progress").Key)
+            else if (columnId == columnsId.FirstOrDefault(x => x.Value == "in progress").Key)
             {
                 return limitInProgress;
             }
@@ -90,7 +90,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 LimitBacklog = newLimit;
             }
 
-            if (columnId == columnsId.FirstOrDefault(x => x.Value == "in_progress").Key)
+            if (columnId == columnsId.FirstOrDefault(x => x.Value == "in progress").Key)
             {
                 limitInProgress = newLimit;
             }
@@ -139,7 +139,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return 0;
             }
 
-            if (columnName.Equals("in_progress"))
+            if (columnName.Equals("in progress"))
             {
                 return 1;
             }
