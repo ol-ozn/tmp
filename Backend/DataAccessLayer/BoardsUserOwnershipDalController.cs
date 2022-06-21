@@ -64,7 +64,31 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 return res > 0;
             }
         }
+        public bool Delete(BoardUserOwnershipDTO boardUserOwnershipDto)
+        {
+            int res = -1;
 
+            using (var connection = new SQLiteConnection(_connectionString))
+            {
+                var command = new SQLiteCommand
+                {
+                    Connection = connection,
+                    CommandText = $"delete from {BoardsUsersOwnershipTableName} where board_id={boardUserOwnershipDto.BoardId} and user_id={boardUserOwnershipDto.UserID}"
+                };
+                try
+                {
+                    connection.Open();
+                    res = command.ExecuteNonQuery();
+                }
+                finally
+                {
+                    command.Dispose();
+                    connection.Close();
+                }
+
+            }
+            return res > 0;
+        }
 
     }
 }

@@ -12,7 +12,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     {
         public const int UNLIMITED = -1;
         private string name;
-        public string Name { get; }
+        public string Name
+        {
+            get { return name; }
+        }
 
         public readonly Dictionary<int, string> columnsId = new Dictionary<int, string> // dictionary< columnsId, ColumnsTitle>
         {
@@ -31,11 +34,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public int LimitBacklog { get; set; }
         public int limitInProgress { get; set; }
         public int LimitDone { get; set; }
-        public int owner { get; set; }
+
+        private int owner;
+        public int Owner
+        {
+            get { return owner; }
+            set { owner = value; }
+        }
 
         private HashSet<string> memeberList; // each board holds its members
 
-        public HashSet<string> MemeberList { get; }
+        public HashSet<string> MemeberList
+        {
+            get { return memeberList; }
+        }
 
 
 
@@ -51,6 +63,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.LimitBacklog = UNLIMITED;
             this.limitInProgress = UNLIMITED;
             this.LimitDone = UNLIMITED;
+
+            memeberList = new HashSet<string>();
         }
 
         public void initColumns()

@@ -331,5 +331,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             usersByName = returnValue.Keys.First();
             usersById = returnValue.Values.First();
         }
+
+        public List<int> getUserBoards(string email)
+        {
+            User user = getUserAndLogeddin(email); //todo: check if user has to be logged in
+            List<int> userBoardsIds = user.getBoardListById().Keys.ToList();
+            return userBoardsIds; 
+        }
     }
 }

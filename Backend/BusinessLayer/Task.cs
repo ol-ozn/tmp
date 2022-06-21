@@ -50,6 +50,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             set { dueDate = value; }
         }
 
+        [JsonIgnore]
         public string columnOrdinal { get; set; }
 
         

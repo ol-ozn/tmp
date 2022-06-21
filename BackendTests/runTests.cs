@@ -195,21 +195,52 @@ namespace BackendTests
             Console.WriteLine("if the user managed to register this should return: {} ");
             Console.WriteLine(gs.Register("olga@gmail.com", "12345Ab"));
 
-            Console.WriteLine("\n");
-            
-            Console.WriteLine("if the user managed to add board this should return: {} ");
+
+            Console.WriteLine("if the user managed to register this should return: {} ");
             Console.WriteLine(gs.AddBoard("olga@gmail.com", "board1"));
-            
+
+            //
             Console.WriteLine("\n");
             
             Console.WriteLine("if the user added a task, this should return: {} :");
             Console.WriteLine(gs.AddTask("olga@gmail.com", "board1", "title1", "f this s", DateTime.Now));
-            
-            Console.WriteLine("\n");
-            Console.WriteLine("if the user advanced a task, this should return: {} :");
-            Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
 
+
+            //
+            // // Console.WriteLine("\n");
+            // // Console.WriteLine("if the user advanced a task, this should return: {} :");
+            // // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
+            //
             // Console.WriteLine(gs.Register("yonatna@gmail.com", "12345Ab"));
+            //
+            // Console.WriteLine("if the user managed to register this should return: {} ");
+            // Console.WriteLine(gs.JoinBoard("yonatna@gmail.com", 1));
+            //
+            //
+            // Console.WriteLine("if the user managed to register this should return: {} ");
+            // Console.WriteLine(gs.RemoveBoard("olga@gmail.com", "board1"));
+
+
+            //
+            // // ServiceFactory sf = new ServiceFactory();
+            //
+            //
+            // Console.WriteLine("\n");
+            // Console.WriteLine("if the user managed to add board this should return: {} ");
+            // Console.WriteLine(gs.AddBoard("yonatna@gmail.com", "board1"));
+            //
+            // Console.WriteLine("\n");
+            // Console.WriteLine("if the user managed to add board this should return: {} ");
+            // Console.WriteLine(gs.AddBoard("yonatna@gmail.com", "board2"));
+            //
+            // Console.WriteLine("\n");
+            // Console.WriteLine("if the user managed to join board this should return: {} ");
+            // Console.WriteLine(gs.JoinBoard("olga@gmail.com", 2));
+            //
+            // Console.WriteLine("\n");
+            // Console.WriteLine("if the user managed to add board this should return: {} ");
+            // Console.WriteLine(gs.JoinBoard("olga@gmail.com", 3));
+
             // Console.WriteLine(gs.Register("amit@gmail.com", "12345Ab"));
             // Console.WriteLine(gs.Register("amit@gmail.com", "12345Ab"));
             // Console.WriteLine(gs.Register("dani@gmail.com", "12345Ab"));
@@ -234,18 +265,18 @@ namespace BackendTests
             //
             // Console.WriteLine("trying to advance a task");
             // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 0));
-           
+
             // // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board2", 0, 1));
             // //
             // // Console.WriteLine(gs.AdvanceTask("olga@gmail.com", "board1", 0, 1));
             //
             // Console.WriteLine("\n");
             // Console.WriteLine("backlog: ");
-            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+            // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
             // Console.WriteLine("\n");
             // Console.WriteLine("in progress: ");
-            Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
-            Console.WriteLine(gs.LimitColumn("olga@gmail.com", "board1", 1, 5));
+            // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 0));
+            // Console.WriteLine(gs.LimitColumn("olga@gmail.com", "board1", 1, 5));
             // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board2", 1));
             // Console.WriteLine("\n");
             // Console.WriteLine("done: ");

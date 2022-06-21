@@ -74,7 +74,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        public bool setColumnLimit(int boardId, string columnName, int newlimit)
+        public bool setColumnLimit(int boardId, string columnName, int newlimit) //todo: change to "update" function in DALC
         {
             using (var connection = new SQLiteConnection(_connectionString))
             {

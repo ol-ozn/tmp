@@ -63,7 +63,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return boardsOwners;
         }
 
-
+        internal static Dictionary<int, int> loadData(BoardsMembersDalController boardsMembersDalController)
+        {
+            Dictionary<int, int> boardsMembers = new Dictionary<int, int>();
+            List<BoardsMembersDTO> BoardsMembersDtos = boardsMembersDalController.SelectAllBoardsMembersDtos();
+            foreach (BoardsMembersDTO boardMembersDto in BoardsMembersDtos)
+            {
+                boardsMembers.Add(boardMembersDto.BoardId, boardMembersDto.MemberID);
+            }
+            return boardsMembers;
+        }
 
     }
 }

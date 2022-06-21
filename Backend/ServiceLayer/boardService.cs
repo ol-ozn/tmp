@@ -204,9 +204,24 @@ public class BoardService
     {
         try
         {
-            boardController.removeBoard(email, name);
+            boardController.removeBoard(name, email);
             log.Info("user: " + email + " deleted board: " + name);
             return new Response(null, null);
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    public Response getBoardName(int boardId)
+    {
+        try
+        {
+            string boardName = boardController.getBoardName(boardId);
+            log.Info("returned board name = " + boardName);
+            return new Response(null, boardName);
         }
         catch (Exception e)
         {

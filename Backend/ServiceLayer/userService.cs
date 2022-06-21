@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
@@ -93,4 +94,18 @@ public class UserService
     //     }
     // }
 
+    public Response GetUserBoards(string email)
+    {
+        try
+        {
+            List<int> userBoards = userController.getUserBoards(email);
+            log.Info("Returned list of board ids of user " + email);
+            return new Response(null, userBoards);
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
 }
