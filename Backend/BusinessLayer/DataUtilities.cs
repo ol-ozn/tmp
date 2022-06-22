@@ -58,20 +58,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return returnValue;
         }
 
-        /// <summary>
-        /// loads the data of board and his owner(board_id, owner_id)
-        /// </summary>
-        /// <param name="boardsUserOwnershipDalController">// the board owners dal controller</param>
-        internal static Dictionary<int, int> loadData(BoardsUserOwnershipDalController boardsUserOwnershipDalController)
-        {
-            Dictionary<int, int> boardsOwners = new Dictionary<int, int>();
-            List<BoardUserOwnershipDTO> BoardUserOwnershipDtos = boardsUserOwnershipDalController.SelectAllBoardUserOwnershipDtos();
-            foreach (BoardUserOwnershipDTO boardUserOwnershipDto in BoardUserOwnershipDtos)
-            {
-                boardsOwners.Add(boardUserOwnershipDto.BoardId,boardUserOwnershipDto.UserID);
-            }
-            return boardsOwners;
-        }
+   
         internal static List<(int boardId, int memberId)> loadData(BoardsMembersDalController boardsMembersDalController)
         {
             List<(int boardId, int memberId)> boardsMembers = new List<(int boardId, int memberId)>();

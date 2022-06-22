@@ -20,7 +20,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private UserController uc;
 
         private TaskDalController taskDalController;
-        private BoardsTasksContainDalController boardsTasksContainDalController;
         public TaskController(ServiceFactory serviceFactory)
         {
             taskDalController = new TaskDalController();

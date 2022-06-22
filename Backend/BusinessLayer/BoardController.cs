@@ -17,17 +17,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private int boardIdCOunter;
 
         private BoardDalController boardDalController;
-        private BoardsUserOwnershipDalController boardOwnershipDalController;
         private BoardsMembersDalController boardsMembersDalController;
-        private BoardsTasksContainDalController boardsTasksContainDalController;
         private TaskDalController taskDalController;
 
         public BoardController(ServiceFactory serviceFactory)
         {
-            boardOwnershipDalController = new BoardsUserOwnershipDalController();
             boardsMembersDalController = new BoardsMembersDalController();
             boardDalController = new BoardDalController();
-            boardsTasksContainDalController = new BoardsTasksContainDalController();
             taskDalController = new TaskDalController();
 
             userController = serviceFactory.UserController;
@@ -63,7 +59,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             boardDalController.Insert(new BoardDTO(boardIdCOunter, boardName, user.Id,
                 Board.UNLIMITED, Board.UNLIMITED, Board.UNLIMITED));
-            boardOwnershipDalController.Insert(new BoardUserOwnershipDTO(boardIdCOunter, user.Id));
             boardsMembersDalController.Insert(new BoardsMembersDTO(boardIdCOunter, user.Id));
 
             Board toAdd = new Board(boardName, boardIdCOunter);
@@ -161,8 +156,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             //todo: erase after deleting ownership table
             //updating the ownership table todo: maybe make an update func that will do 'set userId = newOwnerId where boardId=boardId and userId = currOwnerId' - so that there's only one access to database
-            boardOwnershipDalController.Delete(new BoardUserOwnershipDTO(currentBoard.Id, currentOwner.Id));
-            boardOwnershipDalController.Insert(new BoardUserOwnershipDTO(currentBoard.Id, newOwner.Id));
         }
 
 
@@ -250,9 +243,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             //todo: if erasing linking tables delete 253,255
             boardsMembersDalController.DeleteBoard(board.Id);
-            boardOwnershipDalController.Delete(new BoardUserOwnershipDTO(board.Id, owner.Id));
-
-            boardsTasksContainDalController.DeleteBoard(board.Id);
             taskDalController.DeleteBoard(board.Id);
 
             userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
