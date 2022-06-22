@@ -60,7 +60,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             //adding to db
             taskDalController.Insert(new TaskDTO(taskId, title, description, boardbyName.Id,
                 newTask.CreationTime, dueTime, "backlog", newTask.Assignie));
-            boardsTasksContainDalController.Insert(new BoardsTasksContainDTO(boardbyName.Id, user.Id));
+            // boardsTasksContainDalController.Insert(new BoardsTasksContainDTO(boardbyName.Id, user.Id));
             
             taskId++; 
             boardbyName.columns["backlog"].Add(newTask);

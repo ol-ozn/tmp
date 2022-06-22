@@ -56,21 +56,21 @@ namespace BackendTests
             // Console.WriteLine("\n");
             //
             //
-            // Console.WriteLine("if the user added a task, his email should be the returned value:");
-            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 1",
-            //     new DateTime(2026, 5, 5)));
-            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 2 ",
-            //     new DateTime(2026, 6, 5)));
-            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title3", "bla bla 3",
-            //     new DateTime(2026, 7, 5)));
-            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title4", "bla bla 4",
-            //     new DateTime(2026, 8, 5)));
-            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title5", "bla bla 5",
-            //     new DateTime(2026, 9, 5)));
-            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title6", "bla bla 5",
-            //     new DateTime(2026, 9, 5)));
-            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board2", "title7", "bla bla 6",
-            //     new DateTime(2026, 10, 5)));
+            Console.WriteLine("if the user added a task, his email should be the returned value:");
+            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 1",
+                new DateTime(2026, 5, 5)));
+            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 2 ",
+                new DateTime(2026, 6, 5)));
+            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title3", "bla bla 3",
+                new DateTime(2026, 7, 5)));
+            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title4", "bla bla 4",
+                new DateTime(2026, 8, 5)));
+            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title5", "bla bla 5",
+                new DateTime(2026, 9, 5)));
+            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title6", "bla bla 5",
+                new DateTime(2026, 9, 5)));
+            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board2", "title7", "bla bla 6",
+                new DateTime(2026, 10, 5)));
             //
             // Console.WriteLine("\n");
             //
