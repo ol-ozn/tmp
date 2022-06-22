@@ -78,42 +78,42 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        // public bool Advance(int taskId, string newColumnOrdinal)
-        // {
-        //     using (var connection = new SQLiteConnection(_connectionString))
-        //     {
-        //         SQLiteCommand command = new SQLiteCommand(null, connection);
-        //         int res = -1;
-        //         try
-        //         {
-        //             connection.Open();
-        //             command.CommandText =
-        //                 $"UPDATE {TasksTableName} SET column_ordinal = @ordinal Where id = @taskId; ";
-        //
-        //
-        //             SQLiteParameter taskidParam = new SQLiteParameter(@"taskId", taskId);
-        //             SQLiteParameter ordinalParam = new SQLiteParameter(@"ordinal", newColumnOrdinal);
-        //
-        //             command.Parameters.Add(taskidParam);
-        //             command.Parameters.Add(ordinalParam);
-        //
-        //
-        //             command.Prepare();
-        //             res = command.ExecuteNonQuery();
-        //         }
-        //         catch (Exception ex)
-        //         {
-        //             //log error
-        //         }
-        //         finally
-        //         {
-        //             command.Dispose();
-        //             connection.Close();
-        //
-        //         }
-        //         return res > 0;
-        //     }
-        // }
+        public bool Advance(int taskId, string newColumnOrdinal)
+        {
+            using (var connection = new SQLiteConnection(_connectionString))
+            {
+                SQLiteCommand command = new SQLiteCommand(null, connection);
+                int res = -1;
+                try
+                {
+                    connection.Open();
+                    command.CommandText =
+                        $"UPDATE {TasksTableName} SET column_ordinal = @ordinal Where id = @taskId; ";
+        
+        
+                    SQLiteParameter taskidParam = new SQLiteParameter(@"taskId", taskId);
+                    SQLiteParameter ordinalParam = new SQLiteParameter(@"ordinal", newColumnOrdinal);
+        
+                    command.Parameters.Add(taskidParam);
+                    command.Parameters.Add(ordinalParam);
+        
+        
+                    command.Prepare();
+                    res = command.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    //log error
+                }
+                finally
+                {
+                    command.Dispose();
+                    connection.Close();
+        
+                }
+                return res > 0;
+            }
+        }
 
         // public bool Assign(int taskId, string asignee)
         // {

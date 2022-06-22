@@ -301,8 +301,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             tasksList.Remove(task);
             List<Task> newtasksList = board.getColumn(columnOrdinal + 1);
             newtasksList.Add(task);
-            // taskDalController.Advance(taskId, newColumnOrdinal);
-            taskDalController.Update(taskId, TaskDTO.TaskColumnOrdianlName, newColumnOrdinal);
+            taskDalController.Advance(taskId, newColumnOrdinal);
+           
         }
 
         public void resetData()
