@@ -25,7 +25,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         protected override DTO ConvertReaderToObject(SQLiteDataReader reader)
         {
-            UserDTO result = new UserDTO((long)reader.GetValue(0), reader.GetString(1), reader.GetString(2));
+            UserDTO result = new UserDTO(reader.GetInt32(0), reader.GetString(1), reader.GetString(2));
 
             return result;
         }
@@ -53,7 +53,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
-                    //log error
+                    log.Fatal("Couldn't write to " + UsersTableName);
+
                 }
                 finally
                 {

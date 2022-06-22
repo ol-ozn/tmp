@@ -280,7 +280,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             } 
 
             board.setColumnLimit(columnOrdinal, limit);
-            boardDalController.setColumnLimit(board.Id, board.columnsId[columnOrdinal], limit);
+            boardDalController.Update(board.Id, board.columnsId[columnOrdinal], limit);
+            // boardDalController.setColumnLimit(board.Id, board.columnsId[columnOrdinal], limit);
         }
 
 

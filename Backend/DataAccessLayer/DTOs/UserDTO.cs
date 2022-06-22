@@ -20,7 +20,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         private List<BoardDTO> userBoardsDTOs;
 
-        public UserDTO(long id, string email, string password) : base(new UserDalController())
+        public UserDTO(int id, string email, string password) : base(new UserDalController())
         {
             this.id = id;
             this.email = email;

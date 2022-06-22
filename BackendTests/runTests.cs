@@ -39,9 +39,12 @@ namespace BackendTests
             // // // // //
             // // // Console.WriteLine("\n");
             // // //
+
             Console.WriteLine("if user added a board this should return: {} ");
             Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board1"));
             Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board2"));
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine(gradingService.LimitColumn("amir@gmail.com", "board1", 2, 9));
             // //
             // Console.WriteLine("\n");
             //
@@ -80,7 +83,15 @@ namespace BackendTests
             
             Console.WriteLine(
                 "if user managed to get the limit number of tasks in his column this should return: int value");
+            Console.WriteLine(gradingService.AssignTask("amir@gmail.com", "board1", 0, 1, "amir@gmail.com"));
+            Console.WriteLine(gradingService.AssignTask("amir@gmail.com", "board2", 0, 6, "amir@gmail.com"));
             Console.WriteLine(gradingService.GetColumnLimit("amir@gmail.com", "board1", 0));
+            Console.WriteLine("___________-----------_________________");
+            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 0, 1));
+            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 1, 1));
+            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 2, 1));
+            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 3, 1));
+            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board2", 0, 6));
             //
             // Console.WriteLine("\n");
             //

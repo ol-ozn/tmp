@@ -26,7 +26,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         protected override DTO ConvertReaderToObject(SQLiteDataReader reader)
         {
             // TaskDTO result = new TaskDTO( reader.GetInt64(0),reader.GetString(1),reader.GetString(2), reader.GetInt32(3),reader.GetDateTime(4),reader.GetDateTime(5),reader.GetString(6),reader.GetString(7));
-            TaskDTO result = new TaskDTO((long)reader.GetValue(0), reader.GetString(1), reader.GetString(2), (int)(long)reader.GetValue(3), DateTime.Parse(reader.GetString(4)), DateTime.Parse(reader.GetString(5)), reader.GetString(6), reader.GetString(7));
+            TaskDTO result = new TaskDTO(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetInt32(3), reader.GetDateTime(4), reader.GetDateTime(5), reader.GetString(6), reader.GetString(7));
             return result;
         }
 
@@ -66,7 +66,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
-                    //log error
+                    log.Fatal("Couldn't write to " + TasksTableName);
                 }
                 finally
                 {
@@ -78,42 +78,42 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        public bool Advance(int taskId, string newColumnOrdinal)
-        {
-            using (var connection = new SQLiteConnection(_connectionString))
-            {
-                SQLiteCommand command = new SQLiteCommand(null, connection);
-                int res = -1;
-                try
-                {
-                    connection.Open();
-                    command.CommandText =
-                        $"UPDATE {TasksTableName} SET column_ordinal = @ordinal Where id = @taskId; ";
-
-
-                    SQLiteParameter taskidParam = new SQLiteParameter(@"taskId", taskId);
-                    SQLiteParameter ordinalParam = new SQLiteParameter(@"ordinal", newColumnOrdinal);
-
-                    command.Parameters.Add(taskidParam);
-                    command.Parameters.Add(ordinalParam);
-
-
-                    command.Prepare();
-                    res = command.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    //log error
-                }
-                finally
-                {
-                    command.Dispose();
-                    connection.Close();
-
-                }
-                return res > 0;
-            }
-        }
+        // public bool Advance(int taskId, string newColumnOrdinal)
+        // {
+        //     using (var connection = new SQLiteConnection(_connectionString))
+        //     {
+        //         SQLiteCommand command = new SQLiteCommand(null, connection);
+        //         int res = -1;
+        //         try
+        //         {
+        //             connection.Open();
+        //             command.CommandText =
+        //                 $"UPDATE {TasksTableName} SET column_ordinal = @ordinal Where id = @taskId; ";
+        //
+        //
+        //             SQLiteParameter taskidParam = new SQLiteParameter(@"taskId", taskId);
+        //             SQLiteParameter ordinalParam = new SQLiteParameter(@"ordinal", newColumnOrdinal);
+        //
+        //             command.Parameters.Add(taskidParam);
+        //             command.Parameters.Add(ordinalParam);
+        //
+        //
+        //             command.Prepare();
+        //             res = command.ExecuteNonQuery();
+        //         }
+        //         catch (Exception ex)
+        //         {
+        //             //log error
+        //         }
+        //         finally
+        //         {
+        //             command.Dispose();
+        //             connection.Close();
+        //
+        //         }
+        //         return res > 0;
+        //     }
+        // }
 
         // public bool Assign(int taskId, string asignee)
         // {

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
@@ -12,6 +14,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
     {
         protected readonly string _connectionString;
         private readonly string _tableName;
+        protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public DalController(string tableName)
         {
@@ -39,7 +42,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
                 catch
                 {
-                    //log
+                    log.Fatal("Couldn't write to " + _tableName);
                 }
                 finally
                 {

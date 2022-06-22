@@ -30,7 +30,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         private int doneLimit;
         public int DoneLimit { get => doneLimit; set { doneLimit = value; _controller.Update(id, BoardsDoneLimitColumnName, value); } }
 
-        public BoardDTO(long id, string boardName, int boardOwnerId, int backlogLimit, int inProgressLimit,
+        public BoardDTO(int id, string boardName, int boardOwnerId, int backlogLimit, int inProgressLimit,
             int doneLimit) : base(new BoardDalController())
         {
             this.id = id;

@@ -102,7 +102,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        public TaskDTO(long id, string title, string description, int boardId, DateTime creationTime, DateTime dueDate,
+        public TaskDTO(int id, string title, string description, int boardId, DateTime creationTime, DateTime dueDate,
             string columnOrdinal, string assignee) : base(new TaskDalController())
         {
             this.id = id;

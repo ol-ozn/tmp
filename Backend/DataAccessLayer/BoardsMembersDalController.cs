@@ -53,7 +53,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
-                    //log error
+                    log.Fatal("Couldn't write to " + BoardsMembersTableName);
                 }
                 finally
                 {

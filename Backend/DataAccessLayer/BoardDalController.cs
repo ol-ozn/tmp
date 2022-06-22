@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     public class BoardDalController : DalController
     {
         private const string BoardsTableName = "Boards";
+        
 
         public BoardDalController() : base(BoardsTableName)
         {
@@ -25,7 +28,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         protected override DTO ConvertReaderToObject(SQLiteDataReader reader)
         {
-            BoardDTO result = new BoardDTO((long)reader.GetValue(0), reader.GetString(1), (int)(long)reader.GetValue(2), (int)(long)reader.GetValue(3), (int)(long)reader.GetValue(4), (int)(long)reader.GetValue(5));
+            BoardDTO result = new BoardDTO(reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2), reader.GetInt32(3), reader.GetInt32(4), reader.GetInt32(5));
 
             return result;
         }
@@ -62,7 +65,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
                 catch (Exception ex)
                 {
-                    //log error
+                    log.Fatal("Couldn't write to " + BoardsTableName);
                 }
                 finally
                 {
@@ -74,43 +77,43 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        public bool setColumnLimit(int boardId, string columnName, int newlimit) //todo: change to "update" function in DALC
-        {
-            using (var connection = new SQLiteConnection(_connectionString))
-            {
-                SQLiteCommand command = new SQLiteCommand(null, connection);
-                int res = -1;
-                try
-                {
-                    connection.Open();
-                    command.CommandText =
-                        $"UPDATE {BoardsTableName} SET {columnName} = @newlimit Where id = @boardid; ";
-
-
-                    SQLiteParameter boardidParam = new SQLiteParameter(@"boardid", boardId);
-                    // SQLiteParameter columnnameParam = new SQLiteParameter(@"columnname", columnName);
-                    SQLiteParameter newlimitParam = new SQLiteParameter(@"newlimit", newlimit);
-
-                    command.Parameters.Add(boardidParam);
-                    // command.Parameters.Add(columnnameParam);
-                    command.Parameters.Add(newlimitParam);
-
-
-                    command.Prepare();
-                    res = command.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    //log error
-                }
-                finally
-                {
-                    command.Dispose();
-                    connection.Close();
-
-                }
-                return res > 0;
-            }
-        }
+        // public bool setColumnLimit(int boardId, string columnName, int newlimit) //todo: change to "update" function in DALC
+        // {
+        //     using (var connection = new SQLiteConnection(_connectionString))
+        //     {
+        //         SQLiteCommand command = new SQLiteCommand(null, connection);
+        //         int res = -1;
+        //         try
+        //         {
+        //             connection.Open();
+        //             command.CommandText =
+        //                 $"UPDATE {BoardsTableName} SET {columnName} = @newlimit Where id = @boardid; ";
+        //
+        //
+        //             SQLiteParameter boardidParam = new SQLiteParameter(@"boardid", boardId);
+        //             // SQLiteParameter columnnameParam = new SQLiteParameter(@"columnname", columnName);
+        //             SQLiteParameter newlimitParam = new SQLiteParameter(@"newlimit", newlimit);
+        //
+        //             command.Parameters.Add(boardidParam);
+        //             // command.Parameters.Add(columnnameParam);
+        //             command.Parameters.Add(newlimitParam);
+        //
+        //
+        //             command.Prepare();
+        //             res = command.ExecuteNonQuery();
+        //         }
+        //         catch (Exception ex)
+        //         {
+        //             //log error
+        //         }
+        //         finally
+        //         {
+        //             command.Dispose();
+        //             connection.Close();
+        //
+        //         }
+        //         return res > 0;
+        //     }
+        // }
     }
 }
