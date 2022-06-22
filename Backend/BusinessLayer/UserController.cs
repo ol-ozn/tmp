@@ -16,7 +16,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private int usersIdCount;
 
-        // private int boardIdCOunter;
         private UserDalController userDalController;
 
         public UserController()
@@ -233,7 +232,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>list of board ids</returns>
         public List<int> getUserBoards(string email)
         {
-            User user = getUserAndLogeddin(email); //todo: check if user has to be logged in
+            User user = getUserAndLogeddin(email);
             List<int> userBoardsIds = user.getBoardListById().Keys.ToList();
             return userBoardsIds;
         }
@@ -245,6 +244,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void resetData()
         {
             userDalController.resetTable();
+            usersByName.Clear();
+            usersById.Clear();
             usersIdCount = DataUtilities.EMPTYSEQ;
         }
     }

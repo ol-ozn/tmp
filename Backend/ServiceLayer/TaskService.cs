@@ -12,7 +12,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     {
         private readonly UserController userController;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly TaskController taskController;
+        public readonly TaskController taskController;
 
         public TaskService(ServiceFactory serviceFactory)
         {

@@ -155,9 +155,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             //updating in database the new owner's id
             boardDalController.Update(currentBoard.Id, "board_owner", newOwner.Id);
             currentBoard.Owner = newOwner.Id;
-
-            //todo: erase after deleting ownership table
-            //updating the ownership table todo: maybe make an update func that will do 'set userId = newOwnerId where boardId=boardId and userId = currOwnerId' - so that there's only one access to database
         }
 
 
@@ -404,6 +401,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             boardDalController.resetTable();
             boardsMembersDalController.resetTable();
+            boards.Clear();
             boardIdCOunter = DataUtilities.EMPTYSEQ;
         }
     }

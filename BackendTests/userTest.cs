@@ -28,6 +28,7 @@ public class UserTest
         login2();
         login3();
         login4();
+
         logout1();
         logout2();
         logout3();
