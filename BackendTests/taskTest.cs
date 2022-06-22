@@ -201,5 +201,64 @@ namespace BackendTests
             }
         }
 
+        //
+        // public void changeState1() //should change state successfully
+        // {
+        //     User user = (User)userService.login("yonatan@gamil.com", "Aa13456").ReturnValue;
+        //     boardService.createBoard("try", "yonatan@gamil.com");
+        //     taskService.add("hello", "beep boop", new DateTime(2022, 5, 17), "try", "yonatan@gamil.com");
+        //
+        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 0, 0);
+        //     if (res.ErrorMessage.Equals(null))
+        //     {
+        //         Console.WriteLine("changed the task with title hello successfully from backlog to inprogress");
+        //     }
+        //     else
+        //     {
+        //         Console.Write(res.ErrorMessage);
+        //     }
+        // }
+        //
+        // public void changeState2() //should return we advanced from inprogress to done
+        // {
+        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 1, 0);
+        //     if (res.ErrorMessage.Equals(null))
+        //     {
+        //         Console.WriteLine("changed the task with title hello successfully from inprogress to done");
+        //     }
+        //     else
+        //     {
+        //         Console.Write(res.ErrorMessage);
+        //     }
+        // }
+        //
+        // public void changeState3() //should return we cant advance task from done
+        // {
+        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 2, 0);
+        //     if (res.ErrorMessage.Equals(null))
+        //     {
+        //         Console.WriteLine("changeState 3 failed");
+        //     }
+        //     else
+        //     {
+        //         Console.Write(res.ErrorMessage);
+        //     }
+        // }
+        //
+        // public void changeState4() // should return that the task with this id wasn't found in the column
+        // {
+        //     Response ignore = taskService.add("test4", "bla bla bla", new DateTime(2022, 5, 18), "try",
+        //         "yonatan@gamil.com");
+        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 0, 3984);
+        //     if (res.ErrorMessage.Equals(null))
+        //     {
+        //         Console.WriteLine("changed the task with id 3984 successfully from backlog to inprogress");
+        //     }
+        //     else
+        //     {
+        //         Console.Write(res.ErrorMessage);
+        //     }
+        // }
+
     }
 }

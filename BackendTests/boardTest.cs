@@ -35,11 +35,6 @@ namespace BackendTests
             removeBoard2();
             removeBoard3();
             removeBoard4();
-
-            // changeState1();
-            // changeState2();
-            // changeState3();
-            // changeState4();
         }
 
         public void addBoard1() //should create a board successfully
@@ -96,7 +91,7 @@ namespace BackendTests
 
         public void removeBoard1() //should remove successfully
         {
-            Response res = boardService.remove("board1", "yonatan@gamil.com");
+            Response res = boardService.removeBoard("board1", "yonatan@gamil.com");
             if (res.ErrorMessage.Equals(null))
                 Console.WriteLine(
                     "Account with email: yonatan@gamil.com has removed a board with name \"board1\" successfully");
@@ -106,7 +101,7 @@ namespace BackendTests
 
         public void removeBoard2() //should return attempt to remove board that didn't exist in the first place
         {
-            Response res = boardService.remove("board2", "yonatan@gamil.com");
+            Response res = boardService.removeBoard("board2", "yonatan@gamil.com");
             if (res.ErrorMessage.Equals(null))
                 Console.WriteLine(
                     "Account with email: yonatan@gamil.com has removed a board with name \"board2\" successfully");
@@ -116,7 +111,7 @@ namespace BackendTests
 
         public void removeBoard3() //should return the account doesn't even exist
         {
-            Response res = boardService.remove("board222", "yonatan222@gamil.com");
+            Response res = boardService.removeBoard("board222", "yonatan222@gamil.com");
             if (res.ErrorMessage.Equals(null))
                 Console.WriteLine(
                     "Account with email: yonatan222@gamil.com has removed a board with name \"board222\" successfully");
@@ -127,7 +122,7 @@ namespace BackendTests
         public void removeBoard4() //should return the account isn't even logged in
         {
             userService.logout("yonatan@gamil.com");
-            Response res = boardService.remove("board1", "yonatan@gamil.com");
+            Response res = boardService.removeBoard("board1", "yonatan@gamil.com");
             if (res.ErrorMessage.Equals(null))
                 Console.WriteLine(
                     "Account with email: yonatan222@gamil.com has removed a board with name \"board1\" successfully");
@@ -135,63 +130,9 @@ namespace BackendTests
                 Console.WriteLine(res.ErrorMessage);
         }
 
-        //
-        // public void changeState1() //should change state successfully
-        // {
-        //     User user = (User)userService.login("yonatan@gamil.com", "Aa13456").ReturnValue;
-        //     boardService.createBoard("try", "yonatan@gamil.com");
-        //     taskService.add("hello", "beep boop", new DateTime(2022, 5, 17), "try", "yonatan@gamil.com");
-        //
-        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 0, 0);
-        //     if (res.ErrorMessage.Equals(null))
-        //     {
-        //         Console.WriteLine("changed the task with title hello successfully from backlog to inprogress");
-        //     }
-        //     else
-        //     {
-        //         Console.Write(res.ErrorMessage);
-        //     }
-        // }
-        //
-        // public void changeState2() //should return we advanced from inprogress to done
-        // {
-        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 1, 0);
-        //     if (res.ErrorMessage.Equals(null))
-        //     {
-        //         Console.WriteLine("changed the task with title hello successfully from inprogress to done");
-        //     }
-        //     else
-        //     {
-        //         Console.Write(res.ErrorMessage);
-        //     }
-        // }
-        //
-        // public void changeState3() //should return we cant advance task from done
-        // {
-        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 2, 0);
-        //     if (res.ErrorMessage.Equals(null))
-        //     {
-        //         Console.WriteLine("changeState 3 failed");
-        //     }
-        //     else
-        //     {
-        //         Console.Write(res.ErrorMessage);
-        //     }
-        // }
-        //
-        // public void changeState4() // should return that the task with this id wasn't found in the column
-        // {
-        //     Response ignore = taskService.add("test4", "bla bla bla", new DateTime(2022, 5, 18), "try",
-        //         "yonatan@gamil.com");
-        //     Response res = boardService.changeState("yonatan@gamil.com", "try", 0, 3984);
-        //     if (res.ErrorMessage.Equals(null))
-        //     {
-        //         Console.WriteLine("changed the task with id 3984 successfully from backlog to inprogress");
-        //     }
-        //     else
-        //     {
-        //         Console.Write(res.ErrorMessage);
-        //     }
-        // }
+        public void limitColumn1()
+        {
+
+        }
     }
 }

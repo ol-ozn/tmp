@@ -81,6 +81,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">// the email of the user that wants to join</param>
         /// <param name="boardId">// the boardId of the board that wants to join</param>
+        /// <returns></returns>
         public void joinBoard(string email, int boardId)
         {
             User currentUser = userController.getUserAndLogeddin(email);
@@ -126,6 +127,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="currentOwnerEmail">// the mail of the owner of the board</param>
         /// <param name="newOwnerEmail">// the mail of the user that will be the new owner of the board</param>
         /// <param name="boardName">// the name of the board </param>
+        /// <returns></returns>
         public void transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             User currentOwner = userController.getUserAndLogeddin(currentOwnerEmail);
@@ -164,6 +166,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">// the mail of the user that wants to leave the board</param>
         /// <param name="boardId">// the Id of the board the user wants to leave </param>
+        /// <returns></returns>
         public void leaveBoard(string email, int boardId)
         {
             User leavingUser = userController.getUserAndLogeddin(email);
@@ -207,8 +210,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// This method lets a user remove a board if he's the owner
         /// </summary>
-        /// <param name="boardName">// the mail of the user that wants to leave the board</param>
-        /// <param name="email">// the Id of the board the user wants to leave </param>
+        /// <param name="boardName">// the mail of the user that wants to remove the board</param>
+        /// <param name="email">// the Id of the board the user wants to remove </param>
+        /// <returns></returns>
         public void removeBoard(string boardName, string email)
         {
             User owner = userController.getUserAndLogeddin(email);
@@ -241,7 +245,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardDalController.Delete(new BoardDTO(board.Id, board.Name, board.Owner, board.LimitBacklog,
                 board.limitInProgress, board.LimitDone));
 
-            //todo: if erasing linking tables delete 253,255
             boardsMembersDalController.DeleteBoard(board.Id);
             taskDalController.DeleteBoard(board.Id);
 
@@ -255,7 +258,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The boardId of the column</param>
+        /// <param name="columnOrdinal">The id of the column</param>
         /// <param name="limit">The wanted limit for the column</param>
         /// <returns></returns>
         public void setColumnLimit(string email, string boardName, int columnOrdinal, int limit)
@@ -290,7 +293,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The boardId of the column</param>
+        /// <param name="columnId">The id of the column</param>
         /// <returns>Limit of the given column</returns>
         public int getColumnLimit(string email, string boardName, int columnId)
         {
@@ -310,7 +313,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The boardId of the column</param>
+        /// <param name="columnId">The id of the column</param>
         /// <returns>Name of the given column</returns>
         public string getColumnName(string email, string boardName, int columnId)
         {
@@ -331,7 +334,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The boardId of the column</param>
+        /// <param name="columnId">The id of the column</param>
         /// <returns>List of tasks representing the column</returns>
         public List<Task> getColumn(string email, string boardName, int columnId)
         {
@@ -346,6 +349,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return board.getColumn(columnId);
         }
 
+
+        /// <summary>
+        /// This method loads data related to board- boards and board members. 
+        /// </summary>
+        /// <returns></returns>
         public void loadData()
         {
             boards = DataUtilities.loadData(boardDalController); // loading boards info from db
@@ -372,6 +380,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+
+        /// <summary>
+        /// This method returns the name of a board. 
+        /// </summary>
+        /// <param name="boardId">// the boardId of the board to get its' name</param>
+        /// <returns>string with the name of the board</returns>
         public string getBoardName(int boardId)
         {
             if (!boards.ContainsKey(boardId))
@@ -382,11 +396,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return boards[boardId].Name;
         }
 
+        /// <summary>
+        /// This method deletes the data from board related tables 
+        /// </summary>
+        /// <returns></returns>
         public void resetData()
         {
             boardDalController.resetTable();
             boardsMembersDalController.resetTable();
-            boardIdCOunter = 1;
+            boardIdCOunter = DataUtilities.EMPTYSEQ;
         }
     }
 }

@@ -23,17 +23,24 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public TaskController(ServiceFactory serviceFactory)
         {
             taskDalController = new TaskDalController();
-            // boardsTasksContainDalController = new BoardsTasksContainDalController();
             this.uc = serviceFactory.UserController;
             this.taskId = (int)taskDalController.getSeq() + 1;
-            
         }
 
+        /// <summary>
+        /// This method adds a task to a board. 
+        /// </summary>
+        /// <param name="title">// sets the title of the task</param>
+        /// <param name="description">// sets the description of the task</param>
+        /// <param name="dueTime">// sets the due date of the task</param>
+        /// <param name="boardName">// sets the containing board name of the task</param>
+        /// <param name="email">// sets the user email</param>
+        /// <returns>the added task</returns>
         public Task addTask(string title, string description, DateTime dueTime, string boardName, string email)
         {
             User user = uc.getUserAndLogeddin(email);
 
-            if (!checkTitleValidity(title, user, boardName))
+            if (!checkTitleValidity(title, email, boardName))
             {
                 throw new Exception("user tried to create a new task" +
                                     " with either an empty title or a title with more than" +
@@ -69,14 +76,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
         /// <summary>
-        /// This method edits the title of an existing task. 
+        /// This method edits the title of the task. 
         /// </summary>
-        /// /// titles name length can't be longer than 50 chars.
-        /// <param name="title">// sets the title of the task</param>
+        /// <param name="email">// the email of the user</param>
+        /// <param name="boardName">// the name of the board</param>
+        /// <param name="columnOrdinal">// the column id in which the task is in</param>
+        /// <param name="taskId">// the tasks id</param>
+        /// <param name="title">// the new title</param>
+        /// <returns></returns>
         public void editTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
             User currentUser = uc.getUserAndLogeddin(email);
-            if (!checkTitleValidity(title, currentUser, boardName))
+            if (!checkTitleValidity(title, email, boardName))
             {
                 throw new Exception("user tried to either enter an empty title or a title with more than: " +
                                     "50 characters");
@@ -97,9 +108,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
         /// <summary>
-        /// This method updates the dueDate of the task to the new dueDate entered by the user
+        /// This method edits the due date of the task. 
         /// </summary>
-        /// <param name="dueDate">// sets the DueDate of the task</param>
+        /// <param name="email">// the email of the user</param>
+        /// <param name="boardName">// the name of the board</param>
+        /// <param name="columnOrdinal">// the column id in which the task is in</param>
+        /// <param name="taskId">// the tasks id</param>
+        /// <param name="dueTime">// the new due date</param>
+        /// <returns></returns>
         public void editDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueTime)
         {
             User user = uc.getUserAndLogeddin(email);
@@ -118,10 +134,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
         /// <summary>
-        /// This method edits the description of an existing task.
-        /// descriptions length can't be longer than 300 chars.
+        /// This method edits the description of the task. 
         /// </summary>
-        /// <param name="title">// sets the title of the task</param>
+        /// <param name="email">// the email of the user</param>
+        /// <param name="boardName">// the name of the board</param>
+        /// <param name="columnOrdinal">// the column id in which the task is in</param>
+        /// <param name="taskId">// the tasks id</param>
+        /// <param name="description">// the new description</param>
+        /// <returns></returns>
         public void editDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
         {
             User user = uc.getUserAndLogeddin(email);
@@ -146,12 +166,25 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
 
+        /// <summary>
+        /// This method checks validity of description string. 
+        /// </summary>
+        /// <param name="description">// the description to check its' validity</param>
+        /// <returns>true if string is valid, false otherwise</returns>
         private bool checkDescriptionValidity(string description)
         {
             return ((description != null) && ((description.Length <= 300) && (description.Length > 0)));
         }
 
-        private bool checkTitleValidity(string newTitle, User user, string boardName)
+
+        /// <summary>
+        /// This method checks validity of title string. 
+        /// </summary>
+        /// <param name="newTitle">// the new title to check its' validity</param>
+        /// <param name="email">// the email of the user</param>
+        /// <param name="boardName">// the board name that contains the task</param>
+        /// <returns>true if string is valid, false otherwise</returns>
+        private bool checkTitleValidity(string newTitle, string email, string boardName)
         {
             // checks whether the title is not empty or has more than 50 characters
             if (String.IsNullOrEmpty(newTitle))
@@ -165,7 +198,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
 
             // checks whether the user already has task with this name on the given board
-            if (taskNameAlreadyExists(user, newTitle, boardName))
+            if (taskNameAlreadyExists(email, newTitle, boardName))
             {
                 throw new Exception("a task with this title already exists");
             }
@@ -173,8 +206,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return true;
         }
 
-        private bool taskNameAlreadyExists(User user, string title, string boardName)
+        /// <summary>
+        /// This method checks if a task with given name already exists. 
+        /// </summary>
+        /// <param name="email">// the title to check its' existence</param>
+        /// <param name="title">// the email of the user</param>
+        /// <param name="boardName">// the board name that contains the task</param>
+        /// <returns>true if string is valid, false otherwise</returns>
+        private bool taskNameAlreadyExists(string email, string title, string boardName)
         {
+
+            User user = uc.getUser(email);
             Board board = user.hasBoardByName(boardName);
 
             foreach (List<Task> list in board.columns.Values)
@@ -191,6 +233,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return false;
         }
 
+        /// <summary>
+        /// This method returns a task with a given id. 
+        /// </summary>
+        /// <param name="board">// the board that should contain the task</param>
+        /// <param name="taskId">// the task's id</param>
+        /// <param name="columnOrdinal">// the column id that should contain the task</param>
+        /// <returns>task if its' found, null otherwise</returns>
         public Task findTaskById(Board board, int taskId, int columnOrdinal)
         {
             List<Task> currentTaskList = board.getColumn(columnOrdinal);
@@ -210,6 +259,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
+        /// <summary>
+        /// This method returns a list of tasks. 
+        /// </summary>
+        /// <param name="email">// the email of the user</param>
+        /// <returns>list of in progress task</returns>
         public List<Task> listTaskInProgress(string email)
         {
             User currentUser = uc.getUserAndLogeddin(email);
@@ -243,6 +297,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return list;
         }
 
+        /// <summary>
+        /// This method checks validity of title string. 
+        /// </summary>
+        /// <param name="email">// the email of the user</param>
+        /// <param name="boardName">// the board name that contains the task</param>
+        /// <param name="columnOrdinal">// the id of the column</param>
+        /// <param name="taskId">// the task's id</param>
+        /// <param name="asignee">// the email of the user to assign to</param>
+        /// <returns></returns>
         public void assignTask(string email, string boardName, int columnOrdinal, int taskId, string asignee)
         {
             Board board = uc.getUserAndLogeddin(email).getBoardListByName()[boardName];
@@ -305,10 +368,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
            
         }
 
+        /// <summary>
+        ///  This method deletes the data related to tasks in db.
+        /// </summary>
+        /// <returns></returns>
         public void resetData()
         {
             taskDalController.resetTable();
-            taskId = 1;
+            taskId = DataUtilities.EMPTYSEQ;
         }
     }
 }

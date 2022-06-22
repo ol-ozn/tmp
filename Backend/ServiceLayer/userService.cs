@@ -13,13 +13,13 @@ public class UserService
     {
         userController = serviceFactory.UserController;
     }
-
+    
     /// <summary>
     ///  This method logs in an existing user.
     /// </summary>
     /// <param name="email">The email address of the user to login</param>
     /// <param name="password">The password of the user to login</param>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
+    /// <returns>the email of the user, unless an error occurs</returns>
     public Response login(String email, String password)
     {
         try
@@ -40,7 +40,7 @@ public class UserService
     /// </summary>
     /// <param name="email">The email of the new user</param>
     /// <param name="password">The password of the new user</param>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
+    /// <returns>the string '{}', unless an error occurs</returns>
     public Response createUser(String email, String password)
     {
         try
@@ -59,7 +59,8 @@ public class UserService
     /// <summary>
     /// This method logs out a logged in user. 
     /// </summary>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
+    /// <param name="email">The email of the user</param>
+    /// <returns>the string '{}', unless an error occurs</returns>
     public Response logout(string email)
     {
         try
@@ -76,24 +77,10 @@ public class UserService
     }
 
     /// <summary>
-    /// This method deletes the current account. 
+    /// This method retunes a list of user's boards. 
     /// </summary>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    // public Response deleteAccount(string email)
-    // {
-    //     try
-    //     {
-    //         userController.deleteUser(email);
-    //         log.Info("user with email: " + email + " has been deleted successfully");
-    //         return new Response(null, null);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         log.Debug(e.Message);
-    //         return new Response(e.Message, null);
-    //     }
-    // }
-
+    /// <param name="email">The email of the user</param>
+    /// <returns>Json formatted list of board ids, unless an error occurs</returns>
     public Response GetUserBoards(string email)
     {
         try

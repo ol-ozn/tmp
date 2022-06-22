@@ -11,12 +11,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public static class DataUtilities
     {
-
+        public const int EMPTYSEQ = 1;
 
         /// <summary>
         /// loads the data of every board(id,board_name,board_owner,backlog_limit etc)
         /// </summary>
         /// <param name="boardDalController">// the boards dal controller</param>
+        /// <returns>dictionary of [boardId, board]</returns>
         internal static Dictionary<int, Board> loadData(BoardDalController boardDalController)
         {
             Dictionary<int, Board> boardsLoaded = new Dictionary<int, Board>();
@@ -28,6 +29,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return boardsLoaded;
         }
 
+        /// <summary>
+        /// loads the data of every task(id,title,description, board_id,creation_time,due_date)
+        /// </summary>
+        /// <param name="taskDalController">// the tasks dal controller</param>
+        /// <returns>list of tasks</returns>
         internal static List<Task> loadData(TaskDalController taskDalController)
         {
             List<Task> tasksLoaded = new List<Task>();
@@ -43,6 +49,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// loads the data of every user(id,email,password)
         /// </summary>
         /// <param name="userDalController">// the users dal controller</param>
+        /// <returns>dictionary of [dict of [email, User], dict of [userId, User]]</returns>
         internal static Dictionary<Dictionary<string, User>, Dictionary<int, User>> loadData(UserDalController userDalController)
         {
             Dictionary<Dictionary<string, User>, Dictionary<int, User>> returnValue = new Dictionary<Dictionary<string, User>, Dictionary<int, User>>();
@@ -58,7 +65,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return returnValue;
         }
 
-   
+        /// <summary>
+        /// loads the data of boardMembers (board_id, member_id)
+        /// </summary>
+        /// <param name="boardsMembersDalController">// the board members dal controller</param>
+        /// <returns>list of tuple (board_id, member_id)</returns>
         internal static List<(int boardId, int memberId)> loadData(BoardsMembersDalController boardsMembersDalController)
         {
             List<(int boardId, int memberId)> boardsMembers = new List<(int boardId, int memberId)>();

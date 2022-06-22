@@ -180,7 +180,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
         /// <summary>
-        ///  This method returns a user.
+        ///  This method returns a user if its' logged in.
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <returns>User</returns>
@@ -190,6 +190,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return usersByName[email];
         }
 
+        /// <summary>
+        ///  This method returns a user.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>User</returns>
         public User getUser(string email)
         {
             if (!userExists(email))
@@ -197,6 +202,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return usersByName[email];
         }
 
+        /// <summary>
+        ///  This method returns a user.
+        /// </summary>
+        /// <param name="id">The id of the user</param>
+        /// <returns>User</returns>
         public User getUser(int id)
         {
             if (!usersById.ContainsKey(id))
@@ -204,6 +214,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return usersById[id];
         }
 
+        /// <summary>
+        ///  This method loads data related to users table from db.
+        /// </summary>
+        /// <returns>User</returns>
         public void loadData()
         {
             Dictionary<Dictionary<string, User>, Dictionary<int, User>> returnValue =
@@ -212,6 +226,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             usersById = returnValue.Values.First();
         }
 
+        /// <summary>
+        ///  This method returnes list of user's boards.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>list of board ids</returns>
         public List<int> getUserBoards(string email)
         {
             User user = getUserAndLogeddin(email); //todo: check if user has to be logged in
@@ -219,10 +238,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return userBoardsIds;
         }
 
+        /// <summary>
+        ///  This method deletes the data related to users table in db.
+        /// </summary>
+        /// <returns>User</returns>
         public void resetData()
         {
             userDalController.resetTable();
-            usersIdCount = 1;
+            usersIdCount = DataUtilities.EMPTYSEQ;
         }
     }
 }

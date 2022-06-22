@@ -39,6 +39,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             create();
         }
 
+        /// <summary>
+        /// This method creates the services and controllers. 
+        /// </summary>
+        /// <returns></returns>
         private ServiceFactory create()
         {
             userController = new UserController();

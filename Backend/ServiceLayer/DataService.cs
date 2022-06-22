@@ -25,6 +25,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             this.taskController = taskController;
         }
 
+        /// <summary>
+        /// This method loads the data from db. 
+        /// </summary>
+        /// <returns></returns>
         public Response LoadData()
         {
             try
@@ -41,6 +45,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// This method deletes the data from db. 
+        /// </summary>
+        /// <returns></returns>
         public Response DeleteData()
         {
             try

@@ -18,18 +18,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             this.userController = serviceFactory.UserController;
             this.taskController = serviceFactory.TaskController;
-            // this.taskController = new TaskController(userController);
         }
 
 
         /// <summary>
         /// This method creates and adds a new task. 
         /// </summary>
-        /// <param name="user">The username that wants to add a new task</param>
         /// <param name="title">The title of the new task</param>
         /// <param name="description">The description of the new task</param>
         /// <param name="dueTime">The dueDate of the new task</param>
-        /// <param name="boardId">The boardId of the new task</param>
+        /// <param name="boardName">The board name of the new task</param>
+        /// <param name="email">The email of the user</param>
         /// <returns>creates a new task and adds it to the users task list</returns>
         public Response add(string title, string description, DateTime dueTime, string boardName, string email)
         {
@@ -49,9 +48,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <summary>
         /// This method is called when the user tries to edit the task title. 
         /// </summary>
-        /// <param name="title">The title of the new task</param>
-        /// <param name="task">The task that it's title needs to be edited</param>
-        /// <param name="user">The username that wants to edit the task title</param>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The name of the board where the task should be</param>
+        /// <param name="columnOrdinal">The id of the column where the task should be</param>
+        /// <param name="taskId">The id of the task</param>
+        /// <param name="title">The new title of the task</param>
         /// <returns>The string "{}", unless an error occurs</returns>
         public Response editTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
@@ -70,9 +71,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <summary>
         /// This method is called when the user tries to edit the task description. 
         /// </summary>
-        /// <param name="description">The task that it's description is edited</param>
-        /// <param name="task">The task that it's description needs to be edited</param>
-        /// <param name="user">The username that wants to edit the task description</param>
+        /// <param name="email">The email of the user</param>
+        /// <param name="boardName">The board name where the task should be in</param>
+        /// <param name="columnOrdinal">The id of the column where the task should be in</param>
+        /// <param name="taskId">The task's id</param>
+        /// <param name="description">The new description for the task</param>
         /// <returns>The string "{}", unless an error occurs</returns>
         public Response editTaskDescription(string email, string boardName, int columnOrdinal, int taskId,
             string description)
@@ -92,10 +95,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <summary>
         /// This method is called when the user tries to change the dueDate. 
         /// </summary>
-        /// <param name="dateTime">the new due date that the user wants to change to</param>
-        /// <param name="task">The task that it's description needs to be edited</param>
-        /// <param name="user">The username that wants to edit the task description</param>
-        /// <returns>The string "{}", unless an error occurs</returns>
+        /// <param name="email">the email of the user</param>
+        /// <param name="boardName">the board name where the task should be</param>
+        /// <param name="columnOrdinal">the id of the column where the task should be</param>
+        /// <param name="taskId">the task's id</param>
+        /// <param name="dueDate">the task's new due date</param>
+        /// <returns>The "{}", unless an error occurs</returns>
         public Response editTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
         {
             try
@@ -110,6 +115,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// This method returns a list of user's in progress tasks. 
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>Json formatted list of tasks, unless an error occurs</returns>
         public Response listTasksInProgress(string email)
         {
             try
@@ -127,8 +137,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <summary>
         /// This method changes the state of task. 
         /// </summary>
-        /// <param name="id">The id of the board in which the task is in</param>
-        /// <param name="taskTitle">The title of the task of which to change state</param>
+        /// <param name="email">the email of the user</param>
+        /// <param name="boardName">the name of the board in which the task should be</param>
+        /// <param name="columnOrdinal">the id of the column in which the task should be</param>
+        /// <param name="taskId">the id of the task</param>
         /// <returns>The string "{}", unless an error occurs</returns>
         public Response changeState(string email, string boardName, int columnOrdinal, int taskId)
         {
@@ -145,6 +157,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
+        /// <summary>
+        /// This method assigns a task to a user. 
+        /// </summary>
+        /// <param name="email">the email of the user</param>
+        /// <param name="boardName">the name of the board in which the task should be</param>
+        /// <param name="columnOrdinal">the id of the column in which the task should be</param>
+        /// <param name="taskId">the id of the task</param>
+        /// <param name="emailAssignee">the email of the user to assign to</param>
+        /// <returns>The string "{}", unless an error occurs</returns>
         public Response AssignTask(string email, string boardName, int columnOrdinal, int taskId, string emailAssignee)
         {
             try
