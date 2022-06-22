@@ -150,7 +150,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             using (var connection = new SQLiteConnection(_connectionString))
             {
                 SQLiteCommand command = new SQLiteCommand(null, connection);
-                command.CommandText = $"select * from {_tableName};";
+                // command.CommandText = $"select * from {_tableName};";
+                command.CommandText = $"SELECT seq from sqlite_sequence where name = \"{ _tableName}\"";
+
                 SQLiteDataReader dataReader = null;
                 try
                 {
@@ -160,7 +162,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     while (dataReader.Read())
                     {
                         // results.Add(ConvertReaderToObject(dataReader));
-                        seq = ConvertReaderToObject(dataReader).id;
+                        // seq = ConvertReaderToObject(dataReader).id;
+                        seq = dataReader.GetInt64(0);
                     }
                 }
                 finally
@@ -173,10 +176,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     command.Dispose();
                     connection.Close();
                 }
-
             }
-
             return seq;
+            // return 100;
         }
 
         public bool resetTable()

@@ -24,7 +24,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public TaskController(ServiceFactory serviceFactory)
         {
             taskDalController = new TaskDalController();
-            boardsTasksContainDalController = new BoardsTasksContainDalController();
+            // boardsTasksContainDalController = new BoardsTasksContainDalController();
             this.uc = serviceFactory.UserController;
             this.taskId = (int)taskDalController.getSeq() + 1;
             
@@ -308,6 +308,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void resetData()
         {
             taskDalController.resetTable();
+            taskId = 1;
         }
     }
 }

@@ -16,31 +16,33 @@ namespace BackendTests
     {
         static void Main(string[] args)
         {
-            // ServiceFactory serviceFactory = new ServiceFactory();
-            //
-            //
-            // GradingService gradingService = new GradingService();
-            // Console.WriteLine("if the user managed to register this should return: {} ");
-            // Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
 
-            // Console.WriteLine("if the user managed to register this should return: {} ");
-            // Console.WriteLine(gradingService.Register("Amir@gmail.com", "Test12345"));
-            // Console.WriteLine("\n");
-            // Console.WriteLine("if the user managed to logout this should return: {} ");
-            // Console.WriteLine(gradingService.Logout("Amir@gmail.com"));
-            // Console.WriteLine("if the user managed to login, this should return the users email:  ");
-            // Console.WriteLine(gradingService.Login("Amir@gmail.com", "Test12345"));
-            //
-            // Console.WriteLine("\n");
-            //
 
-            //
-            // Console.WriteLine("\n");
-            //
-            // Console.WriteLine("if user added a board this should return: {} ");
-            // Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board1"));
-            // Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board2"));
-            //
+            GradingService gradingService = new GradingService();
+            gradingService.DeleteData();
+            // gradingService.LoadData();
+            Console.WriteLine("if the user managed to register this should return: {} ");
+            Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
+            // //
+            // // // // Console.WriteLine("if the user managed to register this should return: {} ");
+            // // // // Console.WriteLine(gradingService.Register("Amir@gmail.com", "Test12345"));
+            // // // // Console.WriteLine("\n");
+            // // // // Console.WriteLine("if the user managed to logout this should return: {} ");
+            // // // // Console.WriteLine(gradingService.Logout("Amir@gmail.com"));
+            // // // // Console.WriteLine("if the user managed to login, this should return the users email:  ");
+            // // //
+            // // // // Console.WriteLine(gradingService.Login("amir@gmail.com", "Test12345"));
+            // // // //
+            // // // // // Console.WriteLine("\n");
+            // // // // //
+            // // // // //
+            // // // // //
+            // // // Console.WriteLine("\n");
+            // // //
+            Console.WriteLine("if user added a board this should return: {} ");
+            Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board1"));
+            Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board2"));
+            // //
             // Console.WriteLine("\n");
             //
             // // Console.WriteLine("if user removed board this should return: {} ");
@@ -189,8 +191,8 @@ namespace BackendTests
             // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 1));
             // Console.WriteLine(gs.GetColumn("olga@gmail.com", "board1", 2));
 
-            GradingService gs = new GradingService();
-            Console.WriteLine(gs.LoadData());
+            // GradingService gs = new GradingService();
+            // Console.WriteLine(gs.LoadData());
 
             /*
             Console.WriteLine("\n");

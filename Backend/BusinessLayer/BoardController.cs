@@ -389,6 +389,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             boardDalController.resetTable();
             boardsMembersDalController.resetTable();
+            boardIdCOunter = 1;
         }
     }
 }

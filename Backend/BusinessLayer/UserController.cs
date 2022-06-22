@@ -216,12 +216,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             User user = getUserAndLogeddin(email); //todo: check if user has to be logged in
             List<int> userBoardsIds = user.getBoardListById().Keys.ToList();
-            return userBoardsIds; 
+            return userBoardsIds;
         }
 
         public void resetData()
         {
             userDalController.resetTable();
+            usersIdCount = 1;
         }
     }
 }
