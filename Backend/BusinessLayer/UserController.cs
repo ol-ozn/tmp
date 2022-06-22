@@ -5,21 +5,27 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class UserController
     {
-        private Dictionary<string, User> users;
+        private Dictionary<string, User> usersByName;
+        private Dictionary<int, User> usersById;
+
         private int usersIdCount;
-        private int boardIdCOunter;
+
+        private UserDalController userDalController;
 
         public UserController()
         {
-            users = new Dictionary<string, User>();
-            usersIdCount = 0;
-            boardIdCOunter = 0;
+            userDalController = new UserDalController();
+            usersByName = new Dictionary<string, User>();
+            usersById = new Dictionary<int, User>();
+            usersIdCount = (int)userDalController.getSeq() + 1;
         }
+
 
         /// <summary>
         ///  This method creates a new user.
@@ -29,27 +35,30 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>User object of the new user, unless an error occurs</returns>
         public User createUser(string email, string password)
         {
-            //check if user with given email already exist
+            if (!emailValidity(email))
+            {
+                throw new Exception(email + " is invalid");
+            }
+
             if (userExists(email))
                 throw new Exception("User with email: " + email + " already exists.");
 
-
-            //check email validity
-            if (!emailValidity(email))
-                throw new Exception("Invalid email: " + email);
-
-
-            //check password validity
             if (!passwordValidity(password))
                 throw new Exception(
                     "Invalid password. Length should be between 6 to 20 characters, and should contain at least one Uppercase letter, one Lowercase letter and one number.");
 
-
             //if all the criteria above met- create new User object
+            bool successInsert = userDalController.Insert(new UserDTO(usersIdCount, email, password));
+            if (!successInsert)
+            {
+                throw new Exception("Problem occurred to add user: " + email + "  to DataBase");
+            }
+
             User newUser = new User(email, password, usersIdCount);
+            usersByName.Add(email, newUser);
+            usersById.Add(usersIdCount, newUser);
             usersIdCount++;
-            users.Add(email, newUser);
-            newUser.setIsLoggedIn(true); //setting automatically the user is logged in
+            newUser.IsLoggedIn = true; //setting automatically the user is logged in
 
             return newUser;
         }
@@ -105,18 +114,26 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>User object of logged in user, unless an error occurs</returns>
         public User login(string email, string password)
         {
+            if (!emailValidity(email))
+            {
+                throw new Exception(email + " is invalid");
+            }
+
+            // email = email.ToLower();
             if (!userExists(email))
                 throw new Exception("Attempt to log in to account with email: " + email + " that doesn't exist!");
 
-            if (!users[email].isPassword(password))
+            User user = usersByName[email];
+
+            if (!user.isPassword(password))
                 throw new Exception("Attempt to log in to " + email + " with wrong password!");
 
-            if (isLoggedIn(email))
+            if (user.IsLoggedIn)
                 throw new Exception("User already logged in"); //TODO: check with the guys about this one
 
-            users[email].setIsLoggedIn(true);
+            user.IsLoggedIn = true;
 
-            return users[email];
+            return user;
         }
 
         /// <summary>
@@ -124,22 +141,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email to check existence of a user with</param>
         /// <returns>True if user exists, false otherwise</returns>
-        private bool userExists(string email)
+        public bool userExists(string email)
         {
-            return users.ContainsKey(email);
-        }
-
-        /// <summary>
-        ///  This method deletes an existing user.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <returns>User object of logged in user, unless an error occurs</returns>
-        public void deleteUser(string email)
-        {
-            if (!userExists(email))
-                throw new Exception("Attempt to delete an account with an email that doesn't exist.");
-
-            users.Remove(email);
+            return usersByName.ContainsKey(email);
         }
 
         /// <summary>
@@ -147,11 +151,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The email of the user</param>
         /// <returns>True if the user is logged in, false otherwise</returns>
-        public bool isLoggedIn(string email) //function in order to have access from the outside
+        public void isLoggedIn(string email) //function in order to have access from the outside
         {
             if (!userExists(email))
-                throw new Exception("An account with that email doesn't even exist!");
-            return users[email].getIsLoggedIn();
+                throw new Exception("An account with " + email + " doesn't even exist!");
+            if (!usersByName[email].IsLoggedIn)
+            {
+                throw new Exception(email + " isn't Logged in");
+            }
         }
 
         /// <summary>
@@ -161,101 +168,25 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public void logout(string email)
         {
-            if (!userExists(email))
-                throw new Exception("An account with that email doesn't even exist!");
-            else if (isLoggedIn(email))
-                users[email].setIsLoggedIn(false);
-            else
+            if (!emailValidity(email))
             {
-                throw new Exception("already logged out.");
-            }
-        }
-
-
-        /// <summary>
-        ///  This method returns the column limit of a given column in a given board.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <returns>Limit of the given column</returns>
-        public int getColumnLimit(string email, string boardName, int columnId)
-        {
-            User user = getUser(email); //check if exists and if logged in is in getUser
-
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
+                throw new Exception(email + " is invalid");
             }
 
-            Board board = user.hasBoardByName(boardName);
-            return board.getColumnLimit(columnId);
+            // email = email.ToLower(); //TODO: check if case-sensitivity is needed
+            isLoggedIn(email);
+            usersByName[email].IsLoggedIn = false;
         }
 
         /// <summary>
-        ///  This method returns the column name of a given column in a given board.
+        ///  This method returns a user if its' logged in.
         /// </summary>
         /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <returns>Name of the given column</returns>
-        public string getColumnName(string email, string boardName, int columnId)
+        /// <returns>User</returns>
+        public User getUserAndLogeddin(string email)
         {
-            User user = getUser(email); //check if exists and if logged in is in getUser
-
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
-            }
-
-            Board bord = user.hasBoardByName(boardName);
-            return bord.getColumnName(columnId);
-        }
-
-        /// <summary>
-        ///  This method sets the column limit of a given column in a given board.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <param name="limit">The wanted limit for the column</param>
-        /// <returns></returns>
-        public void setColumnLimit(string email, string boardName, int columnId, int limit)
-        {
-            User user = getUser(email); //check if exists and if logged in is in getUser
-
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
-            }
-
-            if (limit < -1)
-            {
-                throw new Exception("invalid column limit");
-            }
-
-            Board bord = user.hasBoardByName(boardName);
-            bord.setColumnLimit(columnId, limit);
-        }
-
-        /// <summary>
-        ///  This method returns a column from a board.
-        /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnId">The id of the column</param>
-        /// <returns>List of tasks representing the column</returns>
-        public List<Task> getColumn(string email, string boardName, int columnId)
-        {
-            User user = getUser(email); //check if exists and if logged in is in getUser
-
-            if (columnId < 0 || columnId > 2)
-            {
-                throw new Exception("invalid columnId");
-            }
-
-            Board board = user.hasBoardByName(boardName);
-            return board.getColumn(columnId);
+            isLoggedIn(email);
+            return usersByName[email];
         }
 
         /// <summary>
@@ -266,132 +197,56 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public User getUser(string email)
         {
             if (!userExists(email))
-                throw new Exception("User with email: " + email + " doesn't exist");
-            if (!isLoggedIn(email))
-                throw new Exception("User with email: " + email + " is logged out");
-
-            return users[email];
+                throw new Exception("An account with " + email + " doesn't even exist!");
+            return usersByName[email];
         }
 
         /// <summary>
-        ///  This method adds a board to a user.
+        ///  This method returns a user.
         /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <returns>The created Board</returns>
-        public Board addBoard(string boardName, string email)
+        /// <param name="id">The id of the user</param>
+        /// <returns>User</returns>
+        public User getUser(int id)
         {
-            if (string.IsNullOrWhiteSpace(boardName))
-            {
-                throw new Exception("board name is not valid");
-            }
-
-            User user = getUser(email);
-
-            if (!user.getIsLoggedIn())
-            {
-                throw new Exception("User with email " + email + " isn't logged in");
-            }
-
-            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-
-            if (userBoardsbyName.ContainsKey(boardName)) // check if user has baord with given name
-            {
-                throw new Exception("A board named " + boardName + " already exist");
-            }
-
-            int futureID = boardIdCOunter; //TODO: add counter for id 
-            Board toAdd = new Board(boardName, futureID);
-            userBoardsbyName.Add(boardName, toAdd); // add nre board to user board list
-            userBoardsbyId.Add(futureID, toAdd);
-            boardIdCOunter++;
-            return toAdd;
+            if (!usersById.ContainsKey(id))
+                throw new Exception("An account with " + id + " does not exist!");
+            return usersById[id];
         }
 
         /// <summary>
-        ///  This method sets the removes a board from users' boards.
+        ///  This method loads data related to users table from db.
         /// </summary>
-        /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <returns></returns>
-        public void remove(string boardName, string email)
+        /// <returns>User</returns>
+        public void loadData()
         {
-            User user = getUser(email);
-            if (!user.getIsLoggedIn())
-            {
-                throw new Exception("User isn't logged in");
-            }
-
-
-            Dictionary<string, Board> userBoardsbyName = user.getBoardListByName();
-            Dictionary<int, Board> userBoardsbyId = user.getBoardListById();
-            if (userBoardsbyName.ContainsKey(boardName))
-            {
-                int boardId = userBoardsbyName[boardName].getID();
-                userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
-                userBoardsbyId.Remove(boardId); // board has been removed from the userBoardById
-            }
-            else
-            {
-                throw new Exception("Try to remove a board with the name " + boardName +
-                                    " which doesn't exist to the email: " + email);
-            }
+            Dictionary<Dictionary<string, User>, Dictionary<int, User>> returnValue =
+                DataUtilities.loadData(userDalController);
+            usersByName = returnValue.Keys.First();
+            usersById = returnValue.Values.First();
         }
 
         /// <summary>
-        ///  This method changes the state of a task.
+        ///  This method returnes list of user's boards.
         /// </summary>
         /// <param name="email">The email of the user</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The id of the column</param>
-        /// <param name="taskId">The id of the task to advance</param>
-        /// <returns></returns>
-        public void changeState(string email, string boardName, int columnOrdinal, int taskId)
+        /// <returns>list of board ids</returns>
+        public List<int> getUserBoards(string email)
         {
-            User user = getUser(email);
-            bool found = false;
-            if (!user.getIsLoggedIn())
-            {
-                throw new Exception("User with email: " + email + " isn't logged in");
-            }
+            User user = getUserAndLogeddin(email);
+            List<int> userBoardsIds = user.getBoardListById().Keys.ToList();
+            return userBoardsIds;
+        }
 
-            Board board = user.hasBoardByName(boardName);
-            List<Task> tasksList = board.getColumn(columnOrdinal);
-            Dictionary<string, Board> userBoards = user.getBoardListByName();
-            if (tasksList.Count == 0)
-            {
-                throw new Exception("Tried to find a task in an empty list");
-            }
-
-            foreach (Task task in tasksList)
-            {
-                if (task.getId() == taskId)
-                {
-                    if (columnOrdinal < 2) //advance task to in progress
-                    {
-                        if (board.isColumnFull(columnOrdinal + 1)) //check column limit
-                        {
-                            throw new Exception("column overflow");
-                        }
-
-                        board.getColumn(columnOrdinal).Remove(task); //remove task from given column ordinal
-                        board.getColumn(columnOrdinal + 1).Add(task); //advances task to the next column ordinal
-                        found = true;
-                        break;
-                    }
-
-                    else
-                    {
-                        throw new Exception("Try do advance from done \n");
-                    }
-                }
-            }
-
-            if (!found)
-            {
-                throw new Exception("task wasn't found in this column");
-            }
+        /// <summary>
+        ///  This method deletes the data related to users table in db.
+        /// </summary>
+        /// <returns>User</returns>
+        public void resetData()
+        {
+            userDalController.resetTable();
+            usersByName.Clear();
+            usersById.Clear();
+            usersIdCount = DataUtilities.EMPTYSEQ;
         }
     }
 }

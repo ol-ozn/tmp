@@ -11,11 +11,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class User
     {
         private readonly int id;
+        public int Id
+        {
+            get { return id; }
+        }
         public string email;
         private string password;
         private bool isLoggedIn;
+        public bool IsLoggedIn { get; set; }
         private Dictionary<string, Board> boardListByName; // Dict <boardName , Board Object>
-        private Dictionary<int, Board> boardListById;  // Dict < board Id , BoardObject>
+        private Dictionary<int, Board> boardListById; // Dict < board Id , BoardObject>
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         //when we create user, we assume that all the fields are valid
@@ -29,20 +34,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardListById = new Dictionary<int, Board>();
         }
 
-        public bool getIsLoggedIn() { return isLoggedIn; }
-
-        public void setIsLoggedIn(bool value) { isLoggedIn = value; }
-
         public bool isPassword(string possiblePassword)
         {
-            if(possiblePassword.Equals(password))
+            if (possiblePassword.Equals(password))
                 return true;
             return false;
         }
 
-        public Dictionary<string, Board> getBoardListByName() { return boardListByName; }
+        public Dictionary<string, Board> getBoardListByName()
+        {
+            return boardListByName;
+        }
 
-        public Dictionary<int, Board> getBoardListById() { return boardListById; }
+        public Dictionary<int, Board> getBoardListById()
+        {
+            return boardListById;
+        }
 
         public Board hasBoardByName(string boardName)
         {

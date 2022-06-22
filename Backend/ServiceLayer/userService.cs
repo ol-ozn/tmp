@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
@@ -8,17 +9,17 @@ public class UserService
 {
     public UserController userController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-    public UserService()
+    public UserService(ServiceFactory serviceFactory)
     {
-        userController = new UserController();
+        userController = serviceFactory.UserController;
     }
-
+    
     /// <summary>
     ///  This method logs in an existing user.
     /// </summary>
     /// <param name="email">The email address of the user to login</param>
     /// <param name="password">The password of the user to login</param>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
+    /// <returns>the email of the user, unless an error occurs</returns>
     public Response login(String email, String password)
     {
         try
@@ -39,14 +40,14 @@ public class UserService
     /// </summary>
     /// <param name="email">The email of the new user</param>
     /// <param name="password">The password of the new user</param>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
+    /// <returns>the string '{}', unless an error occurs</returns>
     public Response createUser(String email, String password)
     {
         try
         {
             User user = userController.createUser(email, password);
             log.Info("user with email " + email + " was created successfully");
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -58,14 +59,15 @@ public class UserService
     /// <summary>
     /// This method logs out a logged in user. 
     /// </summary>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
+    /// <param name="email">The email of the user</param>
+    /// <returns>the string '{}', unless an error occurs</returns>
     public Response logout(string email)
     {
         try
         {
             userController.logout(email);
             log.Info("user with email: " + email + "has logged out successfully");
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -75,16 +77,17 @@ public class UserService
     }
 
     /// <summary>
-    /// This method deletes the current account. 
+    /// This method retunes a list of user's boards. 
     /// </summary>
-    /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public Response deleteAccount(string email)
+    /// <param name="email">The email of the user</param>
+    /// <returns>Json formatted list of board ids, unless an error occurs</returns>
+    public Response GetUserBoards(string email)
     {
         try
         {
-            userController.deleteUser(email);
-            log.Info("user with email: " + email + " has been deleted successfully");
-            return new Response("{}", null);
+            List<int> userBoards = userController.getUserBoards(email);
+            log.Info("Returned list of board ids of user " + email);
+            return new Response(null, userBoards);
         }
         catch (Exception e)
         {
@@ -92,5 +95,4 @@ public class UserService
             return new Response(e.Message, null);
         }
     }
-
 }

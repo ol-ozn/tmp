@@ -6,10 +6,11 @@ using System.Text.Json;
 public class UserTest
 {
     private readonly UserService us;
-
-    public UserTest(UserService us)
+    private readonly BoardService bs;
+    public UserTest(UserService us, BoardService bs)
     {
         this.us = us;
+        this.bs = bs;
     }
 
     public void runUserTests()
@@ -22,15 +23,20 @@ public class UserTest
         createUser6();
         createUser7();
         createUser8();
+
         login1();
         login2();
         login3();
         login4();
+
         logout1();
         logout2();
         logout3();
-        delete1();
-        delete2();
+        
+        getUserBoards1();
+        getUserBoards2();
+        getUserBoards3();
+        getUserBoards4();
     }
 
     public void createUser1() //should be correct
@@ -169,20 +175,41 @@ public class UserTest
             Console.WriteLine(res.ErrorMessage);
     }
 
-    public void delete1() //should work well
+    public void getUserBoards1() //should return empty list
     {
-        Response res = us.deleteAccount("olga1@gmail.com");
+        Response res = us.createUser("olga5@gmail.com", "123456Ab");
         if (res.ErrorMessage == null)
-            Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
+            Console.WriteLine("list of olga5@gmail.com was returned successfully");
         else
             Console.WriteLine(res.ErrorMessage);
     }
 
-    public void delete2() //should return user doesn't exist
+    public void getUserBoards2() //should return a list
     {
-        Response res = us.deleteAccount("olga1@gmail.com");
+        bs.createBoard("board1", "olga5@gmail.com");
+        bs.createBoard("board2", "olga5@gmail.com");
+        Response res = us.GetUserBoards("olga5@gmail.com");
         if (res.ErrorMessage == null)
-            Console.WriteLine("Account with email: olga1@gmail.com was deleted successfully");
+            Console.WriteLine("list of olga5@gmail.com was returned successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    public void getUserBoards3() //should not work - email doesn't exist
+    {
+        Response res = us.GetUserBoards("yonatan@gmail.com");
+        if (res.ErrorMessage == null)
+            Console.WriteLine("list of yoanatan@gmail.com was returned successfully");
+        else
+            Console.WriteLine(res.ErrorMessage);
+    }
+
+    public void getUserBoards4() //should not work - user logged out
+    {
+        us.logout("olga5@gmail.com");
+        Response res = us.GetUserBoards("olga5@gmail.com");
+        if (res.ErrorMessage == null)
+            Console.WriteLine("list of olga5@gmail.com was returned successfully");
         else
             Console.WriteLine(res.ErrorMessage);
     }

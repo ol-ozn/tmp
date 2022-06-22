@@ -4,29 +4,65 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Board
     {
-        private String name;
-        private Dictionary<int, string> columnsId; // dictionary< columnsId, ColumnsTitle>
-        private Dictionary<string, List<Task>> columns; // dictionary <board title, tasks list>
-        private readonly int id;
-        private int backlog = -1; 
-        private int limitInProgress = -1;
-        private int limitDone = -1;
-        
+        public const int UNLIMITED = -1;
 
+        private string name;
+        public string Name
+        {
+            get { return name; }
+        }
+
+        private readonly int id;
+        public int Id
+        {
+            get { return id; }
+        }
+
+        private int owner;
+        public int Owner
+        {
+            get { return owner; }
+            set { owner = value; }
+        }
+
+        private HashSet<string> memeberList; // each board holds its members
+        public HashSet<string> MemeberList
+        {
+            get { return memeberList; }
+        }
+
+        public int LimitBacklog { get; set; }
+        public int limitInProgress { get; set; }
+        public int LimitDone { get; set; }
+
+        public Dictionary<string, List<Task>> columns { get; } // dictionary <column name, tasks list>
+        public readonly Dictionary<int, string> columnsId = new Dictionary<int, string> // dictionary< columnsId, ColumnsTitle>
+        {
+            { 0, "backlog" },
+            { 1, "in progress" },
+            { 2, "done" }
+        };
 
         public Board(String boardName, int id)
         {
-            name = boardName;
+            this.name = boardName;
+            this.id = id;
+            this.owner = id;
+            memeberList = new HashSet<string>();
+
             columns = new Dictionary<string, List<Task>>();
             initColumns();
-            this.id = id;
-            columnsId = new Dictionary<int, string>();
-            initialColumnsId(columnsId);
+            
+            this.LimitBacklog = UNLIMITED;
+            this.limitInProgress = UNLIMITED;
+            this.LimitDone = UNLIMITED;
+
         }
 
         public void initColumns()
@@ -35,57 +71,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             columns.Add("in progress", new List<Task>());
             columns.Add("done", new List<Task>());
         }
-        public String getName()
-        {
-            return name;
-        }
 
-        public int getID()
-        {
-            return id;
-        }
-
-        public Dictionary<string, List<Task>> getColumns()
-        {
-            return columns;
-        }
-
-        public int getLimitToDo()
-        {
-            return limitDone;
-        }
-
-        public void setLimitToDo(int newLimit)
-        {
-            this.limitDone = newLimit;
-        }
-
-        public int getLimitInProgress()
-        {
-            return limitInProgress;
-        }
-
-        public void setLimitInProgress(int newLimit)
-        {
-            this.limitInProgress = newLimit;
-        }
-
-        public int getLimitDone()
-        {
-            return limitDone;
-        }
-
-        public void setLimitDone(int newLimit)
-        {
-            this.limitDone = newLimit;
-        }
-
-        private void initialColumnsId(Dictionary<int, string> columnsId)
-        {
-            this.columnsId.Add(0, "backlog");
-            this.columnsId.Add(1, "in progress");
-            this.columnsId.Add(2, "done");
-        }
 
         public string getColumnName(int id)
         {
@@ -94,46 +80,49 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public int getColumnLimit(int columnId)
         {
-            if (columnId == 0)
+            if (columnId == getColumnNumber("backlog"))
             {
-                return getLimitToDo();
+                return LimitBacklog;
             }
 
-            else if (columnId == 1)
+            else if (columnId == getColumnNumber("in progress"))
             {
-                return getLimitInProgress();
+                return limitInProgress;
             }
             else
             {
-                return getLimitDone();
+                return LimitDone;
             }
         }
+
         public void setColumnLimit(int columnId, int newLimit)
         {
-            if (columnId == 0)
+            if (columnId == getColumnNumber("backlog"))
             {
-                setLimitToDo(newLimit);
+                LimitBacklog = newLimit;
             }
 
-            else if (columnId == 1)
+            if (columnId == getColumnNumber("in progress"))
             {
-                setLimitInProgress(newLimit);
+                limitInProgress = newLimit;
             }
-            else
+
+            if (columnId == getColumnNumber("done"))
             {
-                setLimitDone(newLimit);
+                LimitDone = newLimit;
             }
+            
         }
 
         public List<Task> getColumn(int id)
         {
-            if (id >2 || id < 0)
+            if (id > 2 || id < 0)
             {
                 throw new Exception("Id out of bounds");
             }
+
             return columns[columnsId[id]];
         }
-        
 
 
         public bool isColumnFull(int colID)
@@ -146,7 +135,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<Task> currentTaskList = getColumn(columnOrdinal);
             foreach (Task currentTask in currentTaskList)
             {
-                if (currentTask.getId() == id)
+                if (currentTask.Id == id)
                 {
                     return currentTask;
                 }
@@ -154,5 +143,29 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             throw new Exception("This Task Does not exist in this column");
         }
+
+        public int getColumnNumber(string columnName)
+        {
+            if (columnName.Equals("backlog"))
+            {
+                return 0;
+            }
+
+            if (columnName.Equals("in progress"))
+            {
+                return 1;
+            }
+
+            if (columnName.Equals("done"))
+            {
+                return 2;
+            }
+
+            else
+            {
+                throw new Exception(columnName + "is invalid");
+            }
+        }
+
     }
 }

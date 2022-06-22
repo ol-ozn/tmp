@@ -50,15 +50,17 @@
 //     /// </summary>
 //     public class GradingService
 //     {
-//         UserService userService;
-//         BoardService boardService;
-//         TaskService taskService;
+//         // UserService userService;
+//         // BoardService boardService;
+//         // TaskService taskService;
+//         private ServiceFactory serviceFactory;
 //
 //         public GradingService()
 //         {
-//             userService = new UserService();
-//             boardService = new BoardService(userService);
-//             taskService = new TaskService(userService);
+//             serviceFactory = new ServiceFactory();
+//             // userService = new UserService();
+//             // boardService = new BoardService(userService);
+//             // taskService = new TaskService(userService);
 //         }
 //
 //
@@ -70,29 +72,23 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string Register(string email, string password)
 //         {
-//             Response res = userService.createUser(email, password);
-//             string s = (JsonController.toJson(res));
-//             if (res.ErrorMessage == null)
-//             {
-//                 return (String)res.ReturnValue;
-//             }
-//
-//             return s;
+//             return (JsonController.toJson(serviceFactory.userService.createUser(email, password)));
 //         }
 //
 //
-//         /// <summary>
-//         ///  This method logs in an existing user.
-//         /// </summary>
-//         /// <param name="email">The email address of the user to login</param>
-//         /// <param name="password">The password of the user to login</param>
-//         /// <returns>Response with user email, unless an error occurs (see <see cref="GradingService"/>)</returns>
+//         //
+//         //         /// <summary>
+//         //         ///  This method logs in an existing user.
+//         //         /// </summary>
+//         //         /// <param name="email">The email address of the user to login</param>
+//         //         /// <param name="password">The password of the user to login</param>
+//         //         /// <returns>Response with user email, unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string Login(string email, string password)
 //         {
-//             return (JsonController.toJson(userService.login(email, password)));
+//             return (JsonController.toJson(serviceFactory.userService.login(email, password)));
 //         }
-//
-//
+//         //
+//         //
 //         /// <summary>
 //         /// This method logs out a logged in user. 
 //         /// </summary>
@@ -100,14 +96,14 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string Logout(string email)
 //         {
-//             Response response = userService.logout(email);
-//             string s = (JsonController.toJson(response));
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
+//             // Response response = serviceFactory.userService.logout(email);
+//             // string s = (JsonController.toJson(response));
+//             // if (response.ErrorMessage == null)
+//             // {
+//             //     return (string)response.ReturnValue;
+//             // }
 //
-//             return s;
+//             return (JsonController.toJson(serviceFactory.userService.logout(email)));
 //         }
 //
 //         /// <summary>
@@ -120,14 +116,14 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
 //         {
-//             Response response = (boardService.limitColumn(email, boardName, columnOrdinal, limit));
+//             Response response = (serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit));
 //             string s = JsonController.toJson(response);
 //             if (response.ErrorMessage == null)
 //             {
 //                 return (string)response.ReturnValue;
 //             }
 //
-//             return s;
+//             return (JsonController.toJson(serviceFactory.boardService.limitColumn(email, boardName, columnOrdinal, limit)));
 //         }
 //
 //         /// <summary>
@@ -139,7 +135,7 @@
 //         /// <returns>Response with column limit value, unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string GetColumnLimit(string email, string boardName, int columnOrdinal)
 //         {
-//             return JsonController.toJson(boardService.getColumnLimit(email, boardName, columnOrdinal));
+//             return JsonController.toJson(serviceFactory.boardService.getColumnLimit(email, boardName, columnOrdinal));
 //         }
 //
 //
@@ -152,7 +148,7 @@
 //         /// <returns>Response with column name value, unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string GetColumnName(string email, string boardName, int columnOrdinal)
 //         {
-//             return JsonController.toJson(boardService.getColumnName(email, boardName, columnOrdinal));
+//             return JsonController.toJson(serviceFactory.boardService.getColumnName(email, boardName, columnOrdinal));
 //         }
 //
 //
@@ -167,7 +163,7 @@
 //         /// <returns>Response with user-email, unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
 //         {
-//             return JsonController.toJson(taskService.add(title, description, dueDate, boardName, email));
+//             return JsonController.toJson(serviceFactory.taskService.add(title, description, dueDate, boardName, email));
 //         }
 //
 //
@@ -182,15 +178,16 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
 //         {
-//             Response response = taskService.editTaskDueDate(email, boardName, columnOrdinal, taskId,
-//                 dueDate);
-//             string s = JsonController.toJson(response);
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
+//             // Response response = serviceFactory.taskService.editTaskDueDate(email, boardName, columnOrdinal, taskId,
+//             //     dueDate);
+//             // string s = JsonController.toJson(response);
+//             // if (response.ErrorMessage == null)
+//             // {
+//             //     return (string)response.ReturnValue;
+//             // }
 //
-//             return s;
+//             return JsonController.toJson(serviceFactory.taskService.editTaskDueDate(email, boardName, columnOrdinal, taskId,
+//                 dueDate));
 //         }
 //
 //
@@ -205,15 +202,16 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
 //         {
-//             Response response = taskService.editTaskTitle(email, boardName, columnOrdinal, taskId,
-//                 title);
-//             string s = JsonController.toJson(response);
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
+//             // Response response = serviceFactory.taskService.editTaskTitle(email, boardName, columnOrdinal, taskId,
+//             //     title);
+//             // string s = JsonController.toJson(response);
+//             // if (response.ErrorMessage == null)
+//             // {
+//             //     return (string)response.ReturnValue;
+//             // }
 //
-//             return s;
+//             return JsonController.toJson(serviceFactory.taskService.editTaskTitle(email, boardName, columnOrdinal, taskId,
+//                 title));
 //         }
 //
 //
@@ -229,15 +227,16 @@
 //         public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId,
 //             string description)
 //         {
-//             Response response = taskService.editTaskDescription(email, boardName, columnOrdinal, taskId,
-//                 description);
-//             string s = JsonController.toJson(response);
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
+//             // Response response = serviceFactory.taskService.editTaskDescription(email, boardName, columnOrdinal, taskId,
+//             //     description);
+//             // string s = JsonController.toJson(response);
+//             // if (response.ErrorMessage == null)
+//             // {
+//             //     return (string)response.ReturnValue;
+//             // }
 //
-//             return s;
+//             return JsonController.toJson(serviceFactory.taskService.editTaskDescription(email, boardName, columnOrdinal, taskId,
+//                 description));
 //         }
 //
 //
@@ -251,14 +250,14 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
 //         {
-//             Response response = boardService.changeState(email, boardName, columnOrdinal, taskId);
-//             string s = JsonController.toJson(response);
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
+//             // Response response = serviceFactory.taskService.changeState(email, boardName, columnOrdinal, taskId);
+//             // string s = JsonController.toJson(response);
+//             // if (response.ErrorMessage == null)
+//             // {
+//             //     return (string)response.ReturnValue;
+//             // }
 //
-//             return s;
+//             return JsonController.toJson(serviceFactory.taskService.changeState(email, boardName, columnOrdinal, taskId));
 //         }
 //
 //
@@ -271,7 +270,7 @@
 //         /// <returns>Response with a list of the column's tasks, unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string GetColumn(string email, string boardName, int columnOrdinal)
 //         {
-//             return (JsonController.toJson(boardService.getColumn(email, boardName, columnOrdinal)));
+//             return (JsonController.toJson(serviceFactory.boardService.getColumn(email, boardName, columnOrdinal)));
 //         }
 //
 //
@@ -283,14 +282,15 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string AddBoard(string email, string name)
 //         {
-//             Response response = boardService.createBoard(name, email);
-//             string s = JsonController.toJson(response);
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
-//
-//             return s;
+//             // Response response = serviceFactory.boardService.createBoard(name, email);
+//             // string s = JsonController.toJson(response);
+//             // if (response.ErrorMessage == null)
+//             // {
+//             //     return (string)response.ReturnValue;
+//             // }
+//             //JsonController.toJson(serviceFactory.userService.login(email, password))
+//             return JsonController.toJson(serviceFactory.boardService.createBoard(name, email));
+//             // return s;
 //         }
 //
 //
@@ -302,14 +302,14 @@
 //         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string RemoveBoard(string email, string name)
 //         {
-//             Response response = boardService.remove(name, email);
-//             string s = JsonController.toJson(response);
-//             if (response.ErrorMessage == null)
-//             {
-//                 return (string)response.ReturnValue;
-//             }
+//             // Response response = serviceFactory.boardService.remove(name, email);
+//             // string s = JsonController.toJson(response);
+//             // if (response.ErrorMessage == null)
+//             // {
+//             //     return (string)response.ReturnValue;
+//             // }
 //
-//             return s;
+//             return JsonController.toJson(serviceFactory.boardService.remove(name, email));
 //         }
 //
 //
@@ -320,7 +320,7 @@
 //         /// <returns>Response with  a list of the in progress tasks, unless an error occurs (see <see cref="GradingService"/>)</returns>
 //         public string InProgressTasks(string email)
 //         {
-//             return (JsonController.toJson(taskService.listTasksInProgress(email)));
+//             return (JsonController.toJson(serviceFactory.taskService.listTasksInProgress(email)));
 //         }
 //     }
 // }

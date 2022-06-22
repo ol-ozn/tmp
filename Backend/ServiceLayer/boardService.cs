@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using log4net;
@@ -8,47 +9,28 @@ using log4net;
 public class BoardService
 {
     private UserController userController;
+    public BoardController boardController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-    public BoardService(UserService userService)
+    public BoardService(ServiceFactory serviceFactory)
     {
-        this.userController = userService.userController;
+        userController = serviceFactory.UserController;
+        boardController = serviceFactory.BoardController;
     }
 
     /// <summary>
     /// This method creates a new board. 
     /// </summary>
-    /// <param name="boardName">The name of the new board</param>
+    /// <param name="boardName">The boardName of the new board</param>
+    /// <param name="email">The email of the user</param>
     /// <returns>The string "{}", unless an error occurs</returns>
     public Response createBoard(string boardName, string email)
     {
         try
         {
-            Board board = userController.addBoard(boardName, email);
+            Board board = boardController.addBoard(boardName, email);
             log.Info("Board: " + boardName + "was add by " + email);
-            return new Response(null, "{}");
-        }
-        catch (Exception e)
-        {
-            log.Debug(e.Message);
-            return new Response(e.Message, null);
-        }
-    }
-
-
-    /// <summary>
-    /// This method removes an existing board. 
-    /// </summary>
-    /// <param name="boardName">The name of the board to remove</param>
-    /// <param name="email">The user that owns the board</param>
-    /// <returns>The string "{}", unless an error occurs</returns>
-    public Response remove(string boardName, string email)
-    {
-        try
-        {
-            userController.remove(boardName, email);
-            log.Info("Board: " + boardName + "was removed by " + email);
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -61,18 +43,18 @@ public class BoardService
     /// This method limits a column in a given board. 
     /// </summary>
     /// <param name="email">The email of the user</param>
-    /// <param name="boardName">The name of the board</param>
-    /// <param name="columnOrdinal">The id of the requested column</param>
+    /// <param name="boardName">The boardName of the board</param>
+    /// <param name="columnOrdinal">The boardId of the requested column</param>
     /// <param name="limit">The new limit of the column</param>
     /// <returns>The string "{}" and the column, unless an error occurs</returns>
     public Response limitColumn(string email, string boardName, int columnOrdinal, int limit)
     {
         try
         {
-            userController.setColumnLimit(email, boardName, columnOrdinal, limit);
-            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            boardController.setColumnLimit(email, boardName, columnOrdinal, limit);
+            log.Info("The limit of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " was set to " + limit);
-            return new Response(null, "{}");
+            return new Response(null, null);
         }
         catch (Exception e)
         {
@@ -85,15 +67,15 @@ public class BoardService
     /// This method returns the limit of a requested column from a given board. 
     /// </summary>
     /// <param name="email">The email of the user</param>
-    /// <param name="boardName">The name of the board</param>
-    /// <param name="columnOrdinal">The id of the requested column</param>
+    /// <param name="boardName">The boardName of the board</param>
+    /// <param name="columnOrdinal">The boardId of the requested column</param>
     /// <returns>The string "{}" and the limit of the column, unless an error occurs</returns>
     public Response getColumnLimit(string email, string boardName, int columnOrdinal)
     {
         try
         {
-            int columnLimit = userController.getColumnLimit(email, boardName, columnOrdinal);
-            log.Info("The limit of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            int columnLimit = boardController.getColumnLimit(email, boardName, columnOrdinal);
+            log.Info("The limit of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " has been accessed");
             return new Response(null, columnLimit);
         }
@@ -105,18 +87,18 @@ public class BoardService
     }
 
     /// <summary>
-    /// This method returns the name of a requested column from a given board. 
+    /// This method returns the boardName of a requested column from a given board. 
     /// </summary>
     /// <param name="email">The email of the user</param>
-    /// <param name="boardName">The name of the board</param>
-    /// <param name="columnOrdinal">The id of the requested column</param>
-    /// <returns>The string "{}" and the column name, unless an error occurs</returns>
+    /// <param name="boardName">The boardName of the board</param>
+    /// <param name="columnOrdinal">The boardId of the requested column</param>
+    /// <returns>The string "{}" and the column boardName, unless an error occurs</returns>
     public Response getColumnName(string email, string boardName, int columnOrdinal)
     {
         try
         {
-            string columnName = userController.getColumnName(email, boardName, columnOrdinal);
-            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            string columnName = boardController.getColumnName(email, boardName, columnOrdinal);
+            log.Info("The boardName of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " has been accessed");
             return new Response(null, columnName);
         }
@@ -131,15 +113,15 @@ public class BoardService
     /// This method returns a requested column from a given board. 
     /// </summary>
     /// <param name="email">The email of the user</param>
-    /// <param name="boardName">The name of the board</param>
-    /// <param name="columnOrdinal">The id of the requested column</param>
+    /// <param name="boardName">The boardName of the board</param>
+    /// <param name="columnOrdinal">The boardId of the requested column</param>
     /// <returns>The string "{}" and the column, unless an error occurs</returns>
     public Response getColumn(string email, string boardName, int columnOrdinal)
     {
         try
         {
-            List<Task> column = userController.getColumn(email, boardName, columnOrdinal);
-            log.Info("The name of column " + userController.getColumnName(email, boardName, columnOrdinal) +
+            List<Task> column = boardController.getColumn(email, boardName, columnOrdinal);
+            log.Info("The boardName of column " + boardController.getColumnName(email, boardName, columnOrdinal) +
                      " in board " + boardName + " has been accessed");
             return new Response(null, column);
         }
@@ -150,19 +132,104 @@ public class BoardService
         }
     }
 
+
     /// <summary>
-    /// This method changes the state of task. 
+    /// This method lets a user join a board. 
     /// </summary>
-    /// <param name="id">The id of the board in which the task is in</param>
-    /// <param name="taskTitle">The title of the task of which to change state</param>
-    /// <returns>The string "{}", unless an error occurs</returns>
-    public Response changeState(string email, string boardName, int columnOrdinal, int taskId)
+    /// <param name="email">The email of the user</param>
+    /// <param name="boardId">The board's id</param>
+    /// <returns>The string "{}" and the column, unless an error occurs</returns>
+    public Response joinBoard(string email, int boardId)
     {
         try
         {
-            userController.changeState(email, boardName, columnOrdinal, taskId);
-            log.Info("taks: " + taskId + " was advanced by " + email);
-            return new Response(null, "{}");
+            boardController.joinBoard(email, boardId);
+            log.Info("user: " + email + " joined board: " + boardId);
+            return new Response(null, null);
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    /// <summary>
+    /// This method transfers ownership of a given board. 
+    /// </summary>
+    /// <param name="currentOwnerEmail">The email of the current owner</param>
+    /// <param name="newOwnerEmail">The email of the new owner</param>
+    /// <param name="boardName">The boardName of the board</param>
+    /// <returns>The string "{}" and the column, unless an error occurs</returns>
+    public Response transferOwnerShip(string currentOwnerEmail, string newOwnerEmail, string boardName)
+    {
+        try
+        {
+            boardController.transferOwnerShip(currentOwnerEmail, newOwnerEmail, boardName);
+            log.Info("user: " + currentOwnerEmail + " transfered: " + boardName + " to user: " + newOwnerEmail);
+            return new Response(null, null);
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    /// <summary>
+    /// This method lets a user leave a board. 
+    /// </summary>
+    /// <param name="email">The email of the user</param>
+    /// <param name="boardId">The id of the board</param>
+    /// <returns>The string "{}" and the column, unless an error occurs</returns>
+    public Response leaveBoard(string email, int boardId)
+    {
+        try
+        {
+            boardController.leaveBoard(email, boardId);
+            log.Info("user: " + email + " left board: " + boardId);
+            return new Response(null, null);
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    /// <summary>
+    /// This method removes a board. 
+    /// </summary>
+    /// <param name="email">The email of the user</param>
+    /// <param name="boardName">The boardName of the board</param>
+    /// <returns>The string "{}" and the column, unless an error occurs</returns>
+    public Response removeBoard(string email, string boardName)
+    {
+        try
+        {
+            boardController.removeBoard(boardName, email);
+            log.Info("user: " + email + " deleted board: " + boardName);
+            return new Response(null, null);
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return new Response(e.Message, null);
+        }
+    }
+
+    /// <summary>
+    /// This method removes a board. 
+    /// </summary>
+    /// <param name="boardId">The the id of the board</param>
+    /// <returns>The name of the board, unless an error occurs</returns>
+    public Response getBoardName(int boardId)
+    {
+        try
+        {
+            string boardName = boardController.getBoardName(boardId);
+            log.Info("returned board boardName = " + boardName);
+            return new Response(null, boardName);
         }
         catch (Exception e)
         {
