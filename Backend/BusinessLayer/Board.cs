@@ -107,7 +107,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 limitInProgress = newLimit;
             }
 
-            if (columnId == getColumnNumber("d"))
+            if (columnId == getColumnNumber("done"))
             {
                 LimitDone = newLimit;
             }
