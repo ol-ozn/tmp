@@ -280,8 +280,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("invalid column limit");
             }
 
+
             User user = userController.getUserAndLogeddin(email);
             Board board = user.hasBoardByName(boardName);
+
+            if (board.getColumn(columnOrdinal).Count > limit)
+            {
+                throw new Exception("there are already too many tasks in this column");
+            } 
 
             board.setColumnLimit(columnOrdinal, limit);
             boardDalController.setColumnLimit(board.Id, board.columnsId[columnOrdinal], limit);
