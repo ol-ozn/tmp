@@ -64,7 +64,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardDalController.Insert(new BoardDTO(boardIdCOunter, boardName, user.Id,
                 Board.UNLIMITED, Board.UNLIMITED, Board.UNLIMITED));
             boardOwnershipDalController.Insert(new BoardUserOwnershipDTO(boardIdCOunter, user.Id));
-            boardsMembersDalController.Insert(new BoardsMembersDTO(boardIdCOunter,user.Id));
+            boardsMembersDalController.Insert(new BoardsMembersDTO(boardIdCOunter, user.Id));
 
             Board toAdd = new Board(boardName, boardIdCOunter);
             //assigne the board owner to the board boardId 
@@ -115,9 +115,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     throw new Exception("user: " + email + " is already part of this board");
                 }
 
-               boardsMembersDalController.Insert(new BoardsMembersDTO(boardToAdd.Id, currentUser.Id));
+                boardsMembersDalController.Insert(new BoardsMembersDTO(boardToAdd.Id, currentUser.Id));
 
-               boardToAdd.MemeberList.Add(email); //adds the user to the members list of the board
+                boardToAdd.MemeberList.Add(email); //adds the user to the members list of the board
             }
             else
             {
@@ -189,7 +189,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boardToLeave.MemeberList.Remove(email); // removes the user from the boards users list
             leavingUser.getBoardListById().Remove(boardId); // removes the board from the boardList by ID
             leavingUser.getBoardListByName().Remove(boardToLeave.Name); // removes board from the users list by name
-            
+
             foreach (Task task in boardToLeave.getColumn(boardToLeave.columnsId
                          .FirstOrDefault(x => x.Value == "backlog").Key))
             {
@@ -258,7 +258,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             userBoardsbyName.Remove(boardName); //board has been removed from userBoardByName
             userBoardsbyId.Remove(board.Id); // board has been removed from the userBoardById
             boards.Remove(board.Id); // removes the board from the global board list
-
         }
 
         /// <summary>
@@ -274,6 +273,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (columnOrdinal > 2 || columnOrdinal < 0)
             {
                 throw new Exception(columnOrdinal + " is invalid");
+            }
+
+            if (limit < -1)
+            {
+                throw new Exception("invalid column limit");
             }
 
             User user = userController.getUserAndLogeddin(email);
@@ -377,6 +381,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("board with id = " + boardId + " doesn't exist!");
             }
+
             return boards[boardId].Name;
         }
 
