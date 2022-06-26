@@ -51,8 +51,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             boardService = new BoardService(this);
             taskController = new TaskController(this);
             taskService = new TaskService(this);
-            dataService = new DataService(userController,boardController,taskController);
+            dataService = new DataService(userController, boardController, taskController);
             return this;
+        }
+
+
+        public void LoadData()
+        {
+            userController.loadData();
+            boardController.loadData();
         }
     }
 }

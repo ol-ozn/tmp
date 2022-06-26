@@ -19,10 +19,10 @@ namespace BackendTests
 
 
             GradingService gradingService = new GradingService();
-            gradingService.DeleteData();
+            // gradingService.DeleteData();
             // gradingService.LoadData();
             Console.WriteLine("if the user managed to register this should return: {} ");
-            Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
+            Console.WriteLine(gradingService.Register(null, "Test12345"));
             // //
             // // // // Console.WriteLine("if the user managed to register this should return: {} ");
             // // // // Console.WriteLine(gradingService.Register("Amir@gmail.com", "Test12345"));
