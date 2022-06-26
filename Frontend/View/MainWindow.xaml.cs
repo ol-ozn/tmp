@@ -48,9 +48,13 @@ namespace Frontend
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             Response response = viewModel.Register();
-            if (response != null)
+            if (response.ErrorMessage != null)
             {
                 ShowMessageLbl.Content = response.ErrorMessage;
+            }
+            else
+            {
+                ShowMessageLbl.Content = "Register success";
             }
         }
     }
