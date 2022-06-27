@@ -58,8 +58,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<UserDTO> userDtos = userDalController.SelectAllUsers();
             foreach (UserDTO userDto in userDtos)
             {
-                userByName.Add(userDto.Email, new User(userDto.Email, userDto.Password, userDto.id));
-                userById.Add(userDto.id, new User(userDto.Email, userDto.Password, userDto.id));
+                User user = new User(userDto.Email, userDto.Password, userDto.id);
+                userByName.Add(userDto.Email, user);
+                userById.Add(userDto.id, user);
             }
             returnValue.Add(userByName,userById);
             return returnValue;

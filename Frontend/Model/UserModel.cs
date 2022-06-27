@@ -40,5 +40,11 @@ namespace Frontend.Model
         {
             this.Email = email;
         }
+
+        public BoardModel getBoards()
+        {
+            return new BoardModel(Controller, this);
+        }
+
     }
 }

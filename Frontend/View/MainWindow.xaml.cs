@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Frontend.Model;
+using Frontend.View;
+using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
 
 namespace Frontend
@@ -36,8 +38,10 @@ namespace Frontend
             Response userModel = viewModel.Login();
             if (userModel.ErrorMessage == null)
             {
-                //TODO: add board view 
-                ShowMessageLbl.Content = "success";
+                UserModel u = new UserModel(viewModel.Controller,(string) userModel.ReturnValue);
+                Boards boardView = new Boards(u);
+                boardView.Show();
+                this.Close();
             }
             else
             {
@@ -54,7 +58,10 @@ namespace Frontend
             }
             else
             {
-                ShowMessageLbl.Content = "Register success";
+                UserModel u = new UserModel(viewModel.Controller, viewModel.Username);
+                Boards boardView = new Boards(u);
+                boardView.Show();
+                this.Close();
             }
         }
     }

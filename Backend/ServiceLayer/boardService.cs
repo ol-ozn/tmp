@@ -8,13 +8,11 @@ using log4net;
 
 public class BoardService
 {
-    private UserController userController;
     private BoardController boardController;
     private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     public BoardService(ServiceFactory serviceFactory)
     {
-        userController = serviceFactory.UserController;
         boardController = serviceFactory.BoardController;
     }
 

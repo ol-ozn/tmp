@@ -45,5 +45,29 @@ namespace Frontend.Model
 
             return response;
         }
+
+        public Response logOut(string username)
+        {
+            Response response = serviceFactory.userService.logout(username);
+            if (response.ErrorMessage != null)
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+
+            // return new UserModel(this, username);
+            return response;
+        }
+
+        public Response getBoards(string username)
+        {
+            Response response = serviceFactory.userService.GetUserBoards(username);
+            if (response.ErrorMessage != null)
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+
+            // return new UserModel(this, username);
+            return response;
+        }
     }
 }
