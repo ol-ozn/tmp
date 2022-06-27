@@ -8,11 +8,11 @@ namespace Frontend.Model
 {
     public class IntModel : NotifiableModelObject
     {
-        public int id;
+        public int Id { get; set; }
 
         public IntModel(BackendController bc, int id) : base(bc)
         {
-            this.id = id;
+            this.Id = id;
         }
     }
 }
