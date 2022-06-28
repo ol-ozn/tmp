@@ -16,6 +16,7 @@ using Frontend.Model;
 using Frontend.View;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
+using MaterialDesignThemes.Wpf;
 
 namespace Frontend
 {
@@ -48,7 +49,7 @@ namespace Frontend
             }
             else
             {
-                ShowMessageLbl.Content = userModel.ErrorMessage;
+                // ShowMessageLbl.Content = userModel.ErrorMessage;
             }
         }
 
@@ -57,7 +58,7 @@ namespace Frontend
             Response<string> response = viewModel.Register();
             if (response.ErrorMessage != null)
             {
-                ShowMessageLbl.Content = response.ErrorMessage;
+                // ShowMessageLbl.Content = response.ErrorMessage;
             }
             else
             {
@@ -66,6 +67,39 @@ namespace Frontend
                 boardView.Show();
                 this.Close();
             }
+        }
+
+        public bool isDarkTheme { get; set; }
+        private readonly PaletteHelper paletteHelper = new PaletteHelper();
+
+        // adding dark Mode
+        private void themeToggle_Click(object sender, RoutedEventArgs e)
+        {
+            ITheme theme = paletteHelper.GetTheme();
+
+            if (isDarkTheme = theme.GetBaseTheme() == BaseTheme.Dark)
+            {
+                isDarkTheme = false;
+                theme.SetBaseTheme(Theme.Light);
+            }
+            else
+            {
+                isDarkTheme = true;
+                theme.SetBaseTheme(Theme.Dark);
+            }
+
+            paletteHelper.SetTheme(theme);
+        }
+
+        private void exitApp(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            DragMove();
         }
     }
 }
