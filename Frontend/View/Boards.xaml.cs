@@ -10,9 +10,13 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Frontend.Model;
+using Frontend.View;
 using Frontend.ViewModel;
+using IntroSE.Kanban.Backend.BusinessLayer;
+using IntroSE.Kanban.Backend.ServiceLayer;
 
 namespace Frontend.View
 {
@@ -22,6 +26,7 @@ namespace Frontend.View
     public partial class Boards : Window
     {
         private BoardsViewModel viewModel;
+
         public Boards(UserModel u)
         {
             InitializeComponent();
@@ -31,9 +36,9 @@ namespace Frontend.View
 
         private void ScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            
+
         }
-        
+
         private void Remove_Button(object sender, RoutedEventArgs e)
         {
             // viewModel.RemoveMessage();
