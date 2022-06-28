@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,26 @@ namespace BackendTests
 
 
             // GradingService gradingService = new GradingService();
+            ServiceFactory sf = new ServiceFactory();
+            sf.dataService.DeleteData();
+            sf.userService.createUser("olga@gmail.com", "123456Ab");
+            sf.boardService.createBoard("board1", "olga@gmail.com");
+            sf.taskService.add("task1", "a", DateTime.Now, "board1", "olga@gmail.com");
+            sf.taskService.add("task2", "a", DateTime.Now, "board1", "olga@gmail.com");
+            sf.taskService.add("task3", "a", DateTime.Now, "board1", "olga@gmail.com");
+            sf.taskService.AssignTask("olga@gmail.com", "board1", 0, 1, "olga@gmail.com");
+            sf.taskService.AssignTask("olga@gmail.com", "board1", 0, 2, "olga@gmail.com");
+            sf.taskService.AssignTask("olga@gmail.com", "board1", 0, 3, "olga@gmail.com");
+            sf.taskService.changeState("olga@gmail.com", "board1", 0, 2);
+            sf.taskService.changeState("olga@gmail.com", "board1", 0, 3);
+            sf.taskService.changeState("olga@gmail.com", "board1", 1, 3);
+
+            Console.WriteLine(sf.boardService.getColumn("olga@gmail.com","board1",0));
+            Console.WriteLine(sf.boardService.getColumn("olga@gmail.com", "board1", 1));
+            Console.WriteLine(sf.boardService.getColumn("olga@gmail.com", "board1", 2));
+
             // gradingService.DeleteData();
+
             // gradingService.LoadData();
             // Console.WriteLine("if the user managed to register this should return: {} ");
             // Console.WriteLine(gradingService.Register("ola@gmail.com", "Aa12345"));

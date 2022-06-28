@@ -61,7 +61,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             Dictionary<string, Board> userBoardByName = user.getBoardListByName();
             Board boardbyName = userBoardByName[boardName]; //getting the needed board from list of user's boards
-            Task newTask = new Task(title, description, dueTime, taskId, boardbyName.Id);
+            Task newTask = new Task(title, description, dueTime, taskId, boardbyName.Id,"backlog", Task.UNASSIGNED);
             
             //adding to db
             taskDalController.Insert(new TaskDTO(taskId, title, description, boardbyName.Id,

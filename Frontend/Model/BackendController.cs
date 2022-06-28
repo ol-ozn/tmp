@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
+using Task = IntroSE.Kanban.Backend.BusinessLayer.Task;
 
 namespace Frontend.Model
 {
@@ -68,6 +69,30 @@ namespace Frontend.Model
                 throw new Exception(response.ErrorMessage);
             }
 
+            // return new UserModel(this, username);
+            return response;
+        }
+
+        public Response<List<string>> getBoardsNames(string username)
+        {
+            Response<List<string>> response = JsonController<List<string>>.fromJson(serviceFactory.userService.GetUserBoardsNames(username));
+            if (response.ErrorMessage != null)
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+
+            // return new UserModel(this, username);
+            return response;
+        }
+
+        public Response<List<Task>> getColumn(string email, string boardName, int columnOrdinal)
+        {
+            Response<List<Task>> response = JsonController<List<Task>>.fromJson(serviceFactory.boardService.getColumn(email, boardName, columnOrdinal));
+            if (response.ErrorMessage != null)
+            {
+                throw new Exception(response.ErrorMessage);
+            }
+        
             // return new UserModel(this, username);
             return response;
         }

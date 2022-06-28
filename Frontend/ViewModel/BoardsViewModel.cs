@@ -13,7 +13,9 @@ namespace Frontend.ViewModel
     {
         public UserModel UserModel;
         public BackendController controller;
-        public BoardModel Board { get; private set; }
+        // public BoardModel Board { get; private set; }
+        public UserModel User { get; private set; }
+
         public string Title { get; private set; }
 
         private BoardModel selectedBoard;
@@ -36,7 +38,7 @@ namespace Frontend.ViewModel
             this.controller = user.Controller;
             this.UserModel = user;
             Title = "Boards of " + user.Email;
-            Board = user.getBoards();
+            User = user;
         }
 
         public Response<string> logout()

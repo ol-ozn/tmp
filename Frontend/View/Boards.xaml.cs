@@ -18,6 +18,7 @@ using Frontend.ViewModel;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using IntroSE.Kanban.Backend.ServiceLayer;
 
+
 namespace Frontend.View
 {
     /// <summary>
@@ -42,12 +43,10 @@ namespace Frontend.View
 
         private void ViewBoard_Button(object sender, RoutedEventArgs e)
         {
-            // viewModel.viewBoard();
             // MainWindow mainWindow = new MainWindow();
-            // ViewTasks boardView = new ViewTasks();
-
-            // boardView.Show();
-            // this.Close();
+            ViewTasks viewTasks = new ViewTasks(viewModel.UserModel, viewModel.SelectedBoard);
+            viewTasks.Show();
+            this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

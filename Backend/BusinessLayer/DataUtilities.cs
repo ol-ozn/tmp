@@ -40,7 +40,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<TaskDTO> tasksDTOs = taskDalController.SelectAllTasks();
             foreach (TaskDTO taskDto in tasksDTOs)
             {
-                tasksLoaded.Add(new Task(taskDto.Title, taskDto.Description, taskDto.DueDate, taskDto.id, taskDto.BoardId));
+                tasksLoaded.Add(new Task(taskDto.Title, taskDto.Description, taskDto.DueDate, taskDto.id, taskDto.BoardId, taskDto.ColumnOrdinal, taskDto.Assignee));
             }
             return tasksLoaded;
         }

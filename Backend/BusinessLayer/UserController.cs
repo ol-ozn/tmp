@@ -237,6 +237,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return userBoardsIds;
         }
 
+
+        /// <summary>
+        ///  This method returnes list of user's boards names.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>list of board ids</returns>
+        public List<string> getUserBoardsNames(string email)
+        {
+            User user = getUserAndLogeddin(email);
+            List<string> userBoardsIds = user.getBoardListByName().Keys.ToList();
+            return userBoardsIds;
+        }
         /// <summary>
         ///  This method deletes the data related to users table in db.
         /// </summary>

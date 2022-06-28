@@ -97,4 +97,20 @@ public class UserService
             return JsonController<List<int>>.toJson(new Response<string>(e.Message, null));
         }
     }
+
+    public string GetUserBoardsNames(string email)
+    {
+        try
+        {
+            email = email.ToLower();
+            List<string> userBoards = userController.getUserBoardsNames(email);
+            log.Info("Returned list of board ids of user " + email);
+            return JsonController<List<string>>.toJson(new Response<List<string>>(null, userBoards)); //todo: serialize
+        }
+        catch (Exception e)
+        {
+            log.Debug(e.Message);
+            return JsonController<List<string>>.toJson(new Response<string>(e.Message, null));
+        }
+    }
 }

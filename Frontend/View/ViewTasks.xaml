@@ -7,6 +7,66 @@
         mc:Ignorable="d"
         Title="ViewTasks" Height="450" Width="800">
     <Grid>
-        
+        <GroupBox x:Name="RightGroupBox" BorderBrush="#515151"  Header="Right Tools" FontSize="18" Foreground="White" Margin="534,10,29,5" >
+            <ListBox ItemsSource="{Binding Path=Board.Done, Mode=TwoWay}"  Background="Green" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="{Binding Path=SelectedBoard, Mode=TwoWay}" RenderTransformOrigin="0.5,0.5" Margin="12,0,10,0">
+                <ListBox.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.578"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </ListBox.RenderTransform>
+                <ListBox.ItemTemplate>
+                    <DataTemplate >
+                        <Border BorderBrush="#FF003CFF" BorderThickness="1" Width="170" >
+                            <StackPanel Orientation="Vertical" >
+                                <TextBox Text="{Binding Path=Title, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=Description, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=DueDate, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=Assignee, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+        <GroupBox x:Name="MiddleGroupBox" Grid.Column="0" Header="Right Tools" FontSize="18" Foreground="White" Margin="10,10,560,0">
+            <ListBox ItemsSource="{Binding Path=Board.Backlog, Mode=TwoWay}"   Background="Green" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="{Binding Path=SelectedBoard, Mode=TwoWay}" Margin="10,0,-2,0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#FF003CFF" BorderThickness="1" Width="170">
+                            <StackPanel Orientation="Vertical" >
+                                <TextBox Text="{Binding Path=Title, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=Description, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=DueDate, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=Assignee, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+        <GroupBox x:Name="LeftGroupBox"  Header="Right Tools" FontSize="18" Foreground="White" Margin="267,10,271,0">
+            <ListBox ItemsSource="{Binding Path=Board.InProgress, Mode=TwoWay}"   Background="Green" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="{Binding Path=SelectedBoard, Mode=TwoWay}" Margin="24,0,20,0" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="#FF003CFF" BorderThickness="1" Width="170">
+                            <StackPanel Orientation="Vertical" >
+                                <TextBox Text="{Binding Path=Title, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=Description, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=DueDate, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+                                <TextBox Text="{Binding Path=Assignee, Mode=TwoWay}" BorderBrush="{x:Null}" Background="white"/>
+
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+        <Label Content="Backlog" HorizontalAlignment="Left" FontSize="20" Margin="85,4,0,0" VerticalAlignment="Top"/>
+        <Label Content="In progress" HorizontalAlignment="Center" FontSize="20" Margin="0,4,0,0" VerticalAlignment="Top"/>
+        <Label Content="done" HorizontalAlignment="Left" FontSize="20" Margin="625,4,0,0" VerticalAlignment="Top"/>
+
     </Grid>
 </Window>

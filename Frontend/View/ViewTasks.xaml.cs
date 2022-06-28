@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Frontend.Model;
+using Frontend.ViewModel;
 
 namespace Frontend.View
 {
@@ -20,9 +21,12 @@ namespace Frontend.View
     /// </summary>
     public partial class ViewTasks : Window
     {
-        public ViewTasks(UserModel u)
+        private ViewTasksViewModel viewModel;
+        public ViewTasks(UserModel u, BoardModel b)
         {
             InitializeComponent();
+            this.viewModel = new ViewTasksViewModel(u,b);
+            this.DataContext = viewModel;
         }
     }
 }
