@@ -15,6 +15,22 @@ namespace Frontend.ViewModel
         public BackendController controller;
         public BoardModel Board { get; private set; }
         public string Title { get; private set; }
+
+        private BoardModel selectedBoard;
+        public BoardModel SelectedBoard
+        {
+            get
+            {
+                return selectedBoard;
+            }
+            set
+            {
+                selectedBoard = value;
+                // EnableForward = value != null;
+                // RaisePropertyChanged("SelectedTask");
+            }
+        }
+
         public BoardsViewModel(UserModel user)
         {
             this.controller = user.Controller;
@@ -23,7 +39,7 @@ namespace Frontend.ViewModel
             Board = user.getBoards();
         }
 
-        public Response logout()
+        public Response<string> logout()
         {
             try
             {
@@ -32,8 +48,13 @@ namespace Frontend.ViewModel
             catch (Exception e)
             {
                 // Message = e.Message;
-                return new Response(e.Message, null);
+                return new Response<string>(e.Message, null);
             }
         }
+
+        // public viewBoard()
+        // {
+        //
+        // }
     }
 }

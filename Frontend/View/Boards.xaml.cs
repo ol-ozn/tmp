@@ -27,6 +27,7 @@ namespace Frontend.View
     {
         private BoardsViewModel viewModel;
 
+
         public Boards(UserModel u)
         {
             InitializeComponent();
@@ -39,9 +40,14 @@ namespace Frontend.View
 
         }
 
-        private void Remove_Button(object sender, RoutedEventArgs e)
+        private void ViewBoard_Button(object sender, RoutedEventArgs e)
         {
-            // viewModel.RemoveMessage();
+            // viewModel.viewBoard();
+            // MainWindow mainWindow = new MainWindow();
+            // ViewTasks boardView = new ViewTasks();
+
+            // boardView.Show();
+            // this.Close();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -20,19 +20,20 @@ public class UserService
     /// <param name="email">The email address of the user to login</param>
     /// <param name="password">The password of the user to login</param>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public Response login(String email, String password)
+    public string login(String email, String password)
     {
         try
         {
             email = email.ToLower();
             User user = userController.login(email, password);
             log.Info("user with email: " + email + " has logged in successfully");
-            return new Response(null, email);
+            
+            return JsonController<string>.toJson(new Response<string>(null, email));
         }
         catch (Exception e)
         {
             log.Debug(e.Message);
-            return new Response(e.Message, null);
+            return JsonController<string>.toJson(new Response<string>(e.Message, null));
         }
     }
 
@@ -42,19 +43,21 @@ public class UserService
     /// <param name="email">The email of the new user</param>
     /// <param name="password">The password of the new user</param>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public Response createUser(String email, String password)
+    public string createUser(String email, String password)
     {
         try
         {
             email = email.ToLower();
             User user = userController.createUser(email, password);
             log.Info("user with email " + email + " was created successfully");
-            return new Response(null, null);
+            // return new Response<string>(null, null);
+            return JsonController<string>.toJson(new Response<string>(null, null));
+
         }
         catch (Exception e)
         {
             log.Debug(e.Message);
-            return new Response(e.Message, null);
+            return JsonController<string>.toJson(new Response<string>(e.Message, null));
         }
     }
 
@@ -62,36 +65,36 @@ public class UserService
     /// This method logs out a logged in user. 
     /// </summary>
     /// <returns>Json formatted string, where ErrorMessage = "ok" , unless an error occurs</returns>
-    public Response logout(string email)
+    public string logout(string email)
     {
         try
         {
             email = email.ToLower();
             userController.logout(email);
             log.Info("user with email: " + email + "has logged out successfully");
-            return new Response(null, null);
+            return JsonController<string>.toJson(new Response<string>(null, null));
         }
         catch (Exception e)
         {
             log.Debug(e.Message);
-            return new Response(e.Message, null);
+            return JsonController<string>.toJson(new Response<string>(e.Message, null));
         }
     }
 
 
-    public Response GetUserBoards(string email)
+    public string GetUserBoards(string email)
     {
         try
         {
             email = email.ToLower();
             List<int> userBoards = userController.getUserBoards(email);
             log.Info("Returned list of board ids of user " + email);
-            return new Response(null, userBoards);
+            return JsonController<List<int>>.toJson(new Response<List<int>>(null, userBoards)); //todo: serialize
         }
         catch (Exception e)
         {
             log.Debug(e.Message);
-            return new Response(e.Message, null);
+            return JsonController<List<int>>.toJson(new Response<string>(e.Message, null));
         }
     }
 }

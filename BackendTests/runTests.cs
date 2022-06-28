@@ -18,14 +18,16 @@ namespace BackendTests
         {
 
 
-            GradingService gradingService = new GradingService();
+            // GradingService gradingService = new GradingService();
             // gradingService.DeleteData();
-            gradingService.LoadData();
+            // gradingService.LoadData();
             // Console.WriteLine("if the user managed to register this should return: {} ");
             // Console.WriteLine(gradingService.Register("ola@gmail.com", "Aa12345"));
             // Console.WriteLine(gradingService.AddBoard("ola@gmail.com", "board1"));
-            Console.WriteLine(gradingService.Login("ola@gmail.com", "Aa12345"));
-            Console.WriteLine(gradingService.GetUserBoards("ola@gmail.com"));
+            // Console.WriteLine(gradingService.Login("ola@gmail.com", "Aa12345"));
+            // Response response = JsonController.fromJson(gradingService.serviceFactory.userService.login("olga@gmail.com", "Test12345"));
+            // Console.WriteLine(Type Argresponse.ReturnValue);
+            // Console.WriteLine(gradingService.GetUserBoards("ola@gmail.com"));
             // // // // Console.WriteLine("if the user managed to register this should return: {} ");
             // // // // Console.WriteLine(gradingService.Register("Amir@gmail.com", "Test12345"));
             // // // // Console.WriteLine("\n");

@@ -56,7 +56,7 @@ namespace Frontend.Model
             }
         }
 
-        public Response Login()
+        public Response<string> Login()
         {
             try
             {
@@ -65,11 +65,11 @@ namespace Frontend.Model
             catch (Exception e)
             {
                 // Message = e.Message;
-                return new Response(e.Message,null);
+                return new Response<string>(e.Message,null);
             }
         }
 
-        public Response Register()
+        public Response<string> Register()
         {
             try
             {
@@ -77,7 +77,7 @@ namespace Frontend.Model
             }
             catch (Exception e)
             {
-                return new Response(e.Message, null);
+                return new Response<string>(e.Message, null);
             }
         }
     }

@@ -35,10 +35,13 @@ namespace Frontend
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            Response userModel = viewModel.Login();
+            Response<string> userModel = viewModel.Login();
+            string returnValue = (string)userModel.ReturnValue;
             if (userModel.ErrorMessage == null)
             {
-                UserModel u = new UserModel(viewModel.Controller,(string) userModel.ReturnValue);
+                // UserModel u = new UserModel(viewModel.Controller,(string)(userModel.ReturnValue));
+                UserModel u = new UserModel(viewModel.Controller, returnValue);
+
                 Boards boardView = new Boards(u);
                 boardView.Show();
                 this.Close();
@@ -51,7 +54,7 @@ namespace Frontend
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            Response response = viewModel.Register();
+            Response<string> response = viewModel.Register();
             if (response.ErrorMessage != null)
             {
                 ShowMessageLbl.Content = response.ErrorMessage;

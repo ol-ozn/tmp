@@ -8,7 +8,7 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <Label Content="{Binding Path=Title, Mode=OneTime}" HorizontalAlignment="Center"/>
-            <ListBox ItemsSource="{Binding Path=Board.BoardsIds, Mode=TwoWay}"  Height="100" Width="100" Background="BlueViolet" d:ItemsSource="{d:SampleData ItemCount=5}">
+            <ListBox ItemsSource="{Binding Path=Board.BoardsIds, Mode=TwoWay}"  Height="100" Width="100" Background="BlueViolet" d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="{Binding Path=SelectedBoard, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border BorderBrush="#FF003CFF" BorderThickness="1">
@@ -19,7 +19,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Content="Delete Message" Click="Remove_Button" IsEnabled="{Binding Path=EnableForward,Mode=OneWay}"></Button>
+            <Button Content="Delete Message" Click="ViewBoard_Button" IsEnabled="{Binding Path=EnableForward,Mode=OneWay}"></Button>
             <Button Content="Logout" Click="Button_Click"/>
 
         </StackPanel>
