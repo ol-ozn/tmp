@@ -49,7 +49,8 @@ namespace Frontend
             }
             else
             {
-                // ShowMessageLbl.Content = userModel.ErrorMessage;
+                MessageBox.Show(userModel.ErrorMessage, "Alert", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
         }
 
@@ -58,7 +59,8 @@ namespace Frontend
             Response<string> response = viewModel.Register();
             if (response.ErrorMessage != null)
             {
-                // ShowMessageLbl.Content = response.ErrorMessage;
+                MessageBox.Show(response.ErrorMessage, "Alert", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
             else
             {

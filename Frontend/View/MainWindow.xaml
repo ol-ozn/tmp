@@ -30,6 +30,7 @@
                                           x:Name="themeToggle" IsChecked="{Binding isDarkTheme}"
                                           Click="themeToggle_Click" />
 
+
                         </StackPanel>
 
                         <Button x:Name="btn_exit" ToolTip="close Application" Content="Exit Application"
@@ -71,6 +72,9 @@
                         materialDesign:ShadowAssist.ShadowDepth="Depth0"
                         Height="53" Width="300" materialDesign:ButtonAssist.CornerRadius="10"
                         FontSize="18" Content="Create Account" Click="Register_Click" />
+                <Label Name= "ShowMessageLbl" Content="{Binding Path= Message, Mode=OneWayToSource}" Foreground="Red" HorizontalAlignment="Center" Margin="0,308,0,0"
+                       VerticalAlignment="Top" Height="28" Width="800" HorizontalContentAlignment="Center"/>
+
 
             </StackPanel>
 
