@@ -3,28 +3,79 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewmodel="clr-namespace:Frontend.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:BoardsViewModel}"
         mc:Ignorable="d"
-        Title="BoardView" Height="450" Width="600">
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <Label Content="{Binding Path=Title, Mode=OneTime}" HorizontalAlignment="Center"/>
-            <ListBox ItemsSource="{Binding Path=User.BoardsNames, Mode=TwoWay}" HorizontalAlignment="Center"   d:ItemsSource="{d:SampleData ItemCount=5}" SelectedItem="{Binding Path=SelectedBoard, Mode=TwoWay}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="#FF003CFF" BorderThickness="1">
+        Title="BoardView" Height="800" Width="800"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{x:Null}"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen">
+
+
+
+    <materialDesign:Card UniformCornerRadius="15" Background="{DynamicResource MaterialDesignPaper}" Margin="25"
+                         materialDesign:ShadowAssist.ShadowDepth="Depth4">
+        <materialDesign:DialogHost CloseOnClickAway="True">
+            <StackPanel>
+
+                <materialDesign:PopupBox HorizontalAlignment="Right" Margin="0 20 20 0"
+                                         PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Height="25">
+                    <StackPanel>
+                        <StackPanel Margin="16 10 0 6" Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+
+
+                        </StackPanel>
+
+                        <Button x:Name="btn_logout" ToolTip="close Application" Content="Logout"
+                                Click="Button_Click" />
+                    </StackPanel>
+
+                </materialDesign:PopupBox>
+                <materialDesign:PackIcon Kind="AccountCircle" Height="61" Width="67" RenderTransformOrigin="0.496,-0.417" />
+                <Label Content="{Binding Email, Mode=OneTime}"/>
+                <Label HorizontalAlignment="Center" FontSize="28" FontWeight="Bold"
+                           Content="{Binding Title, Mode=OneTime}"/>
+                <TextBlock FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Center"
+                           Text="Enter a board by double clicking it:" />
+
+
+                <ListBox Margin="0 50 0 0" 
+                         ItemsSource="{Binding Path=User.BoardsNames, Mode=TwoWay}" 
+                         HorizontalAlignment="Left"   d:ItemsSource="{d:SampleData ItemCount=5}" 
+                         SelectedItem="{Binding Path=SelectedBoard, Mode=TwoWay}" 
+                         MouseDoubleClick="ListBox_MouseDoubleClick"
+                         materialDesign:ShadowAssist.ShadowDepth="Depth0" Height="539" Width="749"
+                         materialDesign:ButtonAssist.CornerRadius="10"
+                         FontSize="24" Style="{DynamicResource MaterialDesignChoiceChipAccentOutlineListBox}" 
+                         Background="{x:Null}" FontStyle="Normal" 
+                         IsSynchronizedWithCurrentItem="True"
+                         >
+
+
+
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
                             <StackPanel Orientation="Vertical" >
                                 <TextBox Text="{Binding Path=Name, Mode=TwoWay}" BorderBrush="{x:Null}"  />
                             </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Button Content="View Board" Click="ViewBoard_Button"></Button>
-            <Button Content="Logout" Click="Button_Click"/>
 
-        </StackPanel>
+                        </DataTemplate>
+
+                    </ListBox.ItemTemplate>
+
+                </ListBox>
 
 
-    </Grid>
+
+            </StackPanel>
+
+
+
+        </materialDesign:DialogHost>
+
+    </materialDesign:Card>
+
 </Window>

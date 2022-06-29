@@ -28,7 +28,6 @@ namespace Frontend.View
     {
         private BoardsViewModel viewModel;
 
-
         public Boards(UserModel u)
         {
             InitializeComponent();
@@ -55,6 +54,21 @@ namespace Frontend.View
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
+        }
+
+        private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // MainWindow mainWindow = new MainWindow();
+            ViewTasks viewTasks = new ViewTasks(viewModel.UserModel, viewModel.SelectedBoard);
+            viewTasks.Show();
+            this.Close();
+        }
+
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            DragMove();
         }
     }
 }

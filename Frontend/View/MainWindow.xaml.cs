@@ -31,7 +31,7 @@ namespace Frontend
         {
             InitializeComponent();
             this.DataContext = new MainViewModel();
-            this.viewModel = (MainViewModel)DataContext;
+            this.viewModel = (MainViewModel) DataContext;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -71,27 +71,27 @@ namespace Frontend
             }
         }
 
-        public bool isDarkTheme { get; set; }
-        private readonly PaletteHelper paletteHelper = new PaletteHelper();
-
-        // adding dark Mode
-        private void themeToggle_Click(object sender, RoutedEventArgs e)
-        {
-            ITheme theme = paletteHelper.GetTheme();
-
-            if (isDarkTheme = theme.GetBaseTheme() == BaseTheme.Dark)
-            {
-                isDarkTheme = false;
-                theme.SetBaseTheme(Theme.Light);
-            }
-            else
-            {
-                isDarkTheme = true;
-                theme.SetBaseTheme(Theme.Dark);
-            }
-
-            paletteHelper.SetTheme(theme);
-        }
+        // public bool isDarkTheme { get; set; }
+        // private readonly PaletteHelper paletteHelper = new PaletteHelper();
+        //
+        // // adding dark Mode
+        // private void themeToggle_Click(object sender, RoutedEventArgs e)
+        // {
+        //     ITheme theme = paletteHelper.GetTheme();
+        //
+        //     if (isDarkTheme = theme.GetBaseTheme() == BaseTheme.Dark)
+        //     {
+        //         isDarkTheme = false;
+        //         theme.SetBaseTheme(Theme.Light);
+        //     }
+        //     else
+        //     {
+        //         isDarkTheme = true;
+        //         theme.SetBaseTheme(Theme.Dark);
+        //     }
+        //
+        //     paletteHelper.SetTheme(theme);
+        // }
 
         private void exitApp(object sender, RoutedEventArgs e)
         {

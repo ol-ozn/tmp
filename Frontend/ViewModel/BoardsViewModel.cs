@@ -12,19 +12,27 @@ namespace Frontend.ViewModel
     internal class BoardsViewModel : NotifiableObject
     {
         public UserModel UserModel;
+
         public BackendController controller;
+
         // public BoardModel Board { get; private set; }
         public UserModel User { get; private set; }
+
+        private string email;
+
+        public string Email
+        {
+            get { return email; }
+            set { email = value; }
+        }
 
         public string Title { get; private set; }
 
         private BoardModel selectedBoard;
+
         public BoardModel SelectedBoard
         {
-            get
-            {
-                return selectedBoard;
-            }
+            get { return selectedBoard; }
             set
             {
                 selectedBoard = value;
@@ -38,6 +46,7 @@ namespace Frontend.ViewModel
             this.controller = user.Controller;
             this.UserModel = user;
             Title = "Boards of " + user.Email;
+            Email = user.Email;
             User = user;
         }
 
