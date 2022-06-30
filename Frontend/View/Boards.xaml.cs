@@ -35,18 +35,7 @@ namespace Frontend.View
             this.DataContext = viewModel;
         }
 
-        private void ScrollBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
 
-        }
-
-        private void ViewBoard_Button(object sender, RoutedEventArgs e)
-        {
-            // MainWindow mainWindow = new MainWindow();
-            ViewTasks viewTasks = new ViewTasks(viewModel.UserModel, viewModel.SelectedBoard);
-            viewTasks.Show();
-            this.Close();
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -59,6 +48,8 @@ namespace Frontend.View
         private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             // MainWindow mainWindow = new MainWindow();
+            
+
             ViewTasks viewTasks = new ViewTasks(viewModel.UserModel, viewModel.SelectedBoard);
             viewTasks.Show();
             this.Close();

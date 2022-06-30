@@ -22,11 +22,22 @@ namespace Frontend.View
     public partial class ViewTasks : Window
     {
         private ViewTasksViewModel viewModel;
+        private UserModel u;
+
         public ViewTasks(UserModel u, BoardModel b)
         {
             InitializeComponent();
-            this.viewModel = new ViewTasksViewModel(u,b);
+            this.viewModel = new ViewTasksViewModel(u, b);
             this.DataContext = viewModel;
+            this.u = u;
+        }
+
+
+        private void PreviousPage_Click(object sender, RoutedEventArgs e)
+        {
+            Boards boards = new Boards(u);
+            boards.Show();
+            this.Close();
         }
     }
 }
