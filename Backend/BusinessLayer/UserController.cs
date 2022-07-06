@@ -37,7 +37,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!emailValidity(email))
             {
-                throw new Exception(email + " is invalid");
+                throw new Exception("email: " + email + "is not a valid email");
             }
 
             if (userExists(email))
@@ -98,7 +98,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private bool emailValidity(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
-                return false;
+            {
+                throw new Exception("Please insert an input");
+            }
+
 
             //regex for valid email
             bool regexValid = Regex.IsMatch(email, @"^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$");
@@ -116,7 +119,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!emailValidity(email))
             {
-                throw new Exception(email + " is invalid");
+                throw new Exception("email: " + email + "is not a valid email");
             }
 
             // email = email.ToLower();
@@ -234,6 +237,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             User user = getUserAndLogeddin(email);
             List<int> userBoardsIds = user.getBoardListById().Keys.ToList();
+            return userBoardsIds;
+        }
+
+
+        /// <summary>
+        ///  This method returnes list of user's boards names.
+        /// </summary>
+        /// <param name="email">The email of the user</param>
+        /// <returns>list of board ids</returns>
+        public List<string> getUserBoardsNames(string email)
+        {
+            User user = getUserAndLogeddin(email);
+            List<string> userBoardsIds = user.getBoardListByName().Keys.ToList();
             return userBoardsIds;
         }
 

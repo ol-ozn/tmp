@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,12 +19,35 @@ namespace BackendTests
         {
 
 
-            GradingService gradingService = new GradingService();
-            gradingService.DeleteData();
+            // GradingService gradingService = new GradingService();
+            ServiceFactory sf = new ServiceFactory();
+            sf.dataService.DeleteData();
+            sf.userService.createUser("olga@gmail.com", "123456Ab");
+            sf.boardService.createBoard("board1", "olga@gmail.com");
+            sf.taskService.add("task1", "a", DateTime.Now, "board1", "olga@gmail.com");
+            sf.taskService.add("task2", "a", DateTime.Now, "board1", "olga@gmail.com");
+            sf.taskService.add("task3", "a", DateTime.Now, "board1", "olga@gmail.com");
+            sf.taskService.AssignTask("olga@gmail.com", "board1", 0, 1, "olga@gmail.com");
+            sf.taskService.AssignTask("olga@gmail.com", "board1", 0, 2, "olga@gmail.com");
+            sf.taskService.AssignTask("olga@gmail.com", "board1", 0, 3, "olga@gmail.com");
+            sf.taskService.changeState("olga@gmail.com", "board1", 0, 2);
+            sf.taskService.changeState("olga@gmail.com", "board1", 0, 3);
+            sf.taskService.changeState("olga@gmail.com", "board1", 1, 3);
+
+            Console.WriteLine(sf.boardService.getColumn("olga@gmail.com","board1",0));
+            Console.WriteLine(sf.boardService.getColumn("olga@gmail.com", "board1", 1));
+            Console.WriteLine(sf.boardService.getColumn("olga@gmail.com", "board1", 2));
+
+            // gradingService.DeleteData();
+
             // gradingService.LoadData();
-            Console.WriteLine("if the user managed to register this should return: {} ");
-            Console.WriteLine(gradingService.Register("amir@gmail.com", "Test12345"));
-            // //
+            // Console.WriteLine("if the user managed to register this should return: {} ");
+            // Console.WriteLine(gradingService.Register("ola@gmail.com", "Aa12345"));
+            // Console.WriteLine(gradingService.AddBoard("ola@gmail.com", "board1"));
+            // Console.WriteLine(gradingService.Login("ola@gmail.com", "Aa12345"));
+            // Response response = JsonController.fromJson(gradingService.serviceFactory.userService.login("olga@gmail.com", "Test12345"));
+            // Console.WriteLine(Type Argresponse.ReturnValue);
+            // Console.WriteLine(gradingService.GetUserBoards("ola@gmail.com"));
             // // // // Console.WriteLine("if the user managed to register this should return: {} ");
             // // // // Console.WriteLine(gradingService.Register("Amir@gmail.com", "Test12345"));
             // // // // Console.WriteLine("\n");
@@ -39,59 +63,59 @@ namespace BackendTests
             // // // // //
             // // // Console.WriteLine("\n");
             // // //
-
-            Console.WriteLine("if user added a board this should return: {} ");
-            Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board1"));
-            Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board2"));
-            Console.WriteLine("-------------------------------");
-            Console.WriteLine(gradingService.LimitColumn("amir@gmail.com", "board1", 2, 9));
+            //
+            // Console.WriteLine("if user added a board this should return: {} ");
+            // Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board1"));
+            // Console.WriteLine(gradingService.AddBoard("amir@gmail.com", "board2"));
+            // Console.WriteLine("-------------------------------");
+            // Console.WriteLine(gradingService.LimitColumn("amir@gmail.com", "board1", 2, 9));
+            // // //
+            // // Console.WriteLine("\n");
             // //
+            // // // Console.WriteLine("if user removed board this should return: {} ");
+            // // // Console.WriteLine(gradingService.RemoveBoard("amir@gmail.com", "board1"));
+            // // // Console.WriteLine(gradingService.RemoveBoard("amir@gmail.com", "board2"));
+            // //
+            // //
+            //
             // Console.WriteLine("\n");
             //
-            // // Console.WriteLine("if user removed board this should return: {} ");
-            // // Console.WriteLine(gradingService.RemoveBoard("amir@gmail.com", "board1"));
-            // // Console.WriteLine(gradingService.RemoveBoard("amir@gmail.com", "board2"));
             //
             //
-            
-            Console.WriteLine("\n");
-
-      
-
-            Console.WriteLine("if the user added a task, his email should be the returned value:");
-            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 1",
-                new DateTime(2026, 5, 5)));
-            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 2 ",
-                new DateTime(2026, 6, 5)));
-            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title3", "bla bla 3",
-                new DateTime(2026, 7, 5)));
-            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title4", "bla bla 4",
-                new DateTime(2026, 8, 5)));
-            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title5", "bla bla 5",
-                new DateTime(2026, 9, 5)));
-            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title6", "bla bla 5",
-                new DateTime(2026, 9, 5)));
-            Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board2", "title7", "bla bla 6",
-                new DateTime(2026, 10, 5)));
+            // Console.WriteLine("if the user added a task, his email should be the returned value:");
+            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 1",
+            //     new DateTime(2026, 5, 5)));
+            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title1", "bla bla 2 ",
+            //     new DateTime(2026, 6, 5)));
+            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title3", "bla bla 3",
+            //     new DateTime(2026, 7, 5)));
+            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title4", "bla bla 4",
+            //     new DateTime(2026, 8, 5)));
+            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title5", "bla bla 5",
+            //     new DateTime(2026, 9, 5)));
+            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board1", "title6", "bla bla 5",
+            //     new DateTime(2026, 9, 5)));
+            // Console.WriteLine(gradingService.AddTask("amir@gmail.com", "board2", "title7", "bla bla 6",
+            //     new DateTime(2026, 10, 5)));
+            // //
             //
-
-            Console.WriteLine("if user managed to limit the number of tasks in his column this should return: {} ");
-            Console.WriteLine(gradingService.LimitColumn("amir@gmail.com", "board1", 0, 4));
-
-
-            Console.WriteLine("\n");
-            
-            Console.WriteLine(
-                "if user managed to get the limit number of tasks in his column this should return: int value");
-            Console.WriteLine(gradingService.AssignTask("amir@gmail.com", "board1", 0, 1, "amir@gmail.com"));
-            Console.WriteLine(gradingService.AssignTask("amir@gmail.com", "board2", 0, 6, "amir@gmail.com"));
-            Console.WriteLine(gradingService.GetColumnLimit("amir@gmail.com", "board1", 0));
-            Console.WriteLine("___________-----------_________________");
-            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 0, 1));
-            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 1, 1));
-            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 2, 1));
-            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 3, 1));
-            Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board2", 0, 6));
+            // Console.WriteLine("if user managed to limit the number of tasks in his column this should return: {} ");
+            // Console.WriteLine(gradingService.LimitColumn("amir@gmail.com", "board1", 0, 4));
+            //
+            //
+            // Console.WriteLine("\n");
+            //
+            // Console.WriteLine(
+            //     "if user managed to get the limit number of tasks in his column this should return: int value");
+            // Console.WriteLine(gradingService.AssignTask("amir@gmail.com", "board1", 0, 1, "amir@gmail.com"));
+            // Console.WriteLine(gradingService.AssignTask("amir@gmail.com", "board2", 0, 6, "amir@gmail.com"));
+            // Console.WriteLine(gradingService.GetColumnLimit("amir@gmail.com", "board1", 0));
+            // Console.WriteLine("___________-----------_________________");
+            // Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 0, 1));
+            // Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 1, 1));
+            // Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 2, 1));
+            // Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board1", 3, 1));
+            // Console.WriteLine(gradingService.AdvanceTask("amir@gmail.com", "board2", 0, 6));
             //
             // Console.WriteLine("\n");
             //

@@ -40,7 +40,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<TaskDTO> tasksDTOs = taskDalController.SelectAllTasks();
             foreach (TaskDTO taskDto in tasksDTOs)
             {
-                tasksLoaded.Add(new Task(taskDto.Title, taskDto.Description, taskDto.DueDate, taskDto.id, taskDto.BoardId));
+                tasksLoaded.Add(new Task(taskDto.Title, taskDto.Description, taskDto.DueDate, taskDto.id, taskDto.BoardId, taskDto.ColumnOrdinal, taskDto.Assignee));
             }
             return tasksLoaded;
         }
@@ -58,8 +58,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<UserDTO> userDtos = userDalController.SelectAllUsers();
             foreach (UserDTO userDto in userDtos)
             {
-                userByName.Add(userDto.Email, new User(userDto.Email, userDto.Password, userDto.id));
-                userById.Add(userDto.id, new User(userDto.Email, userDto.Password, userDto.id));
+                User user = new User(userDto.Email, userDto.Password, userDto.id);
+                userByName.Add(userDto.Email, user);
+                userById.Add(userDto.id, user);
             }
             returnValue.Add(userByName,userById);
             return returnValue;

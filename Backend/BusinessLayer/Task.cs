@@ -12,6 +12,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Task
     {
+        public const string UNASSIGNED = "unassigned";
+
         private int id;
         public int Id
         {
@@ -69,7 +71,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="boardId">The id of the board that the task is in</param>
         /// <param name="id">The id of the task</param>
         /// <returns> creates a new task >
-        public Task(string title, string description, DateTime dueDate, int id,int boardId)
+        // public Task(string title, string description, DateTime dueDate, int id,int boardId)
+        // {
+        //     this.creationTime = DateTime.Now;
+        //     this.title = title;
+        //     this.description = description;
+        //     this.dueDate = dueDate;
+        //     this.id = id;
+        //     this.columnOrdinal = "backlog";
+        //     this.boardId = boardId;
+        //     this.assignie = "unassigned";
+        // }
+
+        public Task(string title, string description, DateTime dueDate, int id, int boardId, string columnOrdinal, string assignie)
         {
             this.creationTime = DateTime.Now;
             this.title = title;
@@ -78,7 +92,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.id = id;
             this.columnOrdinal = "backlog";
             this.boardId = boardId;
-            this.assignie = "unassigned";
+            // this.assignie = "unassigned";
+            this.Assignie = assignie;
+            this.columnOrdinal = columnOrdinal;
         }
 
     }

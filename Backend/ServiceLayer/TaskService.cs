@@ -31,18 +31,18 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="dueTime">The dueDate of the new task</param>
         /// <param name="boardId">The boardId of the new task</param>
         /// <returns>creates a new task and adds it to the users task list</returns>
-        public Response add(string title, string description, DateTime dueTime, string boardName, string email)
+        public string add(string title, string description, DateTime dueTime, string boardName, string email)
         {
             try
             {
                 email = email.ToLower();
                 taskController.addTask(title, description, dueTime, boardName, email);
                 log.Debug("a task was added to user: " + email);
-                return new Response(null, null);
+                return JsonController<string>.toJson(new Response<string>(null, null));
             }
             catch (Exception e)
             {
-                return new Response(e.Message, null);
+                return JsonController<string>.toJson(new Response<string>(e.Message, null));
             }
         }
 
@@ -54,18 +54,18 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="task">The task that it's title needs to be edited</param>
         /// <param name="user">The username that wants to edit the task title</param>
         /// <returns>The string "{}", unless an error occurs</returns>
-        public Response editTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
+        public string editTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
             try
             {
                 email = email.ToLower();
                 taskController.editTitle(email, boardName, columnOrdinal, taskId, title);
                 log.Debug("User: " + email + "edited the task's title");
-                return new Response(null, null);
+                return JsonController<string>.toJson(new Response<string>(null, null));
             }
             catch (Exception e)
             {
-                return new Response(e.Message, null);
+                return JsonController<string>.toJson(new Response<string>(e.Message, null));
             }
         }
 
@@ -76,7 +76,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="task">The task that it's description needs to be edited</param>
         /// <param name="user">The username that wants to edit the task description</param>
         /// <returns>The string "{}", unless an error occurs</returns>
-        public Response editTaskDescription(string email, string boardName, int columnOrdinal, int taskId,
+        public string editTaskDescription(string email, string boardName, int columnOrdinal, int taskId,
             string description)
         {
             try
@@ -84,11 +84,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 email = email.ToLower();
                 taskController.editDescription(email, boardName, columnOrdinal, taskId, description);
                 log.Debug("User: " + email + "edited thier task title");
-                return new Response(null, null);
+                return JsonController<string>.toJson(new Response<string>(null, null));
             }
             catch (Exception e)
             {
-                return new Response(e.Message, null);
+                return JsonController<string>.toJson(new Response<string>(e.Message, null));
             }
         }
 
@@ -99,33 +99,33 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="task">The task that it's description needs to be edited</param>
         /// <param name="user">The username that wants to edit the task description</param>
         /// <returns>The string "{}", unless an error occurs</returns>
-        public Response editTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
+        public string editTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
         {
             try
             {
                 email = email.ToLower();
                 taskController.editDueDate(email, boardName, columnOrdinal, taskId, dueDate);
                 log.Debug("User: " + email + "edited the task title");
-                return new Response(null, null);
+                return JsonController<string>.toJson(new Response<string>(null, null));
             }
             catch (Exception e)
             {
-                return new Response(e.Message, null);
+                return JsonController<string>.toJson(new Response<string>(e.Message, null));
             }
         }
 
-        public Response listTasksInProgress(string email)
+        public string listTasksInProgress(string email)
         {
             try
             {
                 email = email.ToLower();
                 List<Task> inProgress = taskController.listTaskInProgress(email);
                 log.Info("in progress tasks were listed successfully");
-                return new Response(null, inProgress);
+                return JsonController<List<Task>>.toJson(new Response<List<Task>>(null, inProgress));
             }
             catch (Exception e)
             {
-                return new Response(e.Message, null);
+                return JsonController<List<Task>>.toJson(new Response<List<Task>>(e.Message, null));
             }
         }
 
@@ -135,23 +135,23 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="id">The id of the board in which the task is in</param>
         /// <param name="taskTitle">The title of the task of which to change state</param>
         /// <returns>The string "{}", unless an error occurs</returns>
-        public Response changeState(string email, string boardName, int columnOrdinal, int taskId)
+        public string changeState(string email, string boardName, int columnOrdinal, int taskId)
         {
             try
             {
                 email = email.ToLower();
                 taskController.changeState(email, boardName, columnOrdinal, taskId);
                 log.Info("taks: " + taskId + " was advanced by " + email);
-                return new Response(null, null);
+                return JsonController<string>.toJson(new Response<string>(null, null));
             }
             catch (Exception e)
             {
                 log.Debug(e.Message);
-                return new Response(e.Message, null);
+                return JsonController<string>.toJson(new Response<string>(e.Message, null));
             }
         }
 
-        public Response AssignTask(string email, string boardName, int columnOrdinal, int taskId, string emailAssignee)
+        public string AssignTask(string email, string boardName, int columnOrdinal, int taskId, string emailAssignee)
         {
             try
             {
@@ -159,12 +159,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 emailAssignee = emailAssignee.ToLower();
                 taskController.assignTask(email, boardName, columnOrdinal, taskId, emailAssignee);
                 log.Info("task " + taskId + " was assigned to " + emailAssignee);
-                return new Response(null, null);
+                return JsonController<string>.toJson(new Response<string>(null, null));
             }
             catch (Exception e)
             {
                 log.Debug(e.Message);
-                return new Response(e.Message, null);
+                return JsonController<string>.toJson(new Response<string>(e.Message, null));
             }
         }
     }

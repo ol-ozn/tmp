@@ -29,19 +29,19 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// This method loads the data from db. 
         /// </summary>
         /// <returns></returns>
-        public Response LoadData()
+        public Response<string> LoadData()
         {
             try
             {
                 userController.loadData();
                 boardController.loadData();
                 log.Info("Data has been loaded successfully");
-                return new Response(null, null);
+                return new Response<string>(null, null);
             }
             catch (Exception e)
             {
                 log.Debug(e.Message);
-                return new Response(e.Message, null);
+                return new Response<string>(e.Message, null);
             }
         }
 
@@ -49,7 +49,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// This method deletes the data from db. 
         /// </summary>
         /// <returns></returns>
-        public Response DeleteData()
+        public Response<string> DeleteData()
         {
             try
             {
@@ -57,12 +57,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 boardController.resetData();
                 taskController.resetData();
                 log.Info("Data has been deleted successfully");
-                return new Response(null, null);
+                return new Response<string>(null, null);
             }
             catch (Exception e)
             {
                 log.Debug(e.Message);
-                return new Response(e.Message, null);
+                return new Response<string>(e.Message, null);
             }
         }
 
